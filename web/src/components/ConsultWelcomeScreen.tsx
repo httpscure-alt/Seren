@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getDictionary } from "@/i18n/getDictionary";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNavbar } from "@/components/SiteNavbar";
-import { SerenHeroVisual } from "@/components/SerenHeroVisual";
+import { SerenHeroVisual, SEREN_MARKETING_PAGE_SKY } from "@/components/SerenHeroVisual";
 
 function IconClock() {
   return (
@@ -92,7 +92,10 @@ export async function ConsultWelcomeScreen() {
   ] as const;
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_35%_20%,rgba(61,99,116,0.08),transparent_55%),radial-gradient(circle_at_80%_30%,rgba(246,217,166,0.12),transparent_45%),linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.92))] text-on-surface">
+    <div
+      className="min-h-screen overflow-x-hidden text-on-surface"
+      style={{ background: SEREN_MARKETING_PAGE_SKY }}
+    >
       <SiteNavbar />
 
       <main className="pt-24 sm:pt-28">
@@ -200,8 +203,14 @@ export async function ConsultWelcomeScreen() {
                         className="relative w-full overflow-hidden rounded-[1.75rem] p-px bg-gradient-to-br from-primary/28 via-surface-container to-amber-100/18 shadow-[0_28px_80px_-40px_rgba(47,51,48,0.35)]"
                         style={{ aspectRatio: "4 / 5" }}
                       >
-                        <div className="relative h-full w-full overflow-hidden rounded-[calc(1.75rem-1px)] bg-surface-container">
-                          <SerenHeroVisual imageSrc="/demo/welcome-cream-swatch.png" />
+                        <div
+                          className="relative h-full w-full overflow-hidden rounded-[calc(1.75rem-1px)]"
+                          style={{ background: SEREN_MARKETING_PAGE_SKY }}
+                        >
+                          <SerenHeroVisual
+                            imageSrc="/demo/welcome-cream-swatch.png"
+                            blendToPage
+                          />
 
                           <div className="absolute inset-x-4 bottom-4 z-[2] flex justify-center sm:inset-x-6 sm:bottom-6">
                             <div className="inline-flex max-w-full items-center gap-3 rounded-full border border-outline-variant/15 bg-surface/90 px-4 py-2.5 shadow-[0_12px_40px_-24px_rgba(47,51,48,0.2)] backdrop-blur-xl sm:px-5 sm:py-3">
