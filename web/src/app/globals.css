@@ -21,12 +21,15 @@
   --color-primary: #3d6374;
   --color-primary-dim: #305767;
   --color-on-primary: #f0f9ff;
+  --color-primary-container: #c0e9fc;
+  --color-on-primary-container: #305767;
 
   --color-secondary: #5b6063;
   --color-secondary-container: #dfe3e7;
   --color-on-secondary-container: #4d5256;
 
   --color-tertiary: #4e6176;
+  --color-on-tertiary: #f7f9ff;
   --color-tertiary-container: #cee1fb;
   --color-on-tertiary-container: #3f5266;
 
@@ -142,4 +145,12 @@ body {
 .glass-effect {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+}
+
+/* `/consult/welcome` — Material Symbols from design export */
+.consult-welcome .material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+}
+.consult-welcome .material-symbols-outlined.ms-fill {
+  font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
 }

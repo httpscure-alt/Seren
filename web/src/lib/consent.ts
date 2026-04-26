@@ -38,5 +38,9 @@ export function setConsent(choice: Exclude<ConsentChoice, "unset">) {
   try {
     document.cookie = `${CONSENT_KEY}=${choice}; Path=/; Max-Age=${60 * 60 * 24 * 365}; SameSite=Lax`;
   } catch {}
+  // `storage` only fires across tabs; same-tab listeners use this.
+  try {
+    window.dispatchEvent(new Event("seren-consent-change"));
+  } catch {}
 }
 

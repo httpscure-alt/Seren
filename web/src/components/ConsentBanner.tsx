@@ -1,16 +1,23 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getConsent, setConsent, type ConsentChoice } from "@/lib/consent";
 
+/**
+ * Non-blocking cookie notice: bottom bar only (no full-page overlay).
+ * Choice is stored in localStorage + cookie; see `lib/consent.ts`.
+ */
 export function ConsentBanner() {
   const [choice, setChoice] = useState<ConsentChoice>("unset");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setChoice(getConsent());
+    setMounted(true);
   }, []);
 
-  if (choice !== "unset") return null;
+  if (!mounted || choice !== "unset") return null;
 
   const choose = (next: Exclude<ConsentChoice, "unset">) => {
     setConsent(next);
@@ -19,108 +26,42 @@ export function ConsentBanner() {
 
   return (
     <div
-      className="fixed inset-0 z-[200] pointer-events-auto select-none"
-      onMouseDown={(e) => {
-        e.preventDefault();
-        choose("rejected");
-      }}
-      onPointerUp={(e) => {
-        e.preventDefault();
-        choose("rejected");
-      }}
-      onTouchEnd={(e) => {
-        e.preventDefault();
-        choose("rejected");
-      }}
-      onClick={(e) => {
-        e.preventDefault();
-        choose("rejected");
-      }}
-      role="presentation"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-[60] px-4 pt-2 sm:px-6 sm:pt-3"
+      style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom, 0px))" }}
     >
-      <div className="absolute inset-0 bg-on-surface/20" aria-hidden="true" />
-      <div className="absolute inset-0 grid place-items-end sm:place-items-center p-5 sm:p-6">
       <div
-        className="w-full max-w-3xl rounded-[2rem] border border-outline-variant/20 bg-surface shadow-[0_30px_90px_-60px_rgba(47,51,48,0.55)] p-5 sm:p-6"
+        className="pointer-events-auto mx-auto flex max-w-3xl flex-col gap-4 rounded-2xl border border-outline-variant/20 bg-surface/95 px-5 py-4 shadow-[0_-12px_48px_-20px_rgba(47,51,48,0.18)] backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:gap-6"
         role="dialog"
         aria-label="Analytics cookies"
-        onMouseDown={(e) => e.stopPropagation()}
-        onPointerUp={(e) => e.stopPropagation()}
-        onTouchEnd={(e) => e.stopPropagation()}
-        onClick={(e) => e.stopPropagation()}
+        aria-describedby="consent-banner-desc"
       >
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-sm font-headline tracking-tight text-on-surface">
-              Analytics cookies
-            </p>
-            <p className="mt-1 text-xs text-on-surface-variant leading-relaxed max-w-[70ch]">
-              We use analytics (GA4 + PostHog) to understand usage and improve the
-              product. You can opt out anytime.
-            </p>
-            <p className="mt-3 text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-              Tap outside to dismiss
-            </p>
-          </div>
-
-          <div className="flex gap-3 shrink-0">
-            <button
-              type="button"
-              onMouseDown={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                choose("rejected");
-              }}
-              onPointerUp={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                choose("rejected");
-              }}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                choose("rejected");
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                choose("rejected");
-              }}
-              className="touch-manipulation pointer-events-auto px-4 py-2.5 rounded-full border border-outline-variant/25 text-on-surface/70 text-xs uppercase tracking-[0.2em] font-headline hover:bg-surface-container transition-colors"
-            >
-              Reject
-            </button>
-            <button
-              type="button"
-              onMouseDown={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                choose("accepted");
-              }}
-              onPointerUp={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                choose("accepted");
-              }}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                choose("accepted");
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                choose("accepted");
-              }}
-              className="touch-manipulation pointer-events-auto btn-gradient px-5 py-2.5 rounded-full text-on-primary text-xs uppercase tracking-[0.2em] font-headline shadow-sm"
-            >
-              Accept
-            </button>
-          </div>
+        <div className="min-w-0">
+          <p className="text-sm font-headline tracking-tight text-on-surface">Analytics cookies</p>
+          <p id="consent-banner-desc" className="mt-1 max-w-[70ch] text-xs leading-relaxed text-on-surface-variant">
+            We use analytics (GA4 + PostHog) to understand usage and improve the product.{" "}
+            <Link href="/privacy" className="text-primary underline underline-offset-2 hover:brightness-95">
+              Privacy
+            </Link>
+          </p>
         </div>
-      </div>
+
+        <div className="flex shrink-0 gap-3 sm:justify-end">
+          <button
+            type="button"
+            onClick={() => choose("rejected")}
+            className="touch-manipulation rounded-full border border-outline-variant/25 px-4 py-2.5 font-headline text-xs uppercase tracking-[0.2em] text-on-surface/70 transition-colors hover:bg-surface-container"
+          >
+            Reject
+          </button>
+          <button
+            type="button"
+            onClick={() => choose("accepted")}
+            className="touch-manipulation rounded-full btn-gradient px-5 py-2.5 font-headline text-xs uppercase tracking-[0.2em] text-on-primary shadow-sm"
+          >
+            Accept
+          </button>
+        </div>
       </div>
     </div>
   );
 }
-

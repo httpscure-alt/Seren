@@ -16,7 +16,11 @@ export function AnalyticsGate() {
     const update = () => setEnabled(getConsent() === "accepted");
     update();
     window.addEventListener("storage", update);
-    return () => window.removeEventListener("storage", update);
+    window.addEventListener("seren-consent-change", update);
+    return () => {
+      window.removeEventListener("storage", update);
+      window.removeEventListener("seren-consent-change", update);
+    };
   }, []);
 
   const url = useMemo(() => {
