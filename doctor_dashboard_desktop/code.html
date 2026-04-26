@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Seren | physician portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#edeeea",
+                    "surface-dim": "#d6dbd5",
+                    "surface-container-high": "#e6e9e4",
+                    "surface-tint": "#3d6374",
+                    "tertiary-container": "#cee1fb",
+                    "surface-bright": "#faf9f6",
+                    "on-error": "#fff7f6",
+                    "secondary-fixed": "#dfe3e7",
+                    "inverse-primary": "#c3ebff",
+                    "secondary-dim": "#4f5457",
+                    "secondary-fixed-dim": "#d1d5d8",
+                    "primary": "#3d6374",
+                    "outline": "#787c77",
+                    "inverse-on-surface": "#9d9d9a",
+                    "surface-container-lowest": "#ffffff",
+                    "error": "#9f403d",
+                    "error-container": "#fe8983",
+                    "on-surface": "#2f3330",
+                    "tertiary-dim": "#425569",
+                    "on-surface-variant": "#5c605c",
+                    "secondary-container": "#dfe3e7",
+                    "on-secondary-container": "#4d5256",
+                    "surface": "#faf9f6",
+                    "on-error-container": "#752121",
+                    "surface-variant": "#e0e4de",
+                    "on-secondary-fixed": "#3b4043",
+                    "surface-container-highest": "#e0e4de",
+                    "primary-container": "#c0e9fc",
+                    "primary-fixed-dim": "#b2daed",
+                    "tertiary-fixed-dim": "#c0d3ec",
+                    "on-primary-fixed": "#1b4453",
+                    "on-tertiary": "#f7f9ff",
+                    "on-background": "#2f3330",
+                    "tertiary": "#4e6176",
+                    "on-primary-fixed-variant": "#3a6171",
+                    "tertiary-fixed": "#cee1fb",
+                    "outline-variant": "#afb3ae",
+                    "error-dim": "#4e0309",
+                    "on-secondary-fixed-variant": "#575c5f",
+                    "background": "#faf9f6",
+                    "secondary": "#5b6063",
+                    "surface-container-low": "#f4f4f0",
+                    "primary-dim": "#305767",
+                    "on-primary": "#f0f9ff",
+                    "inverse-surface": "#0d0f0d",
+                    "on-secondary": "#f5f9fd",
+                    "primary-fixed": "#c0e9fc",
+                    "on-tertiary-fixed": "#2c3f53",
+                    "on-tertiary-container": "#3f5266",
+                    "on-primary-container": "#305767",
+                    "on-tertiary-fixed-variant": "#495b70"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-manrope { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .glass-header { backdrop-filter: blur(20px); }
+        .pearlized-button { background: linear-gradient(135deg, #3D6374 0%, #305767 100%); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-[#FAF9F6]/70 dark:bg-slate-950/70 backdrop-blur-2xl">
+<div class="flex justify-between items-center px-12 py-6 w-full max-w-screen-2xl mx-auto">
+<div class="text-2xl font-semibold tracking-tighter text-[#2F3330] dark:text-[#FAF9F6] font-manrope">Seren</div>
+<div class="hidden md:flex items-center gap-10 font-manrope lowercase tracking-tight">
+<a class="text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">consultation</a>
+<a class="text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">results</a>
+<a class="text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">boutique</a>
+<a class="text-[#3D6374] border-b-2 border-[#3D6374]/20 pb-1" href="#">physician portal</a>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant text-sm">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 text-sm w-64 focus:ring-1 focus:ring-primary" placeholder="search patients..." type="text"/>
+</div>
+<div class="flex gap-4 items-center">
+<span class="material-symbols-outlined text-primary cursor-pointer">shopping_bag</span>
+<span class="material-symbols-outlined text-primary cursor-pointer">account_circle</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Portal Layout -->
+<main class="pt-32 pb-16 px-12 max-w-screen-2xl mx-auto flex flex-col md:flex-row gap-12">
+<!-- Sidebar: Case Queue -->
+<aside class="w-full md:w-80 flex-shrink-0">
+<div class="flex items-baseline justify-between mb-8">
+<h2 class="text-headline-sm font-headline lowercase tracking-tight text-on-surface">case queue</h2>
+<span class="text-xs font-label uppercase tracking-widest text-outline">12 pending</span>
+</div>
+<div class="space-y-4 no-scrollbar max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
+<!-- Case Item Active -->
+<div class="p-6 rounded-xl bg-surface-container-lowest border-l-4 border-primary transition-all duration-300 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="font-headline font-semibold text-on-surface lowercase">elena vance</p>
+<span class="text-[10px] bg-tertiary-container text-on-tertiary-container px-2 py-0.5 rounded-full lowercase">urgent</span>
+</div>
+<p class="text-xs text-outline mb-4">acne vulgaris / persistent</p>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close-up portrait of a woman with natural skin for medical case file" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNPNZzdzGBwR3PV1hnsft6pBaozLhLZaUh42Sehe5XxUG9CS4kiaMLxBcO6Qww_esON1ifc3kqz18ackFwGAmatBVJnYkr87ZII9CmWZViPZWFQJA96BMFzFISKwsfO-in-1ybdQVKjQAydmdlBAyzm9w6jvDGYBoXRjGdtTWeZZM7XTTRZi6KnG5eg7wqK9zxNdHUPsgoWdI1mPQsLwXaXKU6QWmD9WGfgXBhjEhYRnxqj9V1VGSjXfTgaMIzGXdhAzD7jQi5gFI"/>
+</div>
+<span class="text-[11px] text-outline italic">submitted 2h ago</span>
+</div>
+</div>
+<!-- Case Item Inactive -->
+<div class="p-6 rounded-xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 cursor-pointer opacity-70">
+<div class="flex justify-between items-start mb-2">
+<p class="font-headline font-semibold text-on-surface lowercase">marcus thorne</p>
+</div>
+<p class="text-xs text-outline mb-4">rosacea flare / type ii</p>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="professional portrait of a man for clinical record patient queue" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMGXOdxYGkHXGIVMhnqjTyCgsZQ3Csdo1HpW_v2CqcYr-9l1ubzU9CtSd2NyGHb7hryrnaazI4oay7DUUl767dQfN-1SubKaYhFcHoPzQnt-WFDJYxJX8VfX4v-z564eym7YV_SYcVVrfMYPxPRemWODgc9lUFI9bRgAkBCQqfIEuWEncLRrqYs97q-ULYsjy2l-4RfyvFFqVp0t19B1O2TdnilKNoYIkacKnszZarGx7C8H9UjKqkXqNnCWmzQ4lgvQIEUnPcr_A"/>
+</div>
+<span class="text-[11px] text-outline italic">submitted 5h ago</span>
+</div>
+</div>
+<!-- Case Item Inactive -->
+<div class="p-6 rounded-xl bg-surface-container-low hover:bg-surface-container transition-all duration-300 cursor-pointer opacity-70">
+<div class="flex justify-between items-start mb-2">
+<p class="font-headline font-semibold text-on-surface lowercase">sarah jenkins</p>
+</div>
+<p class="text-xs text-outline mb-4">hyperpigmentation / post-inflammatory</p>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="portrait of a woman with smooth complexion for medical software interface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo_-XLeB6aIiancmmvCkYUcYpsYxSssLso-YCLuNxwHum3W5ejNWaqIuB-xYQ46wP2Az-jOy48igprorfq9RTwkDv-fMrN3DsMQLWY6hm-zL0H7rvh1dO92FI5ddERWUe0DdP-Gjut4P65Ix_1ATnBQWPLV6k9IdBTQS1znDiFdSLhB5I8mN33eGAmKYJJL3LluDsMRzMn8M8vmTxboHPAplJa6zWwglMGq45sZ_LFIKrhAoVvRom-59tk1m1Jj_QCuUnR34JPGlc"/>
+</div>
+<span class="text-[11px] text-outline italic">submitted yesterday</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<section class="flex-grow space-y-12">
+<!-- Patient Header & Intentional Asymmetry -->
+<div class="grid grid-cols-12 gap-8 items-end">
+<div class="col-span-12 lg:col-span-7">
+<span class="text-primary font-label text-sm lowercase tracking-wider mb-2 block">case #9921-b</span>
+<h1 class="text-5xl font-headline font-light lowercase tracking-tighter text-on-surface mb-6">elena vance</h1>
+<div class="flex flex-wrap gap-4">
+<div class="px-4 py-2 rounded-lg bg-surface-container-high flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span class="text-sm font-label lowercase">28 years old</span>
+</div>
+<div class="px-4 py-2 rounded-lg bg-surface-container-high flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">history</span>
+<span class="text-sm font-label lowercase">patient since 2022</span>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-5 flex justify-end gap-3 pb-2">
+<button class="px-6 py-2.5 rounded-full border border-outline-variant/30 text-on-surface-variant text-sm font-manrope lowercase hover:bg-surface-container transition-colors">edit diagnosis</button>
+<button class="px-6 py-2.5 rounded-full border border-outline-variant/30 text-on-surface-variant text-sm font-manrope lowercase hover:bg-surface-container transition-colors">adjust routine</button>
+<button class="px-8 py-2.5 rounded-full pearlized-button text-on-primary text-sm font-manrope lowercase shadow-lg shadow-primary/20">approve</button>
+</div>
+</div>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Patient Images Canvas -->
+<div class="col-span-12 lg:col-span-8 space-y-6">
+<div class="bg-surface-container-lowest rounded-[2rem] p-8 overflow-hidden">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline text-lg lowercase">clinical photography</h3>
+<div class="flex gap-4">
+<button class="text-xs uppercase tracking-widest font-semibold text-primary">frontal</button>
+<button class="text-xs uppercase tracking-widest font-semibold text-outline/50">left profile</button>
+<button class="text-xs uppercase tracking-widest font-semibold text-outline/50">right profile</button>
+</div>
+</div>
+<div class="relative group">
+<img class="w-full aspect-[16/9] object-cover rounded-2xl grayscale-[20%] hover:grayscale-0 transition-all duration-700" data-alt="high-resolution clinical close-up of facial skin texture with marked dermatological concerns in bright soft light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzCcbYeCK9wgDsEBWMKVieu1wPDyFN0bj_PhwsMBZ99A43x4B172W3LDrIvLilEql0BLI2pD8AOFHqvLTEtAM_xccSFt1R-qSJC2rciNv1jEbyCuFU-vO9L2G580thJ8gV_B1wDcVIQBblEkWh0F--Du5K8dn0W-CqgnNimgc74Df3l5ZQrKWeXBVsWJIUG2gIAiOblJd3Q0fDZjQc6pp_zTk2emwlM258YuM_G1PskK-9raR_47BxOwFNXK0P3YAJyoFPn1ms0uc"/>
+<!-- Dermal Map Pins -->
+<div class="absolute top-1/4 left-1/3 w-8 h-8 rounded-full bg-white/30 backdrop-blur-md border border-white/50 animate-pulse flex items-center justify-center cursor-pointer">
+<div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_#3D6374]"></div>
+</div>
+<div class="absolute bottom-1/3 right-1/4 w-8 h-8 rounded-full bg-white/30 backdrop-blur-md border border-white/50 animate-pulse flex items-center justify-center cursor-pointer" style="animation-delay: 1s">
+<div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_#3D6374]"></div>
+</div>
+</div>
+<div class="mt-8 grid grid-cols-4 gap-4">
+<div class="aspect-square rounded-xl overflow-hidden cursor-pointer hover:ring-2 ring-primary transition-all">
+<img class="w-full h-full object-cover" data-alt="dermatology clinical macro photo of forehead area" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrynu_ybRJ_lSM_unDOnXMm_fEKNh7WpQ9ScZSR2YqsgUJr1QOtukdNqJCyDS2MhFku0JlHxtWwhLscGbas1qPfUe3bJctMlkJVd7TKY1dQrnoUK_YeBYut2RNwt7o4T-dpIStvuqJBZwAK507SlnpxAy0cUAP2m2jMft-_QtaEwThEo459FETqTdjs6IZ8fXFYoQ9aoVwziAw3uILA2BTOEbJVeVe6wcMl8RyHXTbt91c81g8MWgOT-3DHh2oKsINPOKsJXXS-Wo"/>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden cursor-pointer hover:ring-2 ring-primary transition-all">
+<img class="w-full h-full object-cover" data-alt="clinical side view of facial skin texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiBtnPffk1gP8NUc-Ub0D7gXfY0dzi9blgzH9pIUky5ius52gBK-fbKOKLP9sRkcR0Hvc1UYQ6TAGzHSuRAr4D6hovdncy2EdzzMyXXj4JadvByqw44BgO5cvFaVdoEuhInFMlaTg-k76BO_tm30rZ-IG22_WCikRrPJ0DWrp0hJolkjVVhGRpiLA3ps5TcKFFIfiopRa6wiyM98JZLDG1Wq6uGd5wmzmhjIJgAiBMmoZKF6DOQzfsqSqFy4LkIHEGmzuYAikxS9w"/>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden cursor-pointer hover:ring-2 ring-primary transition-all">
+<img class="w-full h-full object-cover" data-alt="microscopic skin analysis visualization" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCu7fcMpnkOIfeQRl0blPkVmvx0WHmow4tqkgGS-0rsLYEgd6R-NYggw4yFnLDhHIx11fGdHLVjGaEcT738lgiXq8ilnq9qRWMDoIOFGcCnc7FqxRykFQ5oNBCfOClkS60Z_UqFr0-KQ6RTRBZ_Mv5iRJmTx33bIfyW7q_FbEEJYpXeplFtu79zs1Fch5bJay7HICVsFl1SJlRT37bIT_k7gQYax3Qt82UoEECQSGpaxzcxrGX2HIo6ZhvY4_pCjpvMeyEy65M5S14"/>
+</div>
+<div class="aspect-square rounded-xl bg-surface-container flex flex-col items-center justify-center text-outline group hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">add_a_photo</span>
+<span class="text-[10px] uppercase tracking-tighter">add image</span>
+</div>
+</div>
+</div>
+<!-- AI Pre-Analysis Summary -->
+<div class="bg-primary-container/30 rounded-[2rem] p-8 border border-primary/5">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary" data-weight="fill">auto_awesome</span>
+<h3 class="font-headline text-lg lowercase text-on-primary-container">clinical intelligence summary</h3>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="space-y-2">
+<p class="text-[10px] uppercase tracking-widest text-on-primary-container/60 font-semibold">probability</p>
+<p class="text-3xl font-manrope font-light text-primary tracking-tighter">94.2% <span class="text-xs font-label text-outline ml-1">acne v.</span></p>
+</div>
+<div class="space-y-2">
+<p class="text-[10px] uppercase tracking-widest text-on-primary-container/60 font-semibold">inflammatory load</p>
+<p class="text-3xl font-manrope font-light text-primary tracking-tighter">medium</p>
+</div>
+<div class="space-y-2">
+<p class="text-[10px] uppercase tracking-widest text-on-primary-container/60 font-semibold">recommended base</p>
+<p class="text-3xl font-manrope font-light text-primary tracking-tighter">tretinoin</p>
+</div>
+</div>
+<p class="mt-8 text-sm leading-relaxed text-on-primary-container/80 max-w-2xl font-label">
+                            AI detection identifies localized papules on the forehead and chin areas. Surface oil production indices are 14% higher than baseline. Suggesting transition from 0.025% to 0.05% formulation with added niacinamide for barrier support.
+                        </p>
+</div>
+</div>
+<!-- Intake Data & Patient Notes -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<div class="bg-surface-container-lowest rounded-[2rem] p-8 h-full">
+<h3 class="font-headline text-lg lowercase mb-8">intake insights</h3>
+<div class="space-y-10">
+<div class="group">
+<p class="text-[10px] uppercase tracking-widest text-outline mb-3">primary concerns</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-full bg-surface-container text-xs lowercase">active breakouts</span>
+<span class="px-3 py-1 rounded-full bg-surface-container text-xs lowercase">texture</span>
+<span class="px-3 py-1 rounded-full bg-surface-container text-xs lowercase">scarring</span>
+</div>
+</div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-outline mb-3">current routine</p>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary mt-1.5"></div>
+<div>
+<p class="text-sm font-medium lowercase">gentle cleanser</p>
+<p class="text-[11px] text-outline lowercase italic">twice daily</p>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary mt-1.5"></div>
+<div>
+<p class="text-sm font-medium lowercase">0.025% tretinoin</p>
+<p class="text-[11px] text-outline lowercase italic">pm / 3x week</p>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary mt-1.5"></div>
+<div>
+<p class="text-sm font-medium lowercase">hyaluronic acid serum</p>
+<p class="text-[11px] text-outline lowercase italic">daily</p>
+</div>
+</li>
+</ul>
+</div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-outline mb-3">lifestyle factors</p>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-sm border-b border-surface-container pb-2">
+<span class="text-on-surface/60 lowercase">stress level</span>
+<span class="font-medium lowercase">elevated</span>
+</div>
+<div class="flex justify-between items-center text-sm border-b border-surface-container pb-2">
+<span class="text-on-surface/60 lowercase">sleep quality</span>
+<span class="font-medium lowercase">6-7 hours</span>
+</div>
+<div class="flex justify-between items-center text-sm border-b border-surface-container pb-2">
+<span class="text-on-surface/60 lowercase">water intake</span>
+<span class="font-medium lowercase">moderate</span>
+</div>
+</div>
+</div>
+<div class="pt-4">
+<p class="text-[10px] uppercase tracking-widest text-outline mb-3">patient note</p>
+<p class="text-sm italic text-on-surface-variant leading-relaxed bg-surface-container-low p-4 rounded-xl">
+                                    "I've noticed more redness lately around my cheeks. The current tretinoin doesn't seem to be helping as much as it did last year. Hoping for something a bit more effective but still gentle."
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-[#2F3330]/5 bg-[#FAF9F6] dark:bg-slate-950">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-16 w-full max-w-screen-2xl mx-auto">
+<div class="text-lg font-bold text-[#2F3330] dark:text-[#FAF9F6] mb-6 md:mb-0">Seren.</div>
+<div class="flex gap-10 font-inter text-sm lowercase tracking-wide text-[#2F3330]/50">
+<a class="hover:text-[#3D6374] transition-opacity opacity-80" href="#">privacy policy</a>
+<a class="hover:text-[#3D6374] transition-opacity opacity-80" href="#">clinical standards</a>
+<a class="hover:text-[#3D6374] transition-opacity opacity-80" href="#">terms of service</a>
+<a class="hover:text-[#3D6374] transition-opacity opacity-80" href="#">contact</a>
+</div>
+<div class="mt-8 md:mt-0 font-inter text-sm lowercase tracking-wide text-[#2F3330]/50">
+                © 2024 Seren. all rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

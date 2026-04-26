@@ -1,0 +1,290 @@
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#edeeea",
+            "surface-dim": "#d6dbd5",
+            "surface-container-high": "#e6e9e4",
+            "surface-tint": "#3d6374",
+            "tertiary-container": "#cee1fb",
+            "surface-bright": "#faf9f6",
+            "on-error": "#fff7f6",
+            "secondary-fixed": "#dfe3e7",
+            "inverse-primary": "#c3ebff",
+            "secondary-dim": "#4f5457",
+            "secondary-fixed-dim": "#d1d5d8",
+            "primary": "#3d6374",
+            "outline": "#787c77",
+            "inverse-on-surface": "#9d9d9a",
+            "surface-container-lowest": "#ffffff",
+            "error": "#9f403d",
+            "error-container": "#fe8983",
+            "on-surface": "#2f3330",
+            "tertiary-dim": "#425569",
+            "on-surface-variant": "#5c605c",
+            "secondary-container": "#dfe3e7",
+            "on-secondary-container": "#4d5256",
+            "surface": "#faf9f6",
+            "on-error-container": "#752121",
+            "surface-variant": "#e0e4de",
+            "on-secondary-fixed": "#3b4043",
+            "surface-container-highest": "#e0e4de",
+            "primary-container": "#c0e9fc",
+            "primary-fixed-dim": "#b2daed",
+            "tertiary-fixed-dim": "#c0d3ec",
+            "on-primary-fixed": "#1b4453",
+            "on-tertiary": "#f7f9ff",
+            "on-background": "#2f3330",
+            "tertiary": "#4e6176",
+            "on-primary-fixed-variant": "#3a6171",
+            "tertiary-fixed": "#cee1fb",
+            "outline-variant": "#afb3ae",
+            "error-dim": "#4e0309",
+            "on-secondary-fixed-variant": "#575c5f",
+            "background": "#faf9f6",
+            "secondary": "#5b6063",
+            "surface-container-low": "#f4f4f0",
+            "primary-dim": "#305767",
+            "on-primary": "#f0f9ff",
+            "inverse-surface": "#0d0f0d",
+            "on-secondary": "#f5f9fd",
+            "primary-fixed": "#c0e9fc",
+            "on-tertiary-fixed": "#2c3f53",
+            "on-tertiary-container": "#3f5266",
+            "on-tertiary-fixed-variant": "#495b70"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1.5rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-nav {
+      backdrop-filter: blur(20px);
+    }
+    .pearl-gradient {
+      background: linear-gradient(135deg, #3d6374 0%, #305767 100%);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body min-h-screen">
+<!-- TopNavBar Implementation from JSON -->
+<header class="fixed top-0 w-full z-50 bg-[#FAF9F6]/70 dark:bg-slate-950/70 backdrop-blur-2xl">
+<nav class="flex justify-between items-center px-12 py-6 w-full max-w-screen-2xl mx-auto">
+<div class="text-2xl font-semibold tracking-tighter text-[#2F3330] dark:text-[#FAF9F6] font-headline">Seren</div>
+<div class="hidden md:flex gap-8 items-center">
+<!-- consultation is active for intake flow -->
+<a class="font-manrope lowercase tracking-tight text-[#3D6374] border-b-2 border-[#3D6374]/20 pb-1 hover:text-[#3D6374] transition-colors duration-300" href="#">consultation</a>
+<a class="font-manrope lowercase tracking-tight text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">results</a>
+<a class="font-manrope lowercase tracking-tight text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">boutique</a>
+<a class="font-manrope lowercase tracking-tight text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">physician portal</a>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer">shopping_bag</span>
+<span class="material-symbols-outlined text-primary cursor-pointer">account_circle</span>
+</div>
+<button class="pearl-gradient text-on-primary px-6 py-2.5 rounded-full font-headline lowercase text-sm tracking-tight scale-98 hover:opacity-90 transition-all duration-200">book appointment</button>
+</div>
+</nav>
+</header>
+<main class="pt-32 pb-24 px-12 max-w-screen-2xl mx-auto">
+<!-- Progress Indicator -->
+<div class="max-w-4xl mx-auto mb-16">
+<div class="flex justify-between items-end mb-4">
+<div>
+<h1 class="font-headline text-3xl font-light tracking-tight text-on-surface lowercase">digital intake</h1>
+<p class="text-on-surface-variant lowercase text-sm mt-1">step 1 of 2: visual documentation &amp; assessment</p>
+</div>
+<div class="text-primary font-headline text-sm tracking-widest lowercase">50% complete</div>
+</div>
+<div class="h-1 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-1/2 transition-all duration-700 ease-in-out"></div>
+</div>
+</div>
+<!-- Main Grid Content -->
+<div class="grid grid-cols-12 gap-12">
+<!-- Sidebar: Photography Tips -->
+<aside class="col-span-12 lg:col-span-3 order-2 lg:order-1">
+<div class="sticky top-40 space-y-8">
+<div class="p-8 rounded-2xl bg-surface-container-low">
+<h3 class="font-headline text-lg mb-6 lowercase text-primary font-semibold">clinical photography tips</h3>
+<ul class="space-y-6">
+<li class="flex gap-4 items-start">
+<span class="material-symbols-outlined text-primary-dim text-xl">light_mode</span>
+<div>
+<p class="font-label text-sm font-semibold lowercase">natural lighting</p>
+<p class="text-xs text-on-surface-variant leading-relaxed mt-1">position yourself near a window. avoid harsh flash that washes out texture.</p>
+</div>
+</li>
+<li class="flex gap-4 items-start">
+<span class="material-symbols-outlined text-primary-dim text-xl">center_focus_strong</span>
+<div>
+<p class="font-label text-sm font-semibold lowercase">macro &amp; context</p>
+<p class="text-xs text-on-surface-variant leading-relaxed mt-1">take one clear close-up and one from a distance to show location.</p>
+</div>
+</li>
+<li class="flex gap-4 items-start">
+<span class="material-symbols-outlined text-primary-dim text-xl">contrast</span>
+<div>
+<p class="font-label text-sm font-semibold lowercase">neutral background</p>
+<p class="text-xs text-on-surface-variant leading-relaxed mt-1">stand against a plain wall to minimize visual distractions.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="p-8 rounded-2xl bg-primary/5 border border-primary/10">
+<div class="flex items-center gap-4 mb-4">
+<img alt="Dr. Riris Asti Respati, SpDVE" class="w-12 h-12 rounded-full object-cover border-2 border-primary/20" src="https://lh3.googleusercontent.com/aida/ADBb0uhtA_5S52BGtwLRwmziONbxj96Pl1fydPpZeDPoJO2G15FcOtVSJQaS9GKV4nODYNTHPOFeF0tRJPrSHXw2EkZOkf5FGNPgqBkLv9GVFLIC093sSl4PzqQXrmNGz13yItZgWxqjdY37l0YfOt6U15Ofdui2iODg-8DWGqm86glTR2eitnuq3NNP5oaX79cIq4ap07J8igNv_6PMMeDFaeChcPWhZrokxnkNtlbVxFwieJ4DrD6YCjd382slLqznc4mUadBTZNhM"/>
+<div>
+<h4 class="font-headline text-sm font-bold lowercase leading-tight text-primary">your lead reviewer</h4>
+<p class="text-[10px] text-on-surface-variant font-semibold mt-0.5">Dr. Riris Asti Respati, SpDVE</p>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed lowercase">your intake data and clinical photos will be personally reviewed by Dr. Respati. all information is encrypted and stored in compliance with medical privacy standards.</p>
+</div>
+</div>
+</aside>
+<!-- Central Content: Steps -->
+<section class="col-span-12 lg:col-span-9 order-1 lg:order-2 space-y-12">
+<!-- Step 1: Photo Upload (Bento Style) -->
+<div class="space-y-6">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 rounded-full bg-primary-container text-primary flex items-center justify-center font-headline text-sm">01</span>
+<h2 class="font-headline text-xl lowercase tracking-tight">upload clinical photos</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Upload Slot 1 -->
+<div class="relative group aspect-[3/4] rounded-2xl bg-surface-container-lowest border-2 border-dashed border-outline-variant/30 flex flex-col items-center justify-center p-6 hover:border-primary/40 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline-variant group-hover:text-primary transition-colors mb-4">add_a_photo</span>
+<p class="text-sm font-label text-on-surface-variant lowercase">primary view</p>
+<p class="text-[10px] text-outline mt-1 uppercase tracking-tighter">required</p>
+</div>
+<!-- Upload Slot 2 -->
+<div class="relative group aspect-[3/4] rounded-2xl bg-surface-container-lowest border border-outline-variant/15 overflow-hidden">
+<img class="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-500" data-alt="close up of clear healthy skin with soft side lighting on a neutral beige background representing a clinical photography sample" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCteVX00HeD5qv6oDvEj_QgIDyMSE60-8kJy8eEg3o_cOSh3O3zIZiBmnrC5niZeiSFoFj_ZWEBRPUZDFQhaDVAksdmsMMXvynOlzi1-eWDpFh4TuqYzJmgGGOrL7E-g27A-BOfQPm_OlE64wQbpqkxaRJgHE_1sdnmQ0fTjZihVUlNNZKlYJbSN-_pEM_pA6orin0H92B5dq9-dDc1qH8E0mT-P8bUlRDNUW0-7C_yG391Af39GghTMHJoqOLcM-yyONvfPCvQBTs"/>
+<div class="absolute inset-0 bg-surface-dim/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-6 text-center">
+<span class="material-symbols-outlined text-primary mb-2">check_circle</span>
+<p class="text-xs font-label text-on-surface lowercase">image_02.jpg</p>
+<button class="mt-4 text-[10px] uppercase tracking-widest text-primary font-bold hover:underline">replace</button>
+</div>
+</div>
+<!-- Upload Slot 3 -->
+<div class="relative group aspect-[3/4] rounded-2xl bg-surface-container-lowest border-2 border-dashed border-outline-variant/30 flex flex-col items-center justify-center p-6 hover:border-primary/40 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl text-outline-variant group-hover:text-primary transition-colors mb-3">add</span>
+<p class="text-xs font-label text-on-surface-variant lowercase">additional angle</p>
+</div>
+</div>
+</div>
+<!-- Step 2: Symptoms Checklist -->
+<div class="space-y-6 pt-12">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 rounded-full bg-primary-container text-primary flex items-center justify-center font-headline text-sm">02</span>
+<h2 class="font-headline text-xl lowercase tracking-tight">symptom profile</h2>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl p-10 space-y-10">
+<p class="text-on-surface-variant text-sm lowercase max-w-2xl">select all that apply to the affected area. this data helps our clinical team prioritize your assessment and identify potential urgency.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+<!-- Checkbox Item: Itchy -->
+<label class="flex items-start gap-5 group cursor-pointer">
+<div class="mt-1 relative flex items-center justify-center w-6 h-6 rounded bg-surface-container-high border border-outline-variant group-hover:border-primary transition-colors">
+<input class="peer absolute opacity-0 w-full h-full cursor-pointer" type="checkbox"/>
+<span class="material-symbols-outlined text-primary scale-0 peer-checked:scale-100 transition-transform text-lg">check</span>
+</div>
+<div>
+<span class="block font-headline text-lg lowercase leading-none text-on-surface group-hover:text-primary transition-colors">itchy</span>
+<span class="block text-xs text-on-surface-variant mt-2 leading-relaxed lowercase">mild to intense itching sensation that may worsen at night or with heat.</span>
+</div>
+</label>
+<!-- Checkbox Item: Painful -->
+<label class="flex items-start gap-5 group cursor-pointer">
+<div class="mt-1 relative flex items-center justify-center w-6 h-6 rounded bg-surface-container-high border border-outline-variant group-hover:border-primary transition-colors">
+<input class="peer absolute opacity-0 w-full h-full cursor-pointer" type="checkbox"/>
+<span class="material-symbols-outlined text-primary scale-0 peer-checked:scale-100 transition-transform text-lg">check</span>
+</div>
+<div>
+<span class="block font-headline text-lg lowercase leading-none text-on-surface group-hover:text-primary transition-colors">painful or tender</span>
+<span class="block text-xs text-on-surface-variant mt-2 leading-relaxed lowercase">localized pain, stinging, or sensitivity when the area is touched.</span>
+</div>
+</label>
+<!-- Checkbox Item: Red -->
+<label class="flex items-start gap-5 group cursor-pointer">
+<div class="mt-1 relative flex items-center justify-center w-6 h-6 rounded bg-surface-container-high border border-outline-variant group-hover:border-primary transition-colors">
+<input class="peer absolute opacity-0 w-full h-full cursor-pointer" type="checkbox"/>
+<span class="material-symbols-outlined text-primary scale-0 peer-checked:scale-100 transition-transform text-lg">check</span>
+</div>
+<div>
+<span class="block font-headline text-lg lowercase leading-none text-on-surface group-hover:text-primary transition-colors">red or inflamed</span>
+<span class="block text-xs text-on-surface-variant mt-2 leading-relaxed lowercase">visible redness, swelling, or a "heated" sensation on the skin surface.</span>
+</div>
+</label>
+<!-- Checkbox Item: Spreading -->
+<label class="flex items-start gap-5 group cursor-pointer">
+<div class="mt-1 relative flex items-center justify-center w-6 h-6 rounded bg-surface-container-high border border-outline-variant group-hover:border-primary transition-colors">
+<input class="peer absolute opacity-0 w-full h-full cursor-pointer" type="checkbox"/>
+<span class="material-symbols-outlined text-primary scale-0 peer-checked:scale-100 transition-transform text-lg">check</span>
+</div>
+<div>
+<span class="block font-headline text-lg lowercase leading-none text-on-surface group-hover:text-primary transition-colors">spreading</span>
+<span class="block text-xs text-on-surface-variant mt-2 leading-relaxed lowercase">the condition is expanding in size or appearing in new locations.</span>
+</div>
+</label>
+</div>
+<!-- Additional Detail Field -->
+<div class="pt-8 border-t border-outline-variant/10">
+<label class="block font-headline text-sm lowercase mb-4 font-semibold">any other observations?</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-xl p-6 text-sm focus:ring-1 focus:ring-primary h-32 placeholder:text-on-surface-variant/40 placeholder:italic" placeholder="describe any other changes, such as bleeding, crusting, or change in texture..."></textarea>
+</div>
+</div>
+</div>
+<!-- Navigation Buttons -->
+<div class="flex justify-between items-center pt-8">
+<button class="flex items-center gap-2 px-8 py-3 text-on-surface-variant hover:text-primary transition-colors lowercase font-headline">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+            previous
+          </button>
+<div class="flex gap-4">
+<button class="px-10 py-3.5 rounded-full border border-outline-variant/30 text-on-surface hover:bg-surface-container-low transition-colors lowercase font-headline tracking-tight">save draft</button>
+<button class="pearl-gradient px-12 py-3.5 rounded-full text-on-primary font-headline tracking-tight lowercase shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">continue to summary</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer Implementation from JSON -->
+<footer class="w-full border-t border-[#2F3330]/5 bg-[#FAF9F6] dark:bg-slate-950 mt-12">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-16 w-full max-w-screen-2xl mx-auto">
+<div class="text-lg font-bold text-[#2F3330] dark:text-[#FAF9F6] font-headline mb-8 md:mb-0">Seren.</div>
+<div class="flex flex-wrap justify-center gap-8 mb-8 md:mb-0">
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] underline-offset-4 opacity-80 transition-opacity" href="#">privacy policy</a>
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] underline-offset-4 opacity-80 transition-opacity" href="#">clinical standards</a>
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] underline-offset-4 opacity-80 transition-opacity" href="#">terms of service</a>
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] underline-offset-4 opacity-80 transition-opacity" href="#">contact</a>
+</div>
+<div class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50">© 2024 Seren. all rights reserved.</div>
+</div>
+</footer>
+</body></html>

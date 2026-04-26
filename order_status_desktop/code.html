@@ -1,0 +1,249 @@
+<html><head><meta charset="utf-8"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-container": "#edeeea",
+                "surface-dim": "#d6dbd5",
+                "surface-container-high": "#e6e9e4",
+                "surface-tint": "#3d6374",
+                "tertiary-container": "#cee1fb",
+                "surface-bright": "#faf9f6",
+                "on-error": "#fff7f6",
+                "secondary-fixed": "#dfe3e7",
+                "inverse-primary": "#c3ebff",
+                "secondary-dim": "#4f5457",
+                "secondary-fixed-dim": "#d1d5d8",
+                "primary": "#3d6374",
+                "outline": "#787c77",
+                "inverse-on-surface": "#9d9d9a",
+                "surface-container-lowest": "#ffffff",
+                "error": "#9f403d",
+                "error-container": "#fe8983",
+                "on-surface": "#2f3330",
+                "tertiary-dim": "#425569",
+                "on-surface-variant": "#5c605c",
+                "secondary-container": "#dfe3e7",
+                "on-secondary-container": "#4d5256",
+                "surface": "#faf9f6",
+                "on-error-container": "#752121",
+                "surface-variant": "#e0e4de",
+                "on-secondary-fixed": "#3b4043",
+                "surface-container-highest": "#e0e4de",
+                "primary-container": "#c0e9fc",
+                "primary-fixed-dim": "#b2daed",
+                "tertiary-fixed-dim": "#c0d3ec",
+                "on-primary-fixed": "#1b4453",
+                "on-tertiary": "#f7f9ff",
+                "on-background": "#2f3330",
+                "tertiary": "#4e6176",
+                "on-primary-fixed-variant": "#3a6171",
+                "tertiary-fixed": "#cee1fb",
+                "outline-variant": "#afb3ae",
+                "error-dim": "#4e0309",
+                "on-secondary-fixed-variant": "#575c5f",
+                "background": "#faf9f6",
+                "secondary": "#5b6063",
+                "surface-container-low": "#f4f4f0",
+                "primary-dim": "#305767",
+                "on-primary": "#f0f9ff",
+                "inverse-surface": "#0d0f0d",
+                "on-secondary": "#f5f9fd",
+                "primary-fixed": "#c0e9fc",
+                "on-tertiary-fixed": "#2c3f53",
+                "on-tertiary-container": "#3f5266",
+                "on-primary-container": "#305767",
+                "on-tertiary-fixed-variant": "#495b70"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "fontFamily": {
+                "headline": ["Manrope"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+        }
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  body {
+    background-color: #FAF9F6;
+    color: #2F3330;
+    font-family: 'Inter', sans-serif;
+  }
+  .glass-nav {
+    background: rgba(250, 249, 246, 0.7);
+    backdrop-filter: blur(20px);
+  }
+</style>
+</head><body class="bg-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation (Shell Component) -->
+<nav class="fixed top-0 w-full z-50 bg-[#FAF9F6]/70 dark:bg-slate-950/70 backdrop-blur-2xl">
+<div class="flex justify-between items-center px-12 py-6 w-full max-w-screen-2xl mx-auto">
+<div class="text-2xl font-semibold tracking-tighter text-[#2F3330] dark:text-[#FAF9F6] font-headline">Seren</div>
+<div class="hidden md:flex items-center space-x-12">
+<a class="font-manrope lowercase tracking-tight text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">consultation</a>
+<a class="font-manrope lowercase tracking-tight text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">results</a>
+<a class="font-manrope lowercase tracking-tight text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">boutique</a>
+<a class="font-manrope lowercase tracking-tight text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">physician portal</a>
+</div>
+<div class="flex items-center space-x-8">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="shopping_bag">shopping_bag</button>
+<button class="material-symbols-outlined text-primary" data-icon="account_circle" style="font-variation-settings: 'FILL' 1;">account_circle</button>
+</div>
+</div>
+</nav>
+<main class="pt-32 pb-24 px-12 max-w-screen-2xl mx-auto">
+<!-- Header Section -->
+<header class="mb-16">
+<h1 class="text-5xl font-headline font-light tracking-tight text-on-surface mb-4">track your shipment</h1>
+<p class="text-lg text-on-surface-variant font-body max-w-2xl leading-relaxed">monitoring the journey of your bespoke skincare essentials from our laboratory to your doorstep.</p>
+</header>
+<div class="grid grid-cols-12 gap-12">
+<!-- Left Column: Order Summary & Tracking Info -->
+<div class="col-span-12 lg:col-span-5 space-y-12">
+<!-- Order Identity Card -->
+<div class="bg-surface-container-lowest p-10 rounded-xl shadow-[12px_40px_40px_-15px_rgba(47,51,48,0.05)]">
+<div class="space-y-6">
+<div class="flex justify-between items-end">
+<div>
+<span class="text-xs font-label uppercase tracking-widest text-on-surface-variant/60 block mb-2">tracking number</span>
+<h3 class="text-2xl font-headline font-medium text-primary tracking-tight">CA-9821034421</h3>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full text-xs font-label lowercase hover:bg-surface-container-high transition-colors">copy link</button>
+</div>
+<div class="h-px bg-surface-container-high"></div>
+<div class="grid grid-cols-2 gap-8">
+<div>
+<span class="text-xs font-label uppercase tracking-widest text-on-surface-variant/60 block mb-1">status</span>
+<span class="text-sm font-body text-on-surface bg-tertiary-container/30 px-3 py-1 rounded-full">dikirim</span>
+</div>
+<div>
+<span class="text-xs font-label uppercase tracking-widest text-on-surface-variant/60 block mb-1">estimated arrival</span>
+<span class="text-sm font-body text-on-surface">oct 24, 2024</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Preview -->
+<div class="bg-surface-container-low p-10 rounded-xl">
+<h4 class="text-sm font-label uppercase tracking-widest text-on-surface-variant/60 mb-8">parcel contents</h4>
+<div class="flex items-center space-x-6">
+<div class="w-24 h-24 rounded-lg overflow-hidden bg-white">
+<img class="w-full h-full object-cover" data-alt="luxury glass skincare bottle with minimalist label on soft beige background with elegant shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcoCP33Tiy6dZFlyDXXYHxYBsXGIW8YvdYO-2praDMvwLAmbdKtv30ZM0PHrY9B1KGs83Q8LmF7SinuQJCKwLCJguWSqvnS8YMKnGXyZQhcqlSVJNyOffx4lbQ89_C5Amg4amC4WZOz1CAdp1D8Gat8R-GXO3uzPMh4OgIurHDMrHcsscz5XPmGhZJMCPWvvn6rep0i-Unt2GABikjH14KyA1_jxmIoqXQQwOt2QrGfz70-6_80gofSyvJa7gvZK3Ri34-EAt7w7E"/>
+</div>
+<div>
+<p class="font-headline text-lg text-on-surface lowercase tracking-tight">resurfacing peptide complex</p>
+<p class="text-sm text-on-surface-variant font-body mt-1">30ml • customized formulation</p>
+</div>
+</div>
+</div>
+<!-- Shipping Address -->
+<div class="px-10">
+<span class="text-xs font-label uppercase tracking-widest text-on-surface-variant/60 block mb-4">delivery address</span>
+<p class="text-on-surface font-body leading-relaxed">
+            alexandra vandenberg<br/>
+            242 high street, unit 4b<br/>
+            greenwich, london SE10 8NN<br/>
+            united kingdom
+          </p>
+</div>
+</div>
+<!-- Right Column: Timeline UI -->
+<div class="col-span-12 lg:col-span-7">
+<div class="bg-surface-container-lowest p-12 rounded-xl border border-outline-variant/10">
+<h2 class="text-2xl font-headline font-light text-on-surface mb-12">shipping journey</h2>
+<div class="relative">
+<!-- Continuous Line -->
+<div class="absolute left-[11px] top-2 bottom-0 w-[2px] bg-surface-container-high"></div>
+<div class="space-y-16">
+<!-- State: Selesai (Upcoming) -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-0 w-6 h-6 rounded-full border-2 border-surface-container-high bg-white z-10 flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-surface-container-high"></div>
+</div>
+<div class="opacity-40">
+<span class="text-xs font-label uppercase tracking-widest text-on-surface-variant block mb-1">step 03</span>
+<h4 class="text-xl font-headline font-medium lowercase tracking-tight mb-2">selesai</h4>
+<p class="text-sm font-body text-on-surface-variant leading-relaxed">expected delivery and digital verification of your atelier parcel.</p>
+</div>
+</div>
+<!-- State: Dikirim (Active) -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-0 w-6 h-6 rounded-full border-2 border-primary bg-primary z-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-white" data-icon="local_shipping" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+</div>
+<!-- Highlight line segment -->
+<div class="absolute left-[11px] -top-16 bottom-0 w-[2px] bg-primary z-0"></div>
+<div>
+<span class="text-xs font-label uppercase tracking-widest text-primary block mb-1">step 02 • in transit</span>
+<h4 class="text-xl font-headline font-medium lowercase tracking-tight mb-4">dikirim</h4>
+<div class="space-y-8 mt-6">
+<div class="flex items-start">
+<div class="flex-1">
+<p class="text-sm font-body text-on-surface font-medium">arrived at local facility</p>
+<p class="text-xs font-label text-on-surface-variant/70 mt-1">london gateway hub • oct 21, 09:42</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="flex-1">
+<p class="text-sm font-body text-on-surface-variant">departed international sorting center</p>
+<p class="text-xs font-label text-on-surface-variant/70 mt-1">frankfurt am main • oct 20, 14:15</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="flex-1">
+<p class="text-sm font-body text-on-surface-variant">handover to logistics partner</p>
+<p class="text-xs font-label text-on-surface-variant/70 mt-1">atelier logistics • oct 20, 08:30</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- State: Diproses (Completed) -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-0 w-6 h-6 rounded-full border-2 border-primary bg-white z-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="check">check</span>
+</div>
+<div>
+<span class="text-xs font-label uppercase tracking-widest text-on-surface-variant block mb-1">step 01 • completed</span>
+<h4 class="text-xl font-headline font-medium lowercase tracking-tight mb-2">diproses</h4>
+<p class="text-sm font-body text-on-surface-variant leading-relaxed">your formulation was curated, quality-checked, and packaged at our atelier.</p>
+<p class="text-xs font-label text-on-surface-variant/70 mt-3 uppercase tracking-wider">oct 19, 2024</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Shell Component) -->
+<footer class="w-full border-t border-[#2F3330]/5 bg-[#FAF9F6] dark:bg-slate-950">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-16 w-full max-w-screen-2xl mx-auto">
+<div class="mb-8 md:mb-0">
+<div class="text-lg font-bold text-[#2F3330] dark:text-[#FAF9F6] font-headline mb-2">Seren</div>
+<p class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50">© 2024 Seren. all rights reserved.</p>
+</div>
+<div class="flex space-x-8">
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] transition-opacity" href="#">privacy policy</a>
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] transition-opacity" href="#">clinical standards</a>
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] transition-opacity" href="#">terms of service</a>
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] transition-opacity" href="#">contact</a>
+</div>
+</div>
+</footer>
+</body></html>

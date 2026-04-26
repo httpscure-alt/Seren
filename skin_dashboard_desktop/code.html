@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#edeeea",
+                    "surface-dim": "#d6dbd5",
+                    "surface-container-high": "#e6e9e4",
+                    "surface-tint": "#3d6374",
+                    "tertiary-container": "#cee1fb",
+                    "surface-bright": "#faf9f6",
+                    "on-error": "#fff7f6",
+                    "secondary-fixed": "#dfe3e7",
+                    "inverse-primary": "#c3ebff",
+                    "secondary-dim": "#4f5457",
+                    "secondary-fixed-dim": "#d1d5d8",
+                    "primary": "#3d6374",
+                    "outline": "#787c77",
+                    "inverse-on-surface": "#9d9d9a",
+                    "surface-container-lowest": "#ffffff",
+                    "error": "#9f403d",
+                    "error-container": "#fe8983",
+                    "on-surface": "#2f3330",
+                    "tertiary-dim": "#425569",
+                    "on-surface-variant": "#5c605c",
+                    "secondary-container": "#dfe3e7",
+                    "on-secondary-container": "#4d5256",
+                    "surface": "#faf9f6",
+                    "on-error-container": "#752121",
+                    "surface-variant": "#e0e4de",
+                    "on-secondary-fixed": "#3b4043",
+                    "surface-container-highest": "#e0e4de",
+                    "primary-container": "#c0e9fc",
+                    "primary-fixed-dim": "#b2daed",
+                    "tertiary-fixed-dim": "#c0d3ec",
+                    "on-primary-fixed": "#1b4453",
+                    "on-tertiary": "#f7f9ff",
+                    "on-background": "#2f3330",
+                    "tertiary": "#4e6176",
+                    "on-primary-fixed-variant": "#3a6171",
+                    "tertiary-fixed": "#cee1fb",
+                    "outline-variant": "#afb3ae",
+                    "error-dim": "#4e0309",
+                    "on-secondary-fixed-variant": "#575c5f",
+                    "background": "#faf9f6",
+                    "secondary": "#5b6063",
+                    "surface-container-low": "#f4f4f0",
+                    "primary-dim": "#305767",
+                    "on-primary": "#f0f9ff",
+                    "inverse-surface": "#0d0f0d",
+                    "on-secondary": "#f5f9fd",
+                    "primary-fixed": "#c0e9fc",
+                    "on-tertiary-fixed": "#2c3f53",
+                    "on-tertiary-container": "#3f5266",
+                    "on-primary-container": "#305767",
+                    "on-tertiary-fixed-variant": "#495b70"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #FAF9F6; color: #2F3330; font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .pearl-gradient { background: linear-gradient(135deg, #3D6374 0%, #305767 100%); }
+    </style>
+</head>
+<body class="antialiased text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#FAF9F6]/70 backdrop-blur-2xl">
+<div class="flex justify-between items-center px-12 py-6 w-full max-w-screen-2xl mx-auto">
+<div class="text-2xl font-semibold tracking-tighter text-[#2F3330] font-headline">Seren</div>
+<div class="hidden md:flex items-center space-x-12">
+<a class="font-headline lowercase tracking-tight text-[#2F3330]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">consultation</a>
+<a class="font-headline lowercase tracking-tight text-[#3D6374] border-b-2 border-[#3D6374]/20 pb-1" href="#">results</a>
+<a class="font-headline lowercase tracking-tight text-[#2F3330]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">boutique</a>
+<a class="font-headline lowercase tracking-tight text-[#2F3330]/60 hover:text-[#3D6374] transition-colors duration-300" href="#">physician portal</a>
+</div>
+<div class="flex items-center space-x-8">
+<button class="material-symbols-outlined text-primary" data-icon="shopping_bag">shopping_bag</button>
+<button class="material-symbols-outlined text-primary" data-icon="account_circle">account_circle</button>
+<button class="pearl-gradient text-on-primary px-6 py-2.5 rounded-full font-headline lowercase tracking-tight text-sm shadow-sm hover:opacity-90 transition-opacity">
+                    book appointment
+                </button>
+</div>
+</div>
+</nav>
+<main class="pt-32 pb-24 px-12 max-w-screen-2xl mx-auto">
+<!-- Hero Welcome -->
+<header class="mb-16">
+<h1 class="text-[3.5rem] font-headline font-light tracking-tight text-on-surface leading-tight mb-4 lowercase">
+                welcome back, <span class="italic font-normal">elizabeth.</span>
+</h1>
+<p class="text-lg text-on-surface-variant font-body max-w-2xl leading-relaxed">
+                your clinical progress is showing significant improvement in epidermal barrier density. your next virtual consultation is scheduled for october 12th.
+            </p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Comparison Panel: Left Column (Large) -->
+<section class="col-span-12 lg:col-span-7 space-y-8">
+<div class="bg-surface-container-lowest p-10 rounded-[2rem] overflow-hidden">
+<div class="flex justify-between items-end mb-10">
+<div>
+<h2 class="text-2xl font-headline font-light lowercase text-on-surface mb-2">dermal evolution</h2>
+<p class="text-sm text-on-surface-variant lowercase tracking-wide">july 2024 — september 2024 comparison</p>
+</div>
+<div class="flex space-x-4">
+<span class="px-4 py-1.5 rounded-full bg-surface-container text-xs font-medium lowercase">hydration +24%</span>
+<span class="px-4 py-1.5 rounded-full bg-tertiary-container text-xs font-medium lowercase">texture +18%</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 relative">
+<div class="group relative aspect-[4/5] rounded-xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover grayscale-[20%] transition-transform duration-700 group-hover:scale-105" data-alt="close-up medical photography of female facial skin texture showing slight redness and uneven tone in soft clinical lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0Vpsvqyq5CQyuCPUJxxE4r5RakbpR1ORBeNSd7EDna04uB7SFlTH5pcYC_sFGPzLVX2RcWq-R8uebNtavVssHzJy6bDlD0dMO8EoaomZsn_epCSgOq_PQSLFcaEP9qhc4uKeXYGlftt4jpLj08GV56BgaR2W1l-Uzn00vBrPZ6VuPg0Xw3y_p3Ytq3ENYwY6i8tsdEyjqLiu0vcPIc9Xjw2qt2FTZOn03Ytgj4rzAKVX0GLba98F18gNGSnnZzxY-7-1U3S8zda0"/>
+<div class="absolute bottom-6 left-6 px-4 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-[10px] uppercase tracking-widest">baseline: july 04</div>
+</div>
+<div class="group relative aspect-[4/5] rounded-xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="close-up medical photography of female facial skin showing clear radiant tone and smooth texture with professional soft light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXz2k7MMKj4kof__xVQ2lIEoBf7SR3cR9hyJCL-XeQksykhw9hwuDNOyZZeDnoToPls3eBNJTuJ6EUGbi5lbenSiKRelov5jyRQJbxwNyac2lU9r1Hp-AvhUonHppPJxsXebSygSYFcup82i0Lcy7RTxESDjcTPtGDVDYdBMu84FdtKkGaz1WCYMjdd5MRPeEn_0zWu6GKEI-wFB6P5Em1DBGA3w8FSBrWhiJ0Z3FWSLXK5QBd_S6G_kxwraeZ6tigToAJ5ff92Cw"/>
+<div class="absolute bottom-6 left-6 px-4 py-1 bg-primary/80 backdrop-blur-md rounded-full text-white text-[10px] uppercase tracking-widest">current: sept 28</div>
+</div>
+<!-- Slider UI Handle (Decorative) -->
+<div class="absolute inset-y-0 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center space-y-4 pointer-events-none">
+<div class="w-[1px] h-full bg-white/40"></div>
+<div class="w-10 h-10 rounded-full border border-white/60 bg-white/10 backdrop-blur-md flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm" data-icon="unfold_more_double">unfold_more_double</span>
+</div>
+<div class="w-[1px] h-full bg-white/40"></div>
+</div>
+</div>
+</div>
+<!-- Consultation History -->
+<div class="bg-surface-container-low p-10 rounded-[2rem]">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-2xl font-headline font-light lowercase text-on-surface">consultation history</h2>
+<button class="text-primary text-sm font-medium lowercase underline underline-offset-8">view all clinical notes</button>
+</div>
+<div class="space-y-6">
+<div class="flex items-start justify-between p-6 bg-surface-container-lowest rounded-2xl hover:shadow-sm transition-shadow">
+<div class="flex space-x-6">
+<div class="w-14 h-14 rounded-full bg-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="medical_services">medical_services</span>
+</div>
+<div>
+<p class="font-headline text-lg lowercase mb-1">barrier repair phase ii</p>
+<p class="text-sm text-on-surface-variant font-body">dr. helena vance • sept 12, 2024</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="flex items-start justify-between p-6 bg-surface-container-lowest rounded-2xl hover:shadow-sm transition-shadow">
+<div class="flex space-x-6">
+<div class="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-outline" data-icon="biotech">biotech</span>
+</div>
+<div>
+<p class="font-headline text-lg lowercase mb-1">initial skin analysis</p>
+<p class="text-sm text-on-surface-variant font-body">dr. helena vance • july 02, 2024</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Active Routine & Metrics: Right Column (Small) -->
+<aside class="col-span-12 lg:col-span-5 space-y-8">
+<!-- Progress Tracking -->
+<div class="bg-surface-container-high p-10 rounded-[2rem] flex flex-col justify-between aspect-square md:aspect-auto min-h-[320px]">
+<div>
+<h2 class="text-2xl font-headline font-light lowercase text-on-surface mb-8">active metrics</h2>
+<div class="space-y-10">
+<div class="space-y-2">
+<div class="flex justify-between text-sm lowercase mb-2">
+<span>cellular turnover speed</span>
+<span class="font-semibold">82% optimal</span>
+</div>
+<div class="w-full h-[6px] bg-white/50 rounded-full overflow-hidden">
+<div class="w-[82%] h-full pearl-gradient rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm lowercase mb-2">
+<span>sebum regulation</span>
+<span class="font-semibold">64% target</span>
+</div>
+<div class="w-full h-[6px] bg-white/50 rounded-full overflow-hidden">
+<div class="w-[64%] h-full bg-tertiary rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm lowercase mb-2">
+<span>collagen synthesis</span>
+<span class="font-semibold">48% recovering</span>
+</div>
+<div class="w-full h-[6px] bg-white/50 rounded-full overflow-hidden">
+<div class="w-[48%] h-full bg-on-surface/20 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Routine -->
+<div class="bg-surface-container-lowest p-10 rounded-[2rem] border border-on-surface/5">
+<div class="flex justify-between items-center mb-10">
+<h2 class="text-2xl font-headline font-light lowercase text-on-surface">morning ritual</h2>
+<span class="text-[10px] uppercase tracking-[0.2em] font-medium text-primary">step 02 of 05</span>
+</div>
+<div class="space-y-8">
+<div class="group flex items-center space-x-6 p-4 -mx-4 rounded-2xl hover:bg-surface-container-low transition-colors">
+<div class="w-20 h-24 rounded-lg bg-surface flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="luxury skincare bottle with frosted glass and minimal typography sitting on a clean surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWvE0zNPBnkEYrohyAwhAzPBJyE3V7LV3rsjm5b5UOLJgswpCVqu_4YVWNmL96m1tuM6laNhp318vvA3FVdYyCUBnHM4IT5pmm8SyB4u-rmDmcVQ1UccF-9qsqB-j7UO92QtjfINfv4Mm7dswwyb_uucxC5QhUtrYljMdmC2OhiL16SYo6XXohdUeeh-phN0XLfOe7wJ3LCFwUaL379QMIK4Fovpd06rb7or050YfJZOLlfivjwB_wkFuCpgnuDypW-9Pik79JhQU"/>
+</div>
+<div class="flex-grow">
+<p class="text-xs text-on-surface-variant lowercase mb-1">cleanser</p>
+<p class="font-headline text-base lowercase font-medium">gentle lipid-replenishing oil</p>
+<p class="text-xs text-primary mt-2 font-medium lowercase">apply to dry skin</p>
+</div>
+<span class="material-symbols-outlined text-primary/30" data-icon="check_circle">check_circle</span>
+</div>
+<div class="group flex items-center space-x-6 p-4 -mx-4 rounded-2xl hover:bg-surface-container-low transition-colors">
+<div class="w-20 h-24 rounded-lg bg-surface flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="clinical glass dropper with clear serum against a warm off-white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDa-erpLHsQWSvRyM1JrFWC989n2Xdu6mfMOILVAWARVDtyW7H0pLNVpVyFl5D_LAHzxS3DF0Av5958_5N25GZ5z-K3HbLY65oDjQce_jeGcZzQt3b91PKqY927iijPBVKELnN4LObAfr5sy1SWgjGjmk5Up7IIuSGe8SL4eQI2NHVvHRokr5idIc5m3d_6I0wXSZGBtR4_UCMYLAnvez4jOo7lq2GvOYZLtsQJ9YYmY6RlhJ-rAN-tm60KGflnR_UuXV1CQ8PakEg"/>
+</div>
+<div class="flex-grow">
+<p class="text-xs text-on-surface-variant lowercase mb-1">active serum</p>
+<p class="font-headline text-base lowercase font-medium">at-2 formula • peptide 04</p>
+<p class="text-xs text-primary mt-2 font-medium lowercase">next step • 08:30 am</p>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+</div>
+<div class="group flex items-center space-x-6 p-4 -mx-4 rounded-2xl opacity-50">
+<div class="w-20 h-24 rounded-lg bg-surface flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="modern minimalist cosmetic jar with clean white packaging and soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtv9-q4zjhTzTUYFSi7ksavrTaou_gW5aNjyu3s-p7RFh91fDBYlKO3zVq4MtDd4p323EzXy0mPpLhtIcZOU332Zb7dFPrieE0pikT1aljnAUaGNgZnzQfxBkpNqBSRoz7nVDLaTOXd0sldwCmiM0xKjZGWL9CIJ1xEb88NWUZ7MHMCy4cgedn9R2g2IESJdr44oXpnkbUFy_gDQQOtKvAKTPcLfULS1SnhzYrj8k8-OYXACFTzF6-TNou_Dz9QRixwL5cHvHBzoA"/>
+</div>
+<div class="flex-grow">
+<p class="text-xs text-on-surface-variant lowercase mb-1">sealing cream</p>
+<p class="font-headline text-base lowercase font-medium">barrier fortifying complex</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-12 py-4 border border-primary/20 rounded-xl text-primary font-headline lowercase tracking-wide text-sm hover:bg-primary/5 transition-colors">
+                        adjust routine focus
+                    </button>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-[#2F3330]/5 bg-[#FAF9F6]">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-16 w-full max-w-screen-2xl mx-auto">
+<div class="text-lg font-bold text-[#2F3330] font-headline lowercase mb-8 md:mb-0">Seren</div>
+<div class="flex flex-wrap justify-center gap-8 md:gap-12 mb-8 md:mb-0">
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] transition-opacity opacity-80" href="#">privacy policy</a>
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] transition-opacity opacity-80" href="#">clinical standards</a>
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] transition-opacity opacity-80" href="#">terms of service</a>
+<a class="font-inter text-sm lowercase tracking-wide text-[#2F3330]/50 hover:text-[#3D6374] transition-opacity opacity-80" href="#">contact</a>
+</div>
+<div class="text-sm text-[#2F3330]/50 font-inter lowercase tracking-wide">
+                © 2024 Seren. all rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

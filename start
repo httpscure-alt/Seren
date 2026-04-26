@@ -1,0 +1,8 @@
+#!/bin/sh
+# Production server from web/ (no package.json at repo root — avoids Tailwind resolving from parent).
+# Usage: ./start -- -H 0.0.0.0 -p 3000
+# Build first if needed: cd web && npm run build
+set -e
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+cd "$ROOT/web"
+exec npm run start -- "$@"

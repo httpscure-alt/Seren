@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>seren — clinical skin analysis</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#edeeea",
+                        "surface-dim": "#d6dbd5",
+                        "surface-container-high": "#e6e9e4",
+                        "surface-tint": "#3d6374",
+                        "tertiary-container": "#cee1fb",
+                        "surface-bright": "#faf9f6",
+                        "on-error": "#fff7f6",
+                        "secondary-fixed": "#dfe3e7",
+                        "inverse-primary": "#c3ebff",
+                        "secondary-dim": "#4f5457",
+                        "secondary-fixed-dim": "#d1d5d8",
+                        "primary": "#3d6374",
+                        "outline": "#787c77",
+                        "inverse-on-surface": "#9d9d9a",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#9f403d",
+                        "error-container": "#fe8983",
+                        "on-surface": "#2f3330",
+                        "tertiary-dim": "#425569",
+                        "on-surface-variant": "#5c605c",
+                        "secondary-container": "#dfe3e7",
+                        "on-secondary-container": "#4d5256",
+                        "surface": "#faf9f6",
+                        "on-error-container": "#752121",
+                        "surface-variant": "#e0e4de",
+                        "on-secondary-fixed": "#3b4043",
+                        "surface-container-highest": "#e0e4de",
+                        "primary-container": "#c0e9fc",
+                        "primary-fixed-dim": "#b2daed",
+                        "tertiary-fixed-dim": "#c0d3ec",
+                        "on-primary-fixed": "#1b4453",
+                        "on-tertiary": "#f7f9ff",
+                        "on-background": "#2f3330",
+                        "tertiary": "#4e6176",
+                        "on-primary-fixed-variant": "#3a6171",
+                        "tertiary-fixed": "#cee1fb",
+                        "outline-variant": "#afb3ae",
+                        "error-dim": "#4e0309",
+                        "on-secondary-fixed-variant": "#575c5f",
+                        "background": "#faf9f6",
+                        "secondary": "#5b6063",
+                        "surface-container-low": "#f4f4f0",
+                        "primary-dim": "#305767",
+                        "on-primary": "#f0f9ff",
+                        "inverse-surface": "#0d0f0d",
+                        "on-secondary": "#f5f9fd",
+                        "primary-fixed": "#c0e9fc",
+                        "on-tertiary-fixed": "#2c3f53",
+                        "on-tertiary-container": "#3f5266",
+                        "on-primary-container": "#305767",
+                        "on-tertiary-fixed-variant": "#495b70"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #3d6374 0%, #305767 100%);
+        }
+
+        .glass-effect {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
+    <!-- TopNavBar -->
+    <nav class="fixed top-0 w-full z-50 bg-[#FAF9F6]/70 dark:bg-slate-950/70 backdrop-blur-2xl">
+        <div class="flex justify-between items-center px-12 py-6 w-full max-w-screen-2xl mx-auto">
+            <div
+                class="text-2xl font-semibold tracking-tighter text-[#2F3330] dark:text-[#FAF9F6] font-headline lowercase">
+                Seren</div>
+            <div class="hidden md:flex items-center gap-10 font-manrope lowercase tracking-tight">
+                <a class="text-[#3D6374] border-b-2 border-[#3D6374]/20 pb-1 hover:text-[#3D6374] transition-colors duration-300"
+                    href="#">consultation</a>
+                <a class="text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300"
+                    href="#">results</a>
+                <a class="text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300"
+                    href="#">boutique</a>
+                <a class="text-[#2F3330]/60 dark:text-[#FAF9F6]/60 hover:text-[#3D6374] transition-colors duration-300"
+                    href="#">physician portal</a>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-4 text-[#3D6374]">
+                    <span
+                        class="material-symbols-outlined cursor-pointer hover:scale-110 transition-transform">shopping_bag</span>
+                    <span
+                        class="material-symbols-outlined cursor-pointer hover:scale-110 transition-transform">account_circle</span>
+                </div>
+                <button
+                    class="btn-gradient text-on-primary px-6 py-2.5 rounded-full text-sm font-medium lowercase tracking-wide scale-98 active:scale-95 transition-all duration-200 shadow-sm">book
+                    appointment</button>
+            </div>
+        </div>
+    </nav>
+    <main class="pt-32">
+        <!-- Hero Section -->
+        <section class="px-12 max-w-screen-2xl mx-auto grid grid-cols-12 gap-8 mb-40">
+            <div class="col-span-12 lg:col-span-7 flex flex-col justify-center">
+                <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter leading-[0.9] lowercase mb-8">
+                    know your skin <br />condition in minutes
+                </h1>
+                <p class="text-lg md:text-xl text-on-surface-variant max-w-xl leading-relaxed mb-12 font-light">
+                    AI-assisted analysis, reviewed by certified dermatology team. Professional-grade diagnosis from the
+                    comfort of your atelier.
+                </p>
+                <div class="flex items-center gap-8">
+                    <button
+                        class="btn-gradient text-on-primary px-10 py-5 rounded-full text-lg font-medium lowercase tracking-wide hover:shadow-xl transition-all duration-300">
+                        start assessment
+                    </button>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-semibold text-primary lowercase tracking-wider">next available
+                            review</span>
+                        <span class="text-on-surface-variant text-sm">approx. 14 minutes</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-12 lg:col-span-5 relative">
+                <div class="aspect-[4/5] rounded-[3rem] overflow-hidden bg-surface-container shadow-inner">
+                    <img alt="Serene portrait of a person with glowing skin in soft morning light"
+                        class="w-full h-full object-cover"
+                        data-alt="soft editorial portrait of a woman with radiant skin in a minimal daylight studio with neutral tones and soft shadows"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiz4F4_ZP85gmVK7yRdigf3cDB-yx4gHX9HPPjqski4KJ1_XcVMZ8e_hoQQS0QrxBE7hrRMzXUFiB2l7OJaNCMRDJGMrors51VlT0G5lcePS2shuOnEtVZ6zyUh1pPC38NNNtQ4PSj0vq1R3rmZjZuCcsXMghUhI5x6aa9SRD0zeQ8apQZlk8qfSiOrGsAjM7_XmtZFZiPpwKObfO2xEIEuuYPOMSUmqc3jVgzgA4bdiFlQhIMgLHIKLbQS4xFNM6KUzUY2sEQb0c" />
+                </div>
+                <div
+                    class="absolute -bottom-8 -left-12 glass-effect bg-surface/70 p-8 rounded-xl shadow-sm border border-outline-variant/10 max-w-xs">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-primary">live clinical
+                            queue</span>
+                    </div>
+                    <p class="text-sm text-on-surface-variant leading-relaxed lowercase">8 dermatologists currently
+                        reviewing reports for active patients.</p>
+                </div>
+            </div>
+        </section>
+        <!-- Trust Section / Bento Grid -->
+        <section class="bg-surface-container-low py-32">
+            <div class="px-12 max-w-screen-2xl mx-auto">
+                <div class="grid grid-cols-12 gap-6">
+                    <!-- Column 1: Credentials -->
+                    <div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+                        <div class="p-10 bg-surface-container-lowest rounded-xl">
+                            <h2 class="text-3xl font-bold tracking-tighter lowercase mb-6">certified expertise</h2>
+                            <p class="text-on-surface-variant mb-8 lowercase leading-relaxed">every ai-assisted report
+                                is verified by a board-certified dermatologist before reaching your inbox.</p>
+                            <div class="flex -space-x-4">
+                                <img alt="Dr. Aris" class="w-12 h-12 rounded-full border-2 border-surface object-cover"
+                                    data-alt="professional portrait of a male doctor in clinical attire with soft lighting"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTa5J70Ws6Xzr_MCplTMBXIM5-ETwC8w8j8omZPBPChiYtT8lOD8xYFB_I4MnyYWVBpCIsauwghiJlQTDZMlmetGJxQIkDZOed30RgPadm296tksj-kx6X1qOawuHKrc03p4JMXySxjKYyNmNICbyAZxGH72MIjmKmjcRTXzDTPVx-wWebLHmQg-x6XQHyfQvS_Drlvr5cWW-xeZkelAK0iBxI-2E4feV1EOwrKvaeYxrXUSY-crPxcMsgblwII2qxCj_LxQv12sk" />
+                                <img alt="Dr. Elena" class="w-12 h-12 rounded-full border-2 border-surface object-cover"
+                                    data-alt="professional portrait of a female doctor in clinical attire with clean background"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3dtnsUWaCBgkPF4_NzTdeldCGzOaeCj2tgsUbHB9jo1hxhpNtR5CsHTvNkRoWi0ixLKI4Zo4fuEOTnyWORvsgS9mn2Xsh9Dk_jfbP8mNRoLWEW5rBWVq_TCg2nBishGTdCvXVHCWBseKqIWhU6_46gKzm2a29XsQypM5PFLeADo50y_RRovVV-Kug4Zdqmlhv-R1jitEcqqFMunfyVW6SMFpRR672vjodK86hXJmUSPNf0EsAI8rl7ruWO7iPqvdFa37oYH3McLQ" />
+                                <img alt="Dr. Julian"
+                                    class="w-12 h-12 rounded-full border-2 border-surface object-cover"
+                                    data-alt="close up professional portrait of a doctor smiling in hospital setting"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAacGX7s5p5E2duT2TbX4hoYUM129kvJmfpQDosHgVCc0os-ufainEioOYtFT_j95E4xPnCAd7wSi-HRoB_9vxir9oOBWReOcl-y3q09GaijekhcfZRQiVSxj_LX2v08M0gKUt4MZZAtP2_lOxjhx5FQnvaF9aN8yCBFFucnk1xUrCz_wgIihDwb9IIqndbfJoO8R57rf_v5E1OGb4aW-xVr7kaJItQKjWOeLhfM9vvHZN0rH3G35EbLWglMBh688qmLJMDXIXpsVI" />
+                                <div
+                                    class="w-12 h-12 rounded-full border-2 border-surface bg-primary-container flex items-center justify-center text-xs font-bold text-on-primary-container">
+                                    +12</div>
+                            </div>
+                        </div>
+                        <div class="p-10 bg-tertiary-container/30 rounded-xl">
+                            <span class="material-symbols-outlined text-primary mb-4"
+                                style="font-size: 40px;">shield</span>
+                            <h3 class="text-xl font-bold lowercase mb-2">hippa compliant</h3>
+                            <p class="text-sm text-on-tertiary-container lowercase">your clinical data is encrypted and
+                                handled with the highest medical security standards.</p>
+                        </div>
+                    </div>
+                    <!-- Column 2: Sample Report Preview -->
+                    <div class="col-span-12 lg:col-span-8">
+                        <div
+                            class="bg-surface-container-lowest rounded-xl overflow-hidden relative group h-full min-h-[500px]">
+                            <div class="p-12">
+                                <div class="flex justify-between items-start mb-12">
+                                    <div>
+                                        <h2 class="text-4xl font-bold tracking-tighter lowercase mb-2">the seren report
+                                        </h2>
+                                        <p class="text-on-surface-variant lowercase">a comprehensive analysis of your
+                                            skin's unique landscape.</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-xs uppercase tracking-tighter font-bold text-outline">report
+                                            id: SRN-8821</span>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-12">
+                                    <div class="space-y-8">
+                                        <div class="flex flex-col gap-1">
+                                            <span
+                                                class="text-xs font-bold text-primary uppercase tracking-widest">clinical
+                                                observation</span>
+                                            <p class="text-on-surface leading-relaxed lowercase">mild inflammatory acne
+                                                with focal hyperpigmentation in the malar region. barrier function shows
+                                                signs of minor dehydration.</p>
+                                        </div>
+                                        <div class="flex flex-col gap-1">
+                                            <span
+                                                class="text-xs font-bold text-primary uppercase tracking-widest">prescribed
+                                                pathway</span>
+                                            <div class="flex flex-wrap gap-2 mt-2">
+                                                <span
+                                                    class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs lowercase">azelaic
+                                                    acid 15%</span>
+                                                <span
+                                                    class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs lowercase">ceramide
+                                                    complex</span>
+                                                <span
+                                                    class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs lowercase">spf
+                                                    50+</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="relative">
+                                        <div class="aspect-square rounded-xl overflow-hidden shadow-sm">
+                                            <img alt="Close up of skin texture with professional mapping markers"
+                                                class="w-full h-full object-cover grayscale opacity-80"
+                                                data-alt="extreme close up of human skin texture with subtle digital overlay markers showing area of analysis"
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNfkkDYcu3R2kHjW3dozXbEw00xKJLPwtczOLPtlgKQWfGlXaV8ZPq5HYOINE53bAZIaryDN80wvDGPEjNzknbhVGWx53eXq-LLyBpnVvP4Xi5jALhmpOwt7fBW9WFJboN8MOr0zyWoi_7fYYVyKlcJeD6magplL9s1PAYGCAmZV6ahAT3WV_Tx6wazh4f61LEZxCUXjX-FBjrMsBm95iI69xQSzYoqqXRGe8JJC_pe30jpcwn349ELPyq_N5V2bV4AUpT6Qp3QOo" />
+                                            <div
+                                                class="absolute top-4 right-4 glass-effect bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-tighter">
+                                                area analyzed: cheek</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-0 group-hover:opacity-10 transition-opacity">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Process Section -->
+        <section class="py-40 px-12 max-w-screen-2xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-24">
+                <h2 class="text-5xl font-bold tracking-tighter lowercase mb-6">the three-step clinical loop</h2>
+                <p class="text-on-surface-variant font-light lowercase leading-relaxed">we've simplified dermatology
+                    into a precise, efficient journey that respects your time and your skin's health.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                <div class="flex flex-col gap-6">
+                    <span
+                        class="text-7xl font-extrabold text-surface-container tracking-tighter font-headline">01</span>
+                    <h3 class="text-2xl font-bold lowercase">capture &amp; upload</h3>
+                    <p class="text-on-surface-variant lowercase leading-relaxed">follow our guided interface to take
+                        high-resolution photos of your skin from three specific angles.</p>
+                </div>
+                <div class="flex flex-col gap-6">
+                    <span
+                        class="text-7xl font-extrabold text-surface-container tracking-tighter font-headline">02</span>
+                    <h3 class="text-2xl font-bold lowercase">ai triangulation</h3>
+                    <p class="text-on-surface-variant lowercase leading-relaxed">our proprietary engine scans 10,000+
+                        data points to identify markers of inflammation, aging, and congestion.</p>
+                </div>
+                <div class="flex flex-col gap-6">
+                    <span
+                        class="text-7xl font-extrabold text-surface-container tracking-tighter font-headline">03</span>
+                    <h3 class="text-2xl font-bold lowercase">physician validation</h3>
+                    <p class="text-on-surface-variant lowercase leading-relaxed">your report is reviewed by a human
+                        expert who confirms the findings and signs off on your custom plan.</p>
+                </div>
+            </div>
+        </section>
+        <!-- CTA Section -->
+        <section class="px-12 pb-40 max-w-screen-2xl mx-auto">
+            <div class="bg-primary rounded-[3rem] p-20 flex flex-col items-center text-center text-on-primary">
+                <h2 class="text-5xl md:text-7xl font-bold tracking-tighter lowercase mb-10 max-w-4xl">ready for clinical
+                    clarity?</h2>
+                <button
+                    class="bg-surface text-primary px-12 py-6 rounded-full text-xl font-medium lowercase tracking-wide hover:scale-105 transition-all duration-300 shadow-xl">
+                    start your assessment
+                </button>
+                <p class="mt-8 text-on-primary/60 text-sm lowercase tracking-widest font-bold">no appointment necessary
+                    • hipaa secure</p>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="w-full border-t border-[#2F3330]/5 bg-[#FAF9F6] dark:bg-slate-950">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center px-12 py-16 w-full font-inter text-sm lowercase tracking-wide max-w-screen-2xl mx-auto">
+            <div class="flex flex-col gap-2 mb-8 md:mb-0">
+                <div class="text-lg font-bold text-[#2F3330] dark:text-[#FAF9F6] font-headline lowercase">Seren</div>
+                <p class="text-[#2F3330]/50">© 2024 Seren. all rights reserved.</p>
+            </div>
+            <div class="flex gap-10">
+                <a class="text-[#2F3330]/50 hover:text-[#3D6374] underline-offset-4 opacity-80 transition-opacity"
+                    href="#">privacy policy</a>
+                <a class="text-[#2F3330]/50 hover:text-[#3D6374] underline-offset-4 opacity-80 transition-opacity"
+                    href="#">clinical standards</a>
+                <a class="text-[#2F3330]/50 hover:text-[#3D6374] underline-offset-4 opacity-80 transition-opacity"
+                    href="#">terms of service</a>
+                <a class="text-[#2F3330]/50 hover:text-[#3D6374] underline-offset-4 opacity-80 transition-opacity font-medium text-[#3D6374]"
+                    href="#">contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

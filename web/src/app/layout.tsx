@@ -1,0 +1,101 @@
+import type { Metadata } from "next";
+import { Inter, Manrope } from "next/font/google";
+import { AuthSessionProvider } from "@/components/AuthSessionProvider";
+import { ToastProvider } from "@/components/ToastProvider";
+import { ConsentBanner } from "@/components/ConsentBanner";
+import { AnalyticsGate } from "@/components/Analytics/AnalyticsGate";
+import { TapDebugger } from "@/components/TapDebugger";
+import "./globals.css";
+import { Suspense } from "react";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Seren — clinical skin analysis",
+    template: "%s — Seren",
+  },
+  description:
+    "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
+  openGraph: {
+    type: "website",
+    siteName: "Seren",
+    title: "Seren — clinical skin analysis",
+    description:
+      "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
+    images: [{ url: "/og", width: 1200, height: 630, alt: "Seren" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Seren — clinical skin analysis",
+    description:
+      "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
+    images: ["/og"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const ldJson = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Seren",
+    url: siteUrl,
+    description:
+      "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
+  };
+
+  return (
+    <html
+      lang="en"
+      className={`${manrope.variable} ${inter.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
+        />
+        <AuthSessionProvider>
+          <ToastProvider>{children}</ToastProvider>
+          <ConsentBanner />
+          <Suspense fallback={null}>
+            <TapDebugger />
+          </Suspense>
+          <Suspense fallback={null}>
+            <AnalyticsGate />
+          </Suspense>
+        </AuthSessionProvider>
+      </body>
+    </html>
+  );
+}

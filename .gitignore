@@ -1,0 +1,24 @@
+.DS_Store
+
+# Next.js app (web/)
+web/node_modules/
+web/.next/
+web/out/
+web/build/
+web/coverage/
+web/.vercel
+web/.env
+web/.env.*
+!web/.env.example
+web/*.tsbuildinfo
+web/next-env.d.ts
+web/npm-debug.log*
+web/yarn-debug.log*
+web/yarn-error.log*
+web/.pnpm-debug.log*
+
+# Playwright
+web/test-results/
+web/playwright-report/
+web/blob-report/
+web/playwright/.cache/

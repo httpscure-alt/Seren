@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Email mockups</title>
+    <style>
+      :root { color-scheme: light; }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: #faf9f6;
+        color: #2f3330;
+        letter-spacing: 0.01em;
+      }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 28px 18px 48px; }
+      .brand {
+        font-weight: 750;
+        font-size: 14px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .rule { margin-top: 10px; height: 1px; background: rgba(120,124,119,0.25); }
+      h1 { font-size: 18px; margin: 16px 0 10px; letter-spacing: -0.01em; }
+      p { margin: 0 0 18px; color: #5c605c; font-size: 13px; line-height: 1.65; }
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+      @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+      a.card {
+        display: block;
+        padding: 16px 16px 14px;
+        background: #ffffff;
+        border: 1px solid rgba(175,179,174,0.22);
+        border-radius: 18px;
+        box-shadow: 0 12px 44px -14px rgba(47,51,48,0.10);
+        color: #2f3330;
+        text-decoration: none;
+      }
+      a.card:hover { border-color: rgba(61,99,116,0.35); }
+      .title { font-weight: 750; font-size: 14px; margin: 0 0 6px; letter-spacing: -0.01em; }
+      .desc { margin: 0; font-size: 12px; color: #5c605c; line-height: 1.6; }
+      .hint { margin-top: 16px; font-size: 12px; color: #787c77; }
+      code { background: rgba(61,99,116,0.08); padding: 2px 6px; border-radius: 999px; color: #305767; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="brand">Seren</div>
+      <div class="rule"></div>
+      <h1>Email HTML mockups</h1>
+      <p>Open each template in a new tab. These are static HTML previews with placeholder tokens like <code>{{confirm_email_url}}</code>.</p>
+
+      <div class="grid">
+        <a class="card" href="./welcome-confirm.html" target="_blank" rel="noopener">
+          <div class="title">Welcome / Confirm your email</div>
+          <p class="desc">Sent after sign-up. CTA to confirm email.</p>
+        </a>
+        <a class="card" href="./email-confirmed.html" target="_blank" rel="noopener">
+          <div class="title">Email confirmed</div>
+          <p class="desc">Optional “success” email after confirmation.</p>
+        </a>
+        <a class="card" href="./forgot-password.html" target="_blank" rel="noopener">
+          <div class="title">Forgot password / Reset password</div>
+          <p class="desc">Reset link with expiry + safety copy.</p>
+        </a>
+      </div>
+
+      <p class="hint">Tip: if you’re using Next.js, these files also load at <code>/email-mockups/</code> when your dev server is running.</p>
+    </div>
+  </body>
+</html>

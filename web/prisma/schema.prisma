@@ -1,0 +1,369 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  PHYSICIAN
+  ADMIN
+}
+
+enum CaseStatus {
+  DRAFT
+  SUBMITTED
+  AI_DRAFTED
+  UNDER_REVIEW
+  PUBLISHED
+  REJECTED
+}
+
+enum JobStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELED
+}
+
+enum SubscriptionPlan {
+  SINGLE
+  JOURNEY_30D
+}
+
+enum PaymentProvider {
+  MIDTRANS
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  CANCELED
+}
+
+enum CouponKind {
+  PERCENT
+  AMOUNT
+}
+
+enum JourneySlot {
+  AM
+  PM
+}
+
+enum MessageRole {
+  USER
+  CLINICIAN
+  SYSTEM
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      Role     @default(USER)
+  password  String?  // credentials auth (hashed); optional for oauth-only
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+  cases    Case[]
+  audits   AuditLog[] @relation("AuditActor")
+  reportsReviewed Report[] @relation("ReportClinician")
+  notesAuthored   ClinicalNote[]
+  subscriptions   Subscription[]
+  payments        Payment[]
+  journeyCheckIns JourneyCheckIn[]
+  threads         MessageThread[]
+  messages        Message[] @relation("UserMessages")
+  seenState       UserSeenState?
+  openedReports   UserOpenedReport[]
+}
+
+model UserSeenState {
+  userId            String   @id
+  lastSeenInboxAt   DateTime?
+  lastSeenReportAt  DateTime?
+  lastSeenJourneyAt DateTime?
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserOpenedReport {
+  id        String   @id @default(cuid())
+  userId    String
+  publicId  String
+  openedAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, publicId])
+  @@index([userId, openedAt])
+}
+
+model JourneyCheckIn {
+  id             String      @id @default(cuid())
+  userId         String
+  date           DateTime
+  slot           JourneySlot
+  completedSteps String[]    @default([])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date, slot])
+  @@index([userId, date])
+}
+
+model MessageThread {
+  id         String   @id @default(cuid())
+  userId     String
+  caseId     String?
+  title      String   @default("Care thread")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  case     Case?  @relation(fields: [caseId], references: [id], onDelete: SetNull)
+  messages Message[]
+
+  @@index([userId, updatedAt])
+  @@index([caseId])
+}
+
+model Message {
+  id         String      @id @default(cuid())
+  threadId   String
+  userId     String?
+  role       MessageRole
+  text       String
+  meta       Json?
+  createdAt  DateTime    @default(now())
+
+  thread MessageThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  user   User?         @relation("UserMessages", fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([threadId, createdAt])
+  @@index([userId])
+}
+
+// Auth.js adapter models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Case {
+  id          String     @id @default(cuid())
+  publicId    String     @unique // e.g. SRN-8821
+  userId      String
+  status      CaseStatus @default(DRAFT)
+  symptoms    String[]   @default([])
+  note        String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  uploads     Upload[]
+  aiJobs      AiJob[]
+  report      Report?
+  notes       ClinicalNote[]
+  audits      AuditLog[]
+  threads     MessageThread[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Upload {
+  id        String   @id @default(cuid())
+  caseId    String
+  kind      String   // primary/left/right, etc.
+  url       String   // object storage URL (or placeholder)
+  createdAt DateTime @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+}
+
+model AiJob {
+  id          String    @id @default(cuid())
+  caseId      String
+  status      JobStatus @default(QUEUED)
+  attempts    Int       @default(0)
+  lockedAt    DateTime?
+  startedAt   DateTime?
+  finishedAt  DateTime?
+  error       String?
+  inputJson   Json
+  outputJson  Json?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([status])
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  caseId      String   @unique
+  version     Int      @default(1)
+  publishedAt DateTime?
+  clinicianId String?
+  contentJson Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  case      Case  @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  clinician User? @relation("ReportClinician", fields: [clinicianId], references: [id])
+}
+
+model ClinicalNote {
+  id          String   @id @default(cuid())
+  caseId      String
+  authorId    String?
+  status      String   @default("Draft") // Draft/Signed for now
+  reason      String
+  summary     String
+  assessment  String[] @default([])
+  plan        String[] @default([])
+  createdAt   DateTime @default(now())
+
+  case   Case  @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  author User? @relation(fields: [authorId], references: [id])
+
+  @@index([caseId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  caseId    String?
+  actorId   String?
+  action    String
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  case  Case? @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  actor User? @relation("AuditActor", fields: [actorId], references: [id])
+
+  @@index([caseId])
+  @@index([actorId])
+}
+
+model Subscription {
+  id          String             @id @default(cuid())
+  userId      String
+  plan        SubscriptionPlan
+  status      SubscriptionStatus @default(ACTIVE)
+  startsAt    DateTime           @default(now())
+  expiresAt   DateTime
+  renewAt     DateTime?
+  provider    PaymentProvider
+  providerRef String?            @unique // orderId / subscription id from provider
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([expiresAt])
+}
+
+model Payment {
+  id          String          @id @default(cuid())
+  userId      String
+  provider    PaymentProvider
+  orderId     String          @unique
+  amountIdr   Int
+  status      PaymentStatus   @default(PENDING)
+  rawPayload  Json?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Coupon {
+  id            String      @id @default(cuid())
+  code          String      @unique
+  kind          CouponKind
+  percentOff    Int?
+  amountOffIdr  Int?
+  eligiblePlans String[]    @default([])
+  expiresAt     DateTime?
+  maxRedemptions Int?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  redemptions CouponRedemption[]
+
+  @@index([expiresAt])
+}
+
+model CouponRedemption {
+  id        String   @id @default(cuid())
+  couponId  String
+  userId    String?
+  paymentId String?
+  createdAt DateTime @default(now())
+
+  coupon Coupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+
+  @@index([couponId])
+  @@index([userId])
+  @@index([paymentId])
+}
+

@@ -1,0 +1,145 @@
+/* Explicit file import avoids Turbopack resolving the `tailwindcss` package from a parent folder. */
+@import "../../node_modules/tailwindcss/index.css";
+/* Direct `index.css` import does not auto-discover templates — scan all app source for utilities. */
+@source "../**/*.{js,ts,jsx,tsx}";
+
+:root {
+  /* seren design tokens */
+  --surface: #faf9f6;
+  --background: var(--surface);
+  --foreground: #2f3330;
+}
+
+@theme inline {
+  /* colors */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-on-surface: #2f3330;
+  --color-on-background: #2f3330;
+  --color-on-surface-variant: #5c605c;
+
+  --color-primary: #3d6374;
+  --color-primary-dim: #305767;
+  --color-on-primary: #f0f9ff;
+
+  --color-secondary: #5b6063;
+  --color-secondary-container: #dfe3e7;
+  --color-on-secondary-container: #4d5256;
+
+  --color-tertiary: #4e6176;
+  --color-tertiary-container: #cee1fb;
+  --color-on-tertiary-container: #3f5266;
+
+  --color-error: #9f403d;
+  --color-error-container: #fe8983;
+  --color-on-error: #fff7f6;
+  --color-on-error-container: #752121;
+
+  --color-outline: #787c77;
+  --color-outline-variant: #afb3ae;
+
+  --color-surface-bright: #faf9f6;
+  --color-surface-dim: #d6dbd5;
+  --color-surface-variant: #e0e4de;
+  --color-surface-container: #edeeea;
+  --color-surface-container-low: #f4f4f0;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #e6e9e4;
+  --color-surface-container-highest: #e0e4de;
+  --color-surface-tint: #3d6374;
+
+  /* fonts */
+  --font-sans: var(--font-body);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  --font-body: var(--font-inter);
+  --font-label: var(--font-inter);
+  --font-headline: var(--font-manrope);
+
+  /* radii */
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1.5rem;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  letter-spacing: 0.01em;
+}
+
+/* Seren layout: premium margins + one readable column width */
+.seren-container {
+  width: 100%;
+  max-width: min(100%, 80rem);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+@media (min-width: 640px) {
+  .seren-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  .seren-container {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+@media (min-width: 1280px) {
+  .seren-container {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}
+
+.seren-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+@media (min-width: 640px) {
+  .seren-section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .seren-section {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* Narrative / form column — consistent width across philosophy + auth body */
+.seren-content {
+  width: 100%;
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Cards: tonal lift — soft outline + tinted shadow (editorial, not “form UI”) */
+.seren-card {
+  border-radius: 1.5rem;
+  background: var(--color-surface-container-lowest);
+  border: 1px solid rgba(175, 179, 174, 0.22);
+  box-shadow: 0 12px 44px -14px rgba(47, 51, 48, 0.07);
+}
+
+.seren-card-quiet {
+  border-radius: 1.5rem;
+  background: var(--color-surface-container-low);
+  border: 1px solid rgba(175, 179, 174, 0.14);
+}
+
+.btn-gradient {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dim) 100%);
+}
+
+.glass-effect {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
