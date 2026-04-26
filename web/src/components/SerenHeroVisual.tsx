@@ -4,11 +4,18 @@ import Image from "next/image";
  * Hero visual: cream texture photography + Seren surface / primary / warm radiants.
  * Use inside a `relative` container with defined size (aspect ratio or fixed height).
  */
-export function SerenHeroVisual({ className = "" }: { className?: string }) {
+export function SerenHeroVisual({
+  className = "",
+  imageSrc = "/demo/hero-cream-texture.png",
+}: {
+  className?: string;
+  /** Override texture art (e.g. pre-intake welcome swatch). */
+  imageSrc?: string;
+}) {
   return (
     <div className={`absolute inset-0 overflow-hidden ${className}`} aria-hidden>
       <Image
-        src="/demo/hero-cream-texture.png"
+        src={imageSrc}
         alt=""
         fill
         className="object-cover"
