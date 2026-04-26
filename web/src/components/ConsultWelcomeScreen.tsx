@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getDictionary } from "@/i18n/getDictionary";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNavbar } from "@/components/SiteNavbar";
-import { SerenHeroVisual, SEREN_MARKETING_PAGE_SKY } from "@/components/SerenHeroVisual";
+import { SEREN_MARKETING_PAGE_SKY } from "@/components/SerenHeroVisual";
 
 function IconClock() {
   return (
@@ -69,7 +69,7 @@ function IconShield() {
 }
 
 /**
- * Pre-intake welcome: dermatologist-reviewed card + cream texture, then digital intake.
+ * Pre-intake welcome: dermatologist introduction, then digital intake.
  */
 export async function ConsultWelcomeScreen() {
   const { dict } = await getDictionary();
@@ -153,13 +153,13 @@ export async function ConsultWelcomeScreen() {
             </div>
 
             <div className="col-span-12 lg:col-span-6 min-w-0 lg:pr-8">
-              <div className="mx-auto flex w-full max-w-[360px] flex-col gap-8 lg:max-w-[380px] lg:ml-auto lg:mr-0">
-                <div className="rounded-2xl border border-outline-variant/15 bg-surface/90 px-5 py-4 shadow-[0_20px_50px_-28px_rgba(47,51,48,0.3)] backdrop-blur-md">
+              <div className="mx-auto w-full max-w-md lg:max-w-lg lg:ml-auto">
+                <div className="rounded-2xl border border-outline-variant/15 bg-surface/90 px-5 py-5 sm:px-6 sm:py-6 shadow-[0_20px_50px_-28px_rgba(47,51,48,0.3)] backdrop-blur-md">
                   <div className="flex gap-3 sm:gap-4">
                     <div className="relative h-[4.5rem] w-[4.5rem] sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-xl border border-outline-variant/12 bg-surface-container-lowest shadow-sm">
                       <Image
                         src="/doctors/dr-riris.png"
-                        alt="Dr. Riris — dermatologist"
+                        alt="Dr. Riris Asti Respati, Sp.DVE"
                         fill
                         className="object-cover object-top"
                         sizes="(max-width: 640px) 72px, 80px"
@@ -170,64 +170,19 @@ export async function ConsultWelcomeScreen() {
                       <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
                         dermatologist-reviewed
                       </p>
-                      <p className="font-headline text-lg sm:text-xl tracking-tight text-on-surface mt-1">
-                        Dr. Riris
+                      <p className="font-headline text-[0.95rem] sm:text-base leading-snug tracking-tight text-on-surface mt-1.5">
+                        Dr. Riris Asti Respati, Sp.DVE
                       </p>
-                      <p className="text-xs text-on-surface-variant mt-0.5 leading-snug">
-                        Board-certified dermatologist reviewing your intake
-                      </p>
-                      <p className="text-sm font-headline font-medium lowercase leading-snug text-on-surface mt-2">
-                        real clinicians, not algorithms alone
+                      <p className="text-xs text-on-surface-variant mt-2 leading-relaxed">
+                        An unhurried read of what you share—so what comes next can feel like it fits you, not a
+                        template.
                       </p>
                     </div>
                   </div>
-                  <p className="mt-4 text-xs italic leading-relaxed text-on-surface-variant border-t border-outline-variant/10 pt-4">
-                    “we treat skin as something that changes week to week. this assessment helps us meet you where you
-                    are—not where a trend says you should be.”
+                  <p className="mt-5 text-xs italic leading-relaxed text-on-surface-variant/90 border-t border-outline-variant/10 pt-5">
+                    “Skin shifts from week to week. This short step is just us getting to know where you are
+                    today—gently, with room to breathe.”
                   </p>
-                </div>
-
-                <div className="relative w-full pr-3 sm:pr-4">
-                  <div
-                    className="relative w-full overflow-hidden rounded-2xl shadow-[0_28px_80px_-40px_rgba(47,51,48,0.3)]"
-                    style={{ aspectRatio: "4 / 5" }}
-                  >
-                    <div
-                      className="relative h-full w-full overflow-hidden rounded-2xl"
-                      style={{ background: SEREN_MARKETING_PAGE_SKY }}
-                    >
-                      <SerenHeroVisual imageSrc="/demo/welcome-cream-swatch.png" blendToPage />
-
-                      <div className="absolute inset-x-4 bottom-4 z-[2] flex justify-center sm:inset-x-6 sm:bottom-6">
-                        <div className="inline-flex max-w-full items-center gap-3 rounded-full border border-outline-variant/15 bg-surface/90 px-4 py-2.5 shadow-[0_12px_40px_-24px_rgba(47,51,48,0.2)] backdrop-blur-xl sm:px-5 sm:py-3">
-                          <span className="text-sm leading-none text-primary" aria-hidden="true">
-                            ★
-                          </span>
-                          <span className="text-xs font-medium tracking-wide text-on-surface">
-                            clinical grade methodology
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div
-                    className="pointer-events-none w-[96px] rounded-2xl bg-primary px-2.5 py-3 text-center text-on-primary shadow-xl sm:w-[100px]"
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      right: 0,
-                      zIndex: 20,
-                      transform: "translate(16px, -50%) rotate(-8deg)",
-                    }}
-                  >
-                    <p className="text-2xl font-headline font-bold leading-none">98%</p>
-                    <p className="mt-2 text-[8px] font-semibold uppercase leading-snug tracking-tight opacity-90">
-                      accuracy in
-                      <br />
-                      skin typing
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
