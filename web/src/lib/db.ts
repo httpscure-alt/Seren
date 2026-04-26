@@ -8,11 +8,24 @@ const globalForPrisma = globalThis as unknown as {
   prismaPool?: Pool;
 };
 
+let loggedMissingDatabaseUrl = false;
+
 function resolveConnectionString(): string {
   const fromEnv = process.env.DATABASE_URL?.trim();
   if (fromEnv) return fromEnv;
-  // Next sets this during `next build` while collecting page data; real URL must exist at runtime.
+  // `next build` — avoid requiring a live DB in CI.
   if (process.env.NEXT_PHASE === "phase-production-build") {
+    return DATABASE_URL_BUILD_PLACEHOLDER;
+  }
+  // Vercel / `next start` without DATABASE_URL: importing Prisma must not throw or every page 500s.
+  // DB queries will fail until Production DATABASE_URL is set in the project env.
+  if (process.env.NODE_ENV === "production") {
+    if (!loggedMissingDatabaseUrl) {
+      loggedMissingDatabaseUrl = true;
+      console.warn(
+        "[prisma] DATABASE_URL is unset in production. Set it in Vercel → Settings → Environment Variables. Using a non-routable placeholder so the app can boot.",
+      );
+    }
     return DATABASE_URL_BUILD_PLACEHOLDER;
   }
   throw new Error("DATABASE_URL is required to initialize Prisma.");
