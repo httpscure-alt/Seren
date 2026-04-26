@@ -1,11 +1,19 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
-export async function GET(req: Request) {
-  const secret = process.env.CRON_SECRET || "";
+function cronAuthorized(req: Request, secret: string): boolean {
+  if (!secret) return true;
   const url = new URL(req.url);
   const token = url.searchParams.get("token") ?? "";
-  if (secret && token !== secret) {
+  if (token === secret) return true;
+  const auth = req.headers.get("authorization") ?? "";
+  if (auth === `Bearer ${secret}`) return true;
+  return false;
+}
+
+export async function GET(req: Request) {
+  const secret = process.env.CRON_SECRET || "";
+  if (secret && !cronAuthorized(req, secret)) {
     return NextResponse.json({ ok: false, error: "Unauthorized." }, { status: 401 });
   }
 

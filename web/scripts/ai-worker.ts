@@ -1,68 +1,12 @@
 import "dotenv/config";
 import { prisma } from "../src/lib/db";
 import { log } from "../src/lib/logger";
-import { buildAiDraftPrompt, type ProductCatalogItem } from "../src/lib/aiPrompt";
-
-type Draft = {
-  condition: string;
-  severity: "Mild" | "Moderate" | "Severe";
-  routine: {
-    morning: string[];
-    evening: string[];
-  };
-  pathway: string[];
-};
-
-const DEFAULT_CATALOG: ProductCatalogItem[] = [
-  {
-    id: "cleanser_cetaphil_gentle",
-    name: "Cetaphil Gentle Skin Cleanser",
-    category: "CLEANSER",
-    tier: "BALANCED",
-    tags: ["SENSITIVE_SAFE"],
-  },
-  {
-    id: "moisturizer_skintific_5x_ceramide",
-    name: "Skintific 5X Ceramide Moisturizer",
-    category: "MOISTURIZER",
-    tier: "BALANCED",
-    tags: ["SENSITIVE_SAFE", "BARRIER_SUPPORT"],
-  },
-  {
-    id: "sunscreen_azarine_hydrasoothe_spf45",
-    name: "Azarine Hydrasoothe Sunscreen Gel SPF45 PA++++",
-    category: "SUNSCREEN",
-    tier: "EVERYDAY",
-    tags: ["OILY_FRIENDLY"],
-  },
-  {
-    id: "acne_bpo_benzolac",
-    name: "Benzolac (benzoyl peroxide) spot treatment",
-    category: "BENZOYL_PEROXIDE",
-    tier: "EVERYDAY",
-    tags: ["ACNE_TREATMENT", "SPOT_TREATMENT"],
-  },
-] as const;
-
-function makeDraftFromInput(input: any): Draft {
-  const symptoms: string[] = Array.isArray(input?.symptoms) ? input.symptoms : [];
-  const hasInflammation = symptoms.some((s) => /red|inflam|pain|tender/i.test(s));
-  const severity: Draft["severity"] = hasInflammation ? "Moderate" : "Mild";
-  return {
-    condition: hasInflammation
-      ? "Localized erythema with barrier stress and reactive sensitivity."
-      : "Mild barrier dysregulation with intermittent congestion.",
-    severity,
-    routine: {
-      morning: ["Gentle cleanser", "Hydrating serum", "Barrier moisturizer", "SPF 50+"],
-      evening: ["Gentle cleanse", "Targeted treatment (low-irritant)", "Barrier repair cream"],
-    },
-    pathway: [
-      "Reassess in 10–14 days for inflammation trend.",
-      "If persistent flare, escalate to dermatologist-guided treatment.",
-    ],
-  };
-}
+import { DEFAULT_AI_PRODUCT_CATALOG } from "../src/lib/ai/defaultCatalog";
+import {
+  DEFAULT_CLINICIAN_LABEL,
+  resolveLlmRoute,
+  runAiDraftPipeline,
+} from "../src/lib/ai/llmDraft";
 
 async function claimJob() {
   const now = new Date();
@@ -98,33 +42,80 @@ async function claimJob() {
   });
 }
 
-async function processJob(job: { id: string; caseId: string; attempts: number; inputJson: any }) {
+async function processJob(job: { id: string; caseId: string; attempts: number; inputJson: unknown }) {
   log("ai_job.start", { jobId: job.id, caseId: job.caseId, attempts: job.attempts });
 
   try {
-    // Prompt builder (for real LLM integration). We still generate deterministic mock output for now.
-    const prompt = buildAiDraftPrompt({
-      input: {
-        symptoms: Array.isArray(job.inputJson?.symptoms) ? job.inputJson.symptoms : [],
-        note: typeof job.inputJson?.note === "string" ? job.inputJson.note : null,
-        isSensitiveSkin: Boolean(job.inputJson?.isSensitiveSkin),
-        budgetTier: job.inputJson?.budgetTier,
-        routineStyle: job.inputJson?.routineStyle,
-      } as any,
-      catalog: DEFAULT_CATALOG as any,
-      clinicianName: "Dr. Riris Asti Respati, SpDVE",
+    const caseRow = await prisma.case.findUnique({
+      where: { id: job.caseId },
+      select: { uploads: { select: { url: true } } },
     });
-    log("ai_job.prompt_built", { jobId: job.id, chars: prompt.user.length + prompt.system.length });
+    const imageUrls = caseRow?.uploads.map((u) => u.url) ?? [];
 
-    const draft = makeDraftFromInput(job.inputJson);
+    const result = await runAiDraftPipeline({
+      inputJson: job.inputJson,
+      catalog: DEFAULT_AI_PRODUCT_CATALOG,
+      imageUrls,
+    });
+
+    if (!result.ok) {
+      throw new Error(result.error);
+    }
+
+    if (result.mode === "mock") {
+      log("ai_job.mock_fallback", {
+        jobId: job.id,
+        caseId: job.caseId,
+        hint: "Set MOONSHOT_API_KEY (Kimi) or OPENAI_API_KEY to call a real model.",
+      });
+    } else {
+      log("ai_job.llm_ok", {
+        jobId: job.id,
+        caseId: job.caseId,
+        model: result.model,
+        images: imageUrls.length,
+      });
+    }
+
+    const defaultEdits = {
+      diagnosis: "",
+      routine: "",
+      updatedAt: new Date().toISOString(),
+    };
 
     await prisma.$transaction(async (tx) => {
+      const existingReport = await tx.report.findUnique({
+        where: { caseId: job.caseId },
+        select: { contentJson: true },
+      });
+      const prev =
+        existingReport?.contentJson && typeof existingReport.contentJson === "object"
+          ? { ...(existingReport.contentJson as Record<string, unknown>) }
+          : {};
+
+      const nextContent: Record<string, unknown> = {
+        ...prev,
+        aiDraft: result.draft,
+      };
+
+      if (!prev.clinician || typeof prev.clinician !== "object") {
+        nextContent.clinician = { name: DEFAULT_CLINICIAN_LABEL };
+      }
+      if (!prev.clinicianEdits || typeof prev.clinicianEdits !== "object") {
+        nextContent.clinicianEdits = defaultEdits;
+      }
+
       await tx.aiJob.update({
         where: { id: job.id },
         data: {
           status: "SUCCEEDED",
           finishedAt: new Date(),
-          outputJson: draft as any,
+          outputJson: {
+            mode: result.mode,
+            model: result.model ?? null,
+            imageCount: imageUrls.length,
+            physicianDraft: result.draft,
+          } as object,
         },
       });
 
@@ -132,16 +123,10 @@ async function processJob(job: { id: string; caseId: string; attempts: number; i
         where: { caseId: job.caseId },
         create: {
           caseId: job.caseId,
-          contentJson: {
-            aiDraft: draft,
-            clinician: { name: "Dr. Riris Asti Respati, SpDVE" },
-          } as any,
+          contentJson: nextContent as object,
         },
         update: {
-          contentJson: {
-            aiDraft: draft,
-            clinician: { name: "Dr. Riris Asti Respati, SpDVE" },
-          } as any,
+          contentJson: nextContent as object,
         },
       });
 
@@ -152,7 +137,11 @@ async function processJob(job: { id: string; caseId: string; attempts: number; i
           audits: {
             create: {
               action: "ai.drafted",
-              meta: { severity: draft.severity },
+              meta: {
+                severity: result.draft.severity,
+                mode: result.mode,
+                model: result.model ?? null,
+              },
             },
           },
         },
@@ -160,8 +149,8 @@ async function processJob(job: { id: string; caseId: string; attempts: number; i
     });
 
     log("ai_job.success", { jobId: job.id, caseId: job.caseId });
-  } catch (err: any) {
-    const message = err?.message ? String(err.message) : "Unknown error";
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unknown error";
     await prisma.aiJob.update({
       where: { id: job.id },
       data: { status: "FAILED", finishedAt: new Date(), error: message },
@@ -178,7 +167,7 @@ async function main() {
   const once = process.argv.includes("--once");
   const intervalMs = 1500;
 
-  log("worker.start", { once });
+  log("worker.start", { once, llm: resolveLlmRoute().kind });
 
   while (true) {
     const job = await claimJob();
@@ -201,4 +190,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-

@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
+import { randomBytes } from "crypto";
 import { Role } from "@prisma/client";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
+import { sendSignupWelcomeEmail } from "@/lib/email/transactionalSend";
 import { normalizeCouponCode } from "@/lib/promotions";
 
 const fieldsSchema = z.object({
@@ -119,6 +121,22 @@ export async function POST(req: Request) {
 
       return created;
     });
+
+    const verifyToken = randomBytes(32).toString("hex");
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    try {
+      await prisma.verificationToken.deleteMany({ where: { identifier: emailNorm } });
+      await prisma.verificationToken.create({
+        data: { identifier: emailNorm, token: verifyToken, expires },
+      });
+      void sendSignupWelcomeEmail({
+        to: user.email,
+        name: user.name,
+        verifyToken,
+      }).catch((e) => console.error("[email] signup welcome", e));
+    } catch (e) {
+      console.error("[auth] verification token / welcome email:", e);
+    }
 
     return NextResponse.json({ ok: true, user });
   } catch (e) {

@@ -56,7 +56,7 @@ Customer accounts: use /auth (role is always USER).
     const hashed = await bcrypt.hash(password, 12);
     await prisma.user.update({
       where: { email },
-      data: { password: hashed, role, name: name ?? existing.name },
+      data: { password: hashed, role, name: name ?? existing.name, emailVerified: new Date() },
     });
     console.log(`Updated existing user ${email} → role ${role}.`);
   } else {
@@ -67,6 +67,7 @@ Customer accounts: use /auth (role is always USER).
         password: hashed,
         role,
         name,
+        emailVerified: new Date(),
       },
     });
     console.log(`Created ${role} user ${email}.`);

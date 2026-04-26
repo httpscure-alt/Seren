@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signInWithCredentials } from "@/lib/credentialsSignIn";
 import { getSession, signIn } from "next-auth/react";
 import { AsyncButton } from "@/components/AsyncButton";
@@ -52,9 +52,11 @@ function AppleIcon() {
 export function AuthClient({
   returnTo,
   oauth,
+  authFlash,
 }: {
   returnTo: string;
   oauth: { google: boolean; apple: boolean };
+  authFlash: "verified" | "verify-failed" | null;
 }) {
   const router = useRouter();
   const toast = useToast();
@@ -65,6 +67,22 @@ export function AuthClient({
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (authFlash === "verified") {
+      toast.push({
+        tone: "success",
+        title: "Email confirmed.",
+        detail: "You can sign in below.",
+      });
+    } else if (authFlash === "verify-failed") {
+      toast.push({
+        tone: "error",
+        title: "That confirmation link didn’t work.",
+        detail: "It may have expired. Sign in if you already confirmed, or create an account again.",
+      });
+    }
+  }, [authFlash, toast]);
 
   async function resolveRedirectAfterLogin(fallback: string) {
     // After credentials sign-in, the role is carried on the session by our callbacks.
@@ -122,7 +140,11 @@ export function AuthClient({
         });
         const json = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(json?.error || "Failed to create account.");
-        toast.push({ tone: "success", title: "Account created." });
+        toast.push({
+          tone: "success",
+          title: "Account created.",
+          detail: "Check your email to confirm your address.",
+        });
       }
 
       await signInWithCredentials(trimmedEmail, password);
@@ -300,6 +322,16 @@ export function AuthClient({
                     />
                     <span className="text-on-surface/30 text-sm select-none">◦</span>
                   </div>
+                  {mode === "login" ? (
+                    <p className="mt-2 text-right">
+                      <Link
+                        href="/auth/forgot-password"
+                        className="text-xs text-primary hover:underline underline-offset-4"
+                      >
+                        Forgot password?
+                      </Link>
+                    </p>
+                  ) : null}
                 </div>
 
                 {message ? <p className="text-sm text-error leading-relaxed">{message}</p> : null}

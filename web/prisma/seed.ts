@@ -32,10 +32,12 @@ async function upsertStaff(
       password: hashed,
       role,
       name: name ?? null,
+      emailVerified: new Date(),
     },
     update: {
       password: hashed,
       role,
+      emailVerified: new Date(),
       ...(name ? { name } : {}),
     },
   });

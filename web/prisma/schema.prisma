@@ -67,16 +67,18 @@ enum MessageRole {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  role      Role     @default(USER)
-  password  String?  // credentials auth (hashed); optional for oauth-only
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  role          Role      @default(USER)
+  password      String? // credentials auth (hashed); optional for oauth-only
+  emailVerified DateTime? // set when user confirms email (credentials signup)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  sessions Session[]
-  accounts Account[]
+  sessions            Session[]
+  accounts            Account[]
+  passwordResetTokens PasswordResetToken[]
   cases    Case[]
   audits   AuditLog[] @relation("AuditActor")
   reportsReviewed Report[] @relation("ReportClinician")
@@ -197,6 +199,18 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model Case {
