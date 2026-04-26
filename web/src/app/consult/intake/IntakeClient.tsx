@@ -44,8 +44,12 @@ type IntakeDraft = {
 };
 
 const STORAGE_KEY = "seren.intakeDraft.v1";
+/** ~4MB binary → base64 stays under typical serverless body limits */
+const MAX_PRIMARY_DATA_URL_CHARS = 5_000_000;
 
 type IntakeCopy = Dictionary["intake"];
+
+type PrimaryPhoto = { dataUrl: string; name: string };
 
 function interpolate(template: string, vars: Record<string, string>) {
   return template.replace(/\{(\w+)\}/g, (_, key) => vars[key] ?? "");
@@ -299,6 +303,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
     pigmentationTypes: [],
   });
   const [busy, setBusy] = useState<string | null>(null);
+  const [primaryPhoto, setPrimaryPhoto] = useState<PrimaryPhoto | null>(null);
 
   useEffect(() => {
     try {
@@ -329,9 +334,52 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
 
   const completionPct = useMemo(() => (activeStep === 1 ? 33 : activeStep === 2 ? 66 : 100), [activeStep]);
 
+  const hasPrimaryPhoto = primaryPhoto !== null;
+
   const canSubmit = useMemo(() => {
-    return draft.chiefComplaint.length > 0 && (draft.duration?.trim()?.length ?? 0) > 0 && draft.severity !== undefined;
-  }, [draft.chiefComplaint.length, draft.duration, draft.severity]);
+    return (
+      hasPrimaryPhoto &&
+      draft.chiefComplaint.length > 0 &&
+      (draft.duration?.trim()?.length ?? 0) > 0 &&
+      draft.severity !== undefined
+    );
+  }, [hasPrimaryPhoto, draft.chiefComplaint.length, draft.duration, draft.severity]);
+
+  function readPrimaryFile(file: File) {
+    if (!file.type.startsWith("image/")) {
+      toast.push({ tone: "info", title: copy.toast.photoInvalidFile });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = typeof reader.result === "string" ? reader.result : "";
+      if (dataUrl.length > MAX_PRIMARY_DATA_URL_CHARS) {
+        toast.push({ tone: "info", title: copy.toast.photoTooLarge });
+        return;
+      }
+      setPrimaryPhoto({ dataUrl, name: file.name });
+    };
+    reader.onerror = () => {
+      toast.push({ tone: "error", title: copy.toast.submitFailed });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function goToStep(next: 1 | 2 | 3) {
+    if (next > 1 && !hasPrimaryPhoto) {
+      toast.push({ tone: "info", title: copy.validation.primaryPhotoRequired });
+      return;
+    }
+    setActiveStep(next);
+  }
+
+  function advanceStep() {
+    if (activeStep === 1 && !hasPrimaryPhoto) {
+      toast.push({ tone: "info", title: copy.validation.primaryPhotoRequired });
+      return;
+    }
+    setActiveStep((s) => (s === 1 ? 2 : 3));
+  }
 
   async function saveDraft() {
     toast.push({ tone: "success", title: copy.toast.draftSaved });
@@ -362,7 +410,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
       symptoms,
       note: formatNote(draft, copy),
       intake: draft,
-      uploads: [],
+      uploads: primaryPhoto ? [{ kind: "primary", url: primaryPhoto.dataUrl }] : [],
     };
 
     setBusy("submit");
@@ -444,7 +492,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
               <button
                 key={s.k}
                 type="button"
-                onClick={() => setActiveStep(s.k)}
+                onClick={() => goToStep(s.k)}
                 className={[
                   "px-4 py-2 rounded-full border text-xs uppercase tracking-[0.22em] transition-colors",
                   activeStep === s.k
@@ -463,19 +511,65 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
                 <p className="text-sm text-on-surface-variant">
                   {copy.photos.helper}
                 </p>
+                {!hasPrimaryPhoto ? (
+                  <p className="text-xs text-primary font-medium">{copy.validation.primaryPhotoRequired}</p>
+                ) : null}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                  {copy.photos.slots.map((label) => (
-                    <label
-                      key={label}
-                      className="relative group aspect-[3/4] rounded-2xl bg-surface-container-lowest border-2 border-dashed border-outline-variant/30 flex flex-col items-center justify-center p-6 hover:border-primary/40 transition-colors cursor-pointer"
-                    >
-                      <span className="text-3xl text-outline-variant group-hover:text-primary transition-colors mb-3">
-                        +
-                      </span>
-                      <p className="text-xs font-label text-on-surface-variant text-center">{label}</p>
-                      <input className="absolute inset-0 opacity-0 cursor-pointer" type="file" accept="image/*" />
-                    </label>
-                  ))}
+                  {copy.photos.slots.map((label, idx) =>
+                    idx === 0 ? (
+                      <label
+                        key={label}
+                        className="relative group aspect-[3/4] overflow-hidden rounded-2xl border-2 border-dashed border-outline-variant/30 bg-surface-container-lowest p-0 transition-colors hover:border-primary/40"
+                      >
+                        {primaryPhoto ? (
+                          <>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={primaryPhoto.dataUrl}
+                              alt=""
+                              className="absolute inset-0 h-full w-full object-cover"
+                            />
+                            <button
+                              type="button"
+                              className="absolute right-2 top-2 z-10 rounded-full bg-on-surface/80 px-3 py-1.5 text-[10px] font-headline uppercase tracking-widest text-surface backdrop-blur-sm"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setPrimaryPhoto(null);
+                              }}
+                            >
+                              Remove
+                            </button>
+                          </>
+                        ) : (
+                          <div className="flex h-full flex-col items-center justify-center p-6">
+                            <span className="mb-3 text-3xl text-outline-variant transition-colors group-hover:text-primary">
+                              +
+                            </span>
+                            <p className="text-center text-xs font-label text-on-surface-variant">{label}</p>
+                          </div>
+                        )}
+                        <input
+                          className="absolute inset-0 cursor-pointer opacity-0"
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const f = e.target.files?.[0];
+                            if (f) readPrimaryFile(f);
+                            e.target.value = "";
+                          }}
+                        />
+                      </label>
+                    ) : (
+                      <div
+                        key={label}
+                        className="relative flex aspect-[3/4] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-outline-variant/20 bg-surface-container-low/60 p-6 opacity-80"
+                      >
+                        <span className="mb-3 text-2xl text-outline-variant/60">+</span>
+                        <p className="text-center text-xs font-label text-on-surface-variant/80">{label}</p>
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
             </Section>
@@ -868,7 +962,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
 
             <button
               type="button"
-              onClick={() => setActiveStep((s) => (s === 1 ? 2 : 3))}
+              onClick={advanceStep}
               disabled={activeStep >= 3}
               className={[
                 "mt-3 w-full btn-gradient px-6 py-3 rounded-full text-on-primary text-sm font-headline shadow-lg shadow-primary/15 transition-opacity",
@@ -882,7 +976,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
           {/* Desktop actions */}
           <div className="hidden lg:flex justify-between items-center pt-4">
             <Link
-              href="/onboarding"
+              href="/consult/welcome"
               className="px-2 sm:px-8 py-3 text-on-surface-variant hover:text-primary transition-colors font-headline"
             >
               {copy.actions.previous}
@@ -898,7 +992,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
               {activeStep < 3 ? (
                 <button
                   type="button"
-                  onClick={() => setActiveStep((s) => (s === 1 ? 2 : 3))}
+                  onClick={advanceStep}
                   className="btn-gradient px-12 py-3.5 rounded-full text-on-primary font-headline tracking-tight shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all text-center"
                 >
                   {copy.actions.next}

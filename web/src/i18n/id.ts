@@ -21,7 +21,7 @@ export const id: Dictionary = {
       items: [
         "Jawab semampunya — nggak harus lengkap",
         "Fokus ke keluhan yang paling kamu rasain",
-        "Kalau bisa, upload foto yang jelas (tapi di demo ini boleh tanpa foto)",
+        "Upload foto frontal yang jelas — wajib untuk review dokter kulit",
       ],
       privacy:
         "Data kamu akan direview dokter kulit. Ceritakan seperlunya saja.",
@@ -29,10 +29,11 @@ export const id: Dictionary = {
     stepper: { photos: "1 • Foto", profile: "2 • Profil", skin: "3 • Kulit" },
     photos: {
       title: "Foto kulit",
-      subtitle: "Kalau ada (di demo ini nggak wajib)",
+      subtitle: "Wajib — tampak depan",
       helper:
-        "Kalau bisa, upload 1 foto frontal (utama). Ini paling bantu dokter lihat detailnya.",
-      slots: ["primary view (required)", "left profile", "right profile"],
+        "Upload minimal satu foto frontal (menghadap kamera) yang jelas. Dokter kulit membutuhkannya untuk menilai kondisi kulit. Foto samping opsional tapi membantu.",
+      slots: ["Frontal (wajib)", "Profil kiri (opsional)", "Profil kanan (opsional)"],
+      remove: "Hapus",
     },
     identity: {
       title: "Identitas & profil dasar",
@@ -122,7 +123,8 @@ export const id: Dictionary = {
     actions: { save: "Simpan", next: "Lanjut", submit: "Kirim", previous: "← Kembali" },
     validation: {
       requiredToSubmit:
-        "Biar bisa dikirim: pilih keluhan utama, isi durasi, dan pilih tingkat gangguannya.",
+        "Biar bisa dikirim: foto klinis frontal, keluhan utama, durasi, dan seberapa mengganggu.",
+      primaryPhotoRequired: "Upload dulu foto frontal yang jelas sebelum lanjut.",
     },
     auth: {
       signedInAs: "Login sebagai {email}",
@@ -134,6 +136,8 @@ export const id: Dictionary = {
       completeRequired: "Lengkapi field wajib dulu ya.",
       submitted: "Terkirim.",
       submitFailed: "Gagal kirim. Coba lagi ya.",
+      photoTooLarge: "Ukuran gambarnya kebesaran. Pilih foto di bawah 5 MB ya.",
+      photoInvalidFile: "Pilih file gambar (mis. JPEG atau PNG).",
     },
     note: {
       identity: "Identitas:",

@@ -35,6 +35,7 @@ export type Dictionary = {
       subtitle: string;
       helper: string;
       slots: string[]; // 3 labels
+      remove: string;
     };
     identity: {
       title: string;
@@ -120,6 +121,7 @@ export type Dictionary = {
     };
     validation: {
       requiredToSubmit: string;
+      primaryPhotoRequired: string;
     };
     auth: {
       signedInAs: string; // e.g. "Signed in as {email}"
@@ -131,6 +133,8 @@ export type Dictionary = {
       completeRequired: string;
       submitted: string;
       submitFailed: string;
+      photoTooLarge: string;
+      photoInvalidFile: string;
     };
     note: {
       identity: string;

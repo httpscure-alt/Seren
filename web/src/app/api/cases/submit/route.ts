@@ -16,7 +16,17 @@ const schema = z.object({
     .array(
       z.object({
         kind: z.string().min(1).max(40),
-        url: z.string().url(),
+        // HTTPS object URLs or inline data URLs from intake (until signed uploads ship).
+        url: z
+          .string()
+          .min(1)
+          .max(5_500_000)
+          .refine(
+            (s) =>
+              /^https?:\/\//i.test(s) ||
+              s.startsWith("data:image/"),
+            "Invalid upload URL",
+          ),
       }),
     )
     .max(10)

@@ -21,16 +21,18 @@ export const en: Dictionary = {
       items: [
         "Answer what you know — you can skip details",
         "Focus on what bothers you most",
-        "Photos help, but you can submit without them in this demo",
+        "Upload a clear frontal photo — it’s required for dermatologist review",
       ],
       privacy: "Your intake will be reviewed by a dermatologist. Only share what you’re comfortable with.",
     },
     stepper: { photos: "1 • Photos", profile: "2 • Profile", skin: "3 • Skin" },
     photos: {
       title: "Clinical photos",
-      subtitle: "Optional in this demo",
-      helper: "If possible, upload 1 frontal photo (primary). It helps your dermatologist see detail.",
-      slots: ["primary view (required)", "left profile", "right profile"],
+      subtitle: "Required — frontal view",
+      helper:
+        "Upload at least one clear frontal (face-forward) photo. Your dermatologist needs it to assess your skin accurately. Side views are optional but helpful.",
+      slots: ["Frontal (required)", "Left profile (optional)", "Right profile (optional)"],
+      remove: "Remove",
     },
     identity: {
       title: "Identity & basic profile",
@@ -118,7 +120,9 @@ export const en: Dictionary = {
     },
     actions: { save: "Save", next: "Next", submit: "Submit", previous: "← Previous" },
     validation: {
-      requiredToSubmit: "Required to submit: select a chief concern, fill duration, and pick how much it bothers you.",
+      requiredToSubmit:
+        "Required to submit: a frontal clinical photo, a chief concern, duration, and how much it bothers you.",
+      primaryPhotoRequired: "Please upload a clear frontal photo before continuing.",
     },
     auth: {
       signedInAs: "Signed in as {email}",
@@ -130,6 +134,8 @@ export const en: Dictionary = {
       completeRequired: "Please complete the required fields.",
       submitted: "Submitted.",
       submitFailed: "Submit failed.",
+      photoTooLarge: "That image is too large. Please choose a smaller photo (under 5 MB).",
+      photoInvalidFile: "Please choose an image file (JPEG, PNG, or similar).",
     },
     note: {
       identity: "Identity:",
