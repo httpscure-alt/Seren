@@ -153,7 +153,7 @@ export async function ConsultWelcomeScreen() {
             </div>
 
             <div className="col-span-12 lg:col-span-6 min-w-0 lg:pr-8">
-              <div className="mx-auto w-full max-w-md lg:max-w-lg lg:ml-auto">
+              <div className="mx-auto flex w-full max-w-md flex-col gap-8 lg:max-w-lg lg:ml-auto">
                 <div className="rounded-2xl border border-outline-variant/15 bg-surface/90 px-5 py-5 sm:px-6 sm:py-6 shadow-[0_20px_50px_-28px_rgba(47,51,48,0.3)] backdrop-blur-md">
                   <div className="flex gap-3 sm:gap-4">
                     <div className="relative h-[4.5rem] w-[4.5rem] sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-xl border border-outline-variant/12 bg-surface-container-lowest shadow-sm">
@@ -183,6 +183,19 @@ export async function ConsultWelcomeScreen() {
                     “Skin shifts from week to week. This short step is just us getting to know where you are
                     today—gently, with room to breathe.”
                   </p>
+                </div>
+
+                <div
+                  className="relative w-full overflow-hidden rounded-2xl border border-outline-variant/12 shadow-[0_28px_80px_-40px_rgba(47,51,48,0.28)]"
+                  style={{ aspectRatio: "4 / 5" }}
+                >
+                  <Image
+                    src="/demo/welcome-cream-swatch.png"
+                    alt=""
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 1024px) 100vw, 420px"
+                  />
                 </div>
               </div>
             </div>
