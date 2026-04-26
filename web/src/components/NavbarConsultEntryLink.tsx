@@ -6,9 +6,8 @@ import { usePathname } from "next/navigation";
 const WELCOME = "/consult/welcome";
 const INTAKE = "/consult/intake";
 
-/** Navbar CTA: welcome step → intake; already in consult flow → stay on intake; elsewhere → welcome. */
+/** Navbar “Start consultation” always opens the welcome step; only the intake step links to intake. */
 function consultEntryHref(pathname: string): string {
-  if (pathname === WELCOME || pathname.startsWith(`${WELCOME}/`)) return INTAKE;
   if (
     pathname.startsWith("/consult/intake") ||
     pathname.startsWith("/consult/analyzing")

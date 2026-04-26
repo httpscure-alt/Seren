@@ -7,6 +7,6 @@ export const metadata: Metadata = {
     "What to expect before you begin: a short assessment, clear photos, and dermatologist-reviewed guidance.",
 };
 
-export default function ConsultWelcomePage() {
+export default async function ConsultWelcomePage() {
   return <ConsultWelcomeScreen />;
 }

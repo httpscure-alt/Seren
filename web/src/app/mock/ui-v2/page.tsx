@@ -82,7 +82,7 @@ export default async function MockUiV2LandingPage() {
             </div>
 
             <Link
-              href="/consult/intake"
+              href="/consult/welcome"
               className="btn-gradient text-on-primary px-5 sm:px-6 py-2.5 rounded-full text-sm font-medium tracking-wide scale-98 active:scale-95 transition-all duration-200 shadow-sm"
             >
               {dict.nav.startConsultation}
@@ -104,7 +104,7 @@ export default async function MockUiV2LandingPage() {
             </p>
             <div className="flex items-center gap-6 sm:gap-8 flex-wrap">
               <Link
-                href="/consult/intake"
+                href="/consult/welcome"
                 className="btn-gradient text-on-primary px-7 sm:px-10 py-4 sm:py-5 rounded-full text-base sm:text-lg font-medium tracking-wide hover:shadow-xl transition-all duration-300"
               >
                 {dict.landing.ctaStart}
@@ -293,7 +293,7 @@ export default async function MockUiV2LandingPage() {
               {dict.landing.pricingHeading}
             </h2>
             <Link
-              href="/consult/intake"
+              href="/consult/welcome"
               className="bg-surface text-primary px-10 sm:px-12 py-4 sm:py-6 rounded-full text-lg sm:text-xl font-medium tracking-wide hover:scale-[1.03] transition-all duration-300 shadow-xl"
             >
               {dict.landing.ctaStart}
