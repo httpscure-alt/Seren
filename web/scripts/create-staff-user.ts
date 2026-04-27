@@ -41,7 +41,7 @@ Customer accounts: use /auth (role is always USER).
   }
 
   const role = roleRaw as Role;
-  const connectionString = process.env.DATABASE_URL;
+  let connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
     console.error("DATABASE_URL is not set.");
     process.exit(1);
