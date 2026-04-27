@@ -33,7 +33,7 @@ function resolveConnectionString(): string {
 }
 
 function makeClient() {
-  const connectionString = resolveConnectionString();
+  let connectionString = resolveConnectionString();
   if (process.env.NODE_ENV === "production" && !globalForPrisma.loggedDatabaseTarget) {
     globalForPrisma.loggedDatabaseTarget = true;
     try {
@@ -53,6 +53,9 @@ function makeClient() {
     // Supabase pooler certificates may not chain to Node's default trust store.
     // Prefer providing a CA, but for now allow opting out of verification for the pooler.
     if (u.hostname.endsWith(".pooler.supabase.com")) {
+      // Avoid pg-connection-string sslmode defaults overriding our ssl setting.
+      u.searchParams.delete("sslmode");
+      connectionString = u.toString();
       ssl = { rejectUnauthorized: false };
     } else if (process.env.NODE_ENV === "development" && process.env.NODE_TLS_REJECT_UNAUTHORIZED === "0") {
       ssl = { rejectUnauthorized: false };

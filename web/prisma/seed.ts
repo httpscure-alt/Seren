@@ -57,7 +57,11 @@ async function main() {
   let ssl: PoolConfig["ssl"] | undefined;
   try {
     const u = new URL(connectionString);
-    if (u.hostname.endsWith(".pooler.supabase.com")) ssl = { rejectUnauthorized: false };
+    if (u.hostname.endsWith(".pooler.supabase.com")) {
+      u.searchParams.delete("sslmode");
+      connectionString = u.toString();
+      ssl = { rejectUnauthorized: false };
+    }
   } catch {
     // ignore
   }
