@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PrismaClient, ProductCategory } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 
@@ -12,21 +12,23 @@ const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-const categoryMap: Record<string, ProductCategory> = {
-  "cleanser": "CLEANSER",
+// Note: `SkincareProduct.category` is stored as a string in Prisma schema,
+// so keep this mapping as plain strings.
+const categoryMap: Record<string, string> = {
+  cleanser: "CLEANSER",
   "facial-wash": "CLEANSER",
-  "toner": "TONER",
-  "essence": "TONER",
-  "serum": "SERUM",
-  "moisturizer": "MOISTURIZER",
+  toner: "TONER",
+  essence: "TONER",
+  serum: "SERUM",
+  moisturizer: "MOISTURIZER",
   "day-cream": "MOISTURIZER",
   "night-cream": "MOISTURIZER",
-  "sunscreen": "SUNSCREEN",
-  "sunblock": "SUNSCREEN",
-  "treatment": "TREATMENT",
+  sunscreen: "SUNSCREEN",
+  sunblock: "SUNSCREEN",
+  treatment: "TREATMENT",
   "acne-spot": "TREATMENT",
-  "mask": "TREATMENT",
-  "exfoliator": "TREATMENT",
+  mask: "TREATMENT",
+  exfoliator: "TREATMENT",
 };
 
 const realProducts = [
@@ -199,7 +201,7 @@ async function scrapeProducts() {
       slug,
       brand: product.brand,
       name: product.name,
-      category: product.category as ProductCategory,
+      category: product.category,
       activesSummary: product.actives,
       isActive: true
     };
