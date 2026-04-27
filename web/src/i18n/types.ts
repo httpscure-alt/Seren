@@ -113,6 +113,15 @@ export type Dictionary = {
       subtitle: string;
       placeholder: string;
     };
+    routine: {
+      title: string;
+      subtitle: string;
+      searchLabel: string;
+      searchPlaceholder: string;
+      noMatch: string;
+      usageLabel: string;
+      addAnother: string;
+    };
     actions: {
       save: string;
       next: string;

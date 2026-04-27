@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Wordmark aligned with SiteNavbar BrandMark: Manrope 500, tight tracking, on-surface #2f3330.
+  Intrinsic size e200px wide for website / lockups. Requires network once for Google Fonts, or install Manrope locally.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="64" viewBox="0 0 240 64" fill="none" role="img" aria-label="Seren">
+  <style type="text/css">
+    @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@500&amp;display=swap");
+    .wordmark {
+      font-family: "Manrope", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 40px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      fill: #2f3330;
+    }
+  </style>
+  <text x="0" y="46" class="wordmark">Seren</text>
+</svg>

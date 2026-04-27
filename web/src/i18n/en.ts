@@ -12,7 +12,7 @@ export const en: Dictionary = {
     step: { photos: "Photos", profile: "Profile", skin: "Skin" },
     progress: {
       step1: "Step 1 of 3: Photos",
-      step2: "Step 2 of 3: Basic profile + chief concern",
+      step2: "Step 2 of 3: Basic profile + chief complaint",
       step3: "Step 3 of 3: Skin characteristics",
       complete: "{pct}% complete",
     },
@@ -46,7 +46,7 @@ export const en: Dictionary = {
       genderPreferNot: "Prefer not to say",
     },
     chief: {
-      title: "Chief concern",
+      title: "Chief complaint",
       subtitle: "What is your main skin concern right now? (select all that apply)",
       options: [
         "Acne",
@@ -54,7 +54,6 @@ export const en: Dictionary = {
         "Dry skin",
         "Sensitive / easily irritated",
         "Dark spots / hyperpigmentation",
-        "Dullness",
         "Other",
       ],
       otherLabel: "Other (describe briefly)",
@@ -118,10 +117,19 @@ export const en: Dictionary = {
       subtitle: "Optional",
       placeholder: "Example: pregnancy/breastfeeding, outdoors often, recently changed skincare, etc.",
     },
+    routine: {
+      title: "Current routine",
+      subtitle: "Help your dermatologist see what products you use today — it helps avoid duplicate active ingredients.",
+      searchLabel: "Type a brand or product name",
+      searchPlaceholder: "e.g. CeraVe, sunscreen, etc.",
+      noMatch: "No match? Use \"Can't find it\" and describe it below.",
+      usageLabel: "When do you use it?",
+      addAnother: "+ Add another product",
+    },
     actions: { save: "Save", next: "Next", submit: "Submit", previous: "← Previous" },
     validation: {
       requiredToSubmit:
-        "Required to submit: a frontal clinical photo, a chief concern, duration, and how much it bothers you.",
+        "Required to submit: a frontal clinical photo, a chief complaint, duration, and how much it bothers you.",
       primaryPhotoRequired: "Please upload a clear frontal photo before continuing.",
     },
     auth: {

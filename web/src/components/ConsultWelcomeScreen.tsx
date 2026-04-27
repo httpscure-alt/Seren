@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BrandMark } from "@/components/BrandMark";
+import { DevDemoLinksBanner } from "@/components/DevDemoLinksBanner";
 
 /**
  * Consult welcome — layout from design export, brand + typography aligned with SiteNavbar / philosophy.
@@ -22,6 +23,7 @@ export function ConsultWelcomeScreen() {
           </div>
         </div>
       </header>
+      <DevDemoLinksBanner />
 
       <main className="flex flex-grow items-center justify-center py-16 sm:py-20">
         <div className="seren-container w-full">

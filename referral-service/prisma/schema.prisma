@@ -1,0 +1,151 @@
+// Standalone Postgres schema for the referral / affiliate service.
+// Run migrations in this package only — do not merge into web/prisma.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("REFERRAL_DATABASE_URL")
+}
+
+enum PartnerType {
+  USER // linked Seren customer who refers
+  CREATOR // external promoter
+}
+
+enum PartnerStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum CommissionStatus {
+  PENDING // owed, not yet in a payout batch
+  APPROVED
+  PAID
+  REVERSED // chargeback / refund
+  HELD // manual fraud review
+}
+
+model Partner {
+  id            String         @id @default(cuid())
+  type          PartnerType
+  status        PartnerStatus  @default(ACTIVE)
+  /// Opaque Seren user id when type = USER; null for pure creators until they sign up
+  serenUserId   String?        @unique
+  displayName   String?
+  email         String         @unique
+  payoutProfile Json? // bank details, tax id, etc. — encrypt at app layer in production
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  codes       ReferralCode[]
+  attributions Attribution[]
+  commissions Commission[]
+}
+
+model Program {
+  id          String   @id @default(cuid())
+  name        String
+  /// 800 = 8%, 1000 = 10%
+  rateBps     Int
+  /// Attribution window in days (e.g. 30)
+  windowDays  Int      @default(30)
+  activeFrom  DateTime?
+  activeTo    DateTime?
+  /// e.g. ["JOURNEY_30D", "SINGLE"] — match Seren SubscriptionPlan slugs
+  eligiblePlans String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  codes ReferralCode[]
+}
+
+model ReferralCode {
+  id        String   @id @default(cuid())
+  code      String   @unique // uppercase slug, e.g. SARAH10
+  partnerId String
+  programId String
+  createdAt DateTime @default(now())
+  revokedAt DateTime?
+
+  partner Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  program Program @relation(fields: [programId], references: [id], onDelete: Restrict)
+
+  attributions Attribution[]
+
+  @@index([partnerId])
+}
+
+/// Snapshot when someone lands with ?ref= or cookie
+model Attribution {
+  id          String   @id @default(cuid())
+  referralCodeId String
+  partnerId   String
+  /// Referee — populated when Seren sends user id
+  serenUserId String?
+  /// For pre-account tracking
+  anonymousKey String? // hashed session or device id from main app
+  landedAt    DateTime @default(now())
+  expiresAt   DateTime
+
+  referralCode ReferralCode @relation(fields: [referralCodeId], references: [id], onDelete: Cascade)
+  partner      Partner      @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+
+  conversion Conversion?
+
+  @@index([serenUserId])
+  @@index([referralCodeId, landedAt])
+}
+
+model Conversion {
+  id             String   @id @default(cuid())
+  attributionId  String   @unique
+  serenUserId    String   // referee
+  serenOrderId   String   @unique // Midtrans order id — idempotency
+  amountIdr      Int      // commission base (net or gross per Program rules)
+  currency       String   @default("IDR")
+  convertedAt    DateTime @default(now())
+
+  attribution Attribution @relation(fields: [attributionId], references: [id], onDelete: Cascade)
+  commission  Commission?
+}
+
+model Commission {
+  id            String            @id @default(cuid())
+  partnerId     String
+  conversionId  String            @unique
+  rateBps       Int
+  amountIdr     Int // earned commission, not subtotal
+  status        CommissionStatus  @default(PENDING)
+  payoutBatchId String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  partner     Partner      @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  conversion  Conversion   @relation(fields: [conversionId], references: [id], onDelete: Cascade)
+  payoutBatch PayoutBatch? @relation(fields: [payoutBatchId], references: [id])
+
+  @@index([partnerId, status])
+}
+
+model PayoutBatch {
+  id         String   @id @default(cuid())
+  period     String   // e.g. 2026-04
+  approvedAt DateTime?
+  paidAt     DateTime?
+  createdAt  DateTime @default(now())
+
+  commissions Commission[]
+}
+
+/// Inbound events from Seren (audit + idempotency)
+model IngestedEvent {
+  id         String   @id // client-supplied event_id, e.g. midtrans-ORDER-123
+  source     String   @default("seren")
+  payload    Json
+  receivedAt DateTime @default(now())
+
+  @@index([receivedAt])
+}

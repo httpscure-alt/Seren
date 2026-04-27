@@ -8,9 +8,13 @@ const nav = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/users", label: "Users" },
   { href: "/admin/cases", label: "Cases" },
+  { href: "/admin/ai-jobs", label: "AI jobs" },
+  { href: "/admin/messages", label: "Care threads" },
   { href: "/admin/subscriptions", label: "Subscriptions" },
   { href: "/admin/promos", label: "Promos" },
+  { href: "/admin/audit", label: "Audit log" },
   { href: "/admin/analytics", label: "Analytics" },
+  { href: "/admin/catalog", label: "Product catalog" },
 ] as const;
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {

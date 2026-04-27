@@ -81,6 +81,11 @@ export default async function AdminAnalyticsPage() {
 
         <div className="rounded-[2rem] bg-surface-container-lowest border border-outline-variant/10 p-7">
           <p className="font-headline tracking-tight text-base">Recent audit logs</p>
+          <p className="mt-2 text-xs text-on-surface/45">
+            <Link href="/admin/audit" className="text-primary underline underline-offset-4">
+              View full audit log (250 rows)
+            </Link>
+          </p>
           <div className="mt-6 space-y-3 text-sm text-on-surface-variant">
             {recentAudit.length ? (
               recentAudit.map((a) => (

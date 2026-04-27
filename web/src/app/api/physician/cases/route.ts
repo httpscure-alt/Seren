@@ -38,6 +38,21 @@ export async function GET() {
         },
       },
       user: { select: { email: true, name: true } },
+      regimenLines: {
+        orderBy: { sortOrder: "asc" },
+        select: {
+          id: true,
+          sortOrder: true,
+          usageSlot: true,
+          brandRaw: true,
+          nameRaw: true,
+          userNote: true,
+          source: true,
+          product: {
+            select: { id: true, brand: true, name: true, activesSummary: true },
+          },
+        },
+      },
     },
   });
 

@@ -9,8 +9,9 @@ function Frame({ children }: { children: React.ReactNode }) {
         OG preview frame (mock)
       </p>
       <div className="w-full aspect-[1200/630] max-w-[1200px] mx-auto">{children}</div>
-      <p className="mt-6 text-xs text-on-surface/45 leading-relaxed">
-        Habit-tracker energy — shareable because it’s about consistency, not “skin problems”.
+      <p className="mt-6 text-sm text-on-surface-variant leading-relaxed">
+        Dark “streak” canvas + big completion meter + crisp white checklist — reads as Duolingo /
+        Strava energy, not a beige brochure.
       </p>
     </div>
   );
@@ -18,55 +19,71 @@ function Frame({ children }: { children: React.ReactNode }) {
 
 function Check({ label, checked }: { label: string; checked: boolean }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-surface border border-outline-variant/10 px-4 py-3">
+    <div
+      className={[
+        "flex items-center gap-3 rounded-2xl px-4 py-3.5 border-2 transition-shadow",
+        checked
+          ? "bg-white border-primary/25 shadow-[0_8px_24px_-12px_rgba(61,99,116,0.35)]"
+          : "bg-white/50 border-outline-variant/20 border-dashed",
+      ].join(" ")}
+    >
       <span
         className={[
-          "grid place-items-center size-6 rounded-xl border text-xs font-headline",
+          "grid place-items-center size-8 rounded-xl text-sm font-headline shrink-0",
           checked
-            ? "bg-primary/10 border-primary/20 text-primary"
-            : "bg-surface border-outline-variant/15 text-on-surface/35",
+            ? "bg-gradient-to-br from-primary to-primary-dim text-on-primary shadow-md"
+            : "bg-surface-container text-on-surface/30 border border-outline-variant/20",
         ].join(" ")}
         aria-hidden="true"
       >
-        {checked ? "✓" : "•"}
+        {checked ? "✓" : ""}
       </span>
-      <span className="text-sm text-on-surface/80">{label}</span>
+      <span className={["text-sm font-medium", checked ? "text-on-surface" : "text-on-surface/45"].join(" ")}>
+        {label}
+      </span>
     </div>
   );
 }
 
 function ChecklistCard() {
   return (
-    <div className="w-full h-full rounded-[28px] overflow-hidden border border-outline-variant/10 shadow-[0_30px_90px_-60px_rgba(47,51,48,0.55)] bg-surface-container-lowest relative">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(202,225,250,0.88),transparent_55%),radial-gradient(circle_at_82%_22%,rgba(249,232,179,0.62),transparent_55%),radial-gradient(circle_at_56%_82%,rgba(201,232,220,0.72),transparent_60%)]" />
-      <div className="absolute inset-0 opacity-[0.1] [background-image:radial-gradient(#2f3330_0.6px,transparent_0.6px)] [background-size:18px_18px]" />
+    <div className="w-full h-full rounded-[24px] overflow-hidden ring-2 ring-[#c9a227]/30 shadow-[0_36px_110px_-28px_rgba(61,99,116,0.45)] relative bg-[#102018]">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_0%,rgba(61,99,116,0.55),transparent),radial-gradient(circle_at_90%_20%,rgba(232,197,71,0.2),transparent_50%),radial-gradient(circle_at_40%_100%,rgba(120,180,160,0.25),transparent_55%)]" />
+      <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(#fff_0.5px,transparent_0.5px)] [background-size:10px_10px]" />
 
-      <div className="relative h-full p-10 grid grid-cols-12 gap-8">
+      <div className="relative h-full p-10 grid grid-cols-12 gap-8 text-white">
         <div className="col-span-5 flex flex-col justify-between">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.28em] text-on-surface/55">
-              Seren routine checklist
+            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#9fd4b8]">
+              Seren · streak mode
             </p>
-            <p className="mt-5 text-5xl font-headline tracking-tight leading-[0.95]">
-              7‑day streak
+            <div className="mt-6 flex items-end gap-3">
+              <p className="text-6xl sm:text-7xl font-headline font-light tracking-[-0.04em] leading-none text-white">
+                86%
+              </p>
+              <p className="pb-2 text-sm font-semibold uppercase tracking-widest text-[#ffe08a]">
+                week done
+              </p>
+            </div>
+            <p className="mt-4 text-3xl font-headline tracking-tight leading-tight">
+              7-day streak
             </p>
-            <p className="mt-4 text-base text-on-surface-variant leading-relaxed">
-              A calm routine you can actually keep.
+            <p className="mt-3 text-sm leading-relaxed text-white/80">
+              Habit energy beats “before/after” shame. Share the discipline, not the diagnosis.
             </p>
           </div>
 
-          <div className="rounded-[2rem] bg-surface/70 backdrop-blur border border-outline-variant/12 p-7">
-            <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-              This week’s goal
-            </p>
-            <p className="mt-2 text-xl font-headline tracking-tight">
-              Protect daily. Introduce actives slowly.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {["AM", "PM", "Sunscreen"].map((t) => (
+          <div className="rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 p-6">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">Goal</p>
+            <p className="mt-2 text-lg font-headline tracking-tight">Daily SPF + barrier repair</p>
+            <div className="mt-4 h-2 rounded-full bg-black/30 overflow-hidden">
+              <div className="h-full w-[86%] rounded-full bg-gradient-to-r from-[#3d6374] to-[#e8c547]" />
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {["AM", "PM", "SPF"].map((t) => (
                 <span
                   key={t}
-                  className="rounded-full bg-surface border border-outline-variant/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] text-on-surface/70"
+                  className="rounded-full bg-black/25 border border-white/15 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90"
                 >
                   {t}
                 </span>
@@ -75,38 +92,36 @@ function ChecklistCard() {
           </div>
         </div>
 
-        <div className="col-span-7 rounded-[2rem] bg-surface/70 backdrop-blur border border-outline-variant/12 p-8">
+        <div className="col-span-7 rounded-[1.75rem] bg-white text-on-surface p-8 shadow-2xl border border-primary/10">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-                Today (Day 7)
-              </p>
-              <p className="mt-2 text-2xl font-headline tracking-tight">Checklist</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary">Day 7</p>
+              <p className="mt-2 text-2xl font-headline tracking-tight">Today’s checklist</p>
             </div>
-            <span className="rounded-full bg-primary/10 border border-primary/15 text-primary px-3 py-1 text-[10px] uppercase tracking-[0.22em] shrink-0">
-              Derm‑reviewed
+            <span className="rounded-full btn-gradient text-on-primary px-4 py-2 text-[9px] font-bold uppercase tracking-[0.2em] shadow-md shrink-0">
+              Derm-reviewed
             </span>
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-3">
+          <div className="mt-6 grid grid-cols-2 gap-4">
             <div className="space-y-3">
-              <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">AM</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-on-surface/45">AM</p>
               <Check checked label="Cleanser (gentle)" />
               <Check checked label="Moisturizer" />
               <Check checked label="Sunscreen (2 fingers)" />
             </div>
             <div className="space-y-3">
-              <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">PM</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-on-surface/45">PM</p>
               <Check checked label="Cleanser (double if makeup)" />
               <Check checked={false} label="Active (1–2×/week)" />
               <Check checked label="Moisturizer (repair)" />
             </div>
           </div>
 
-          <div className="mt-7 flex items-center justify-between gap-4">
-            <p className="text-xs text-on-surface/45">SRN‑8821</p>
-            <div className="rounded-full bg-surface border border-outline-variant/12 px-4 py-2 text-xs uppercase tracking-[0.2em] font-headline text-on-surface/70">
-              Copy routine
+          <div className="mt-8 flex items-center justify-between gap-4 pt-2 border-t border-outline-variant/15">
+            <p className="text-xs font-mono font-semibold text-primary">SRN‑8821</p>
+            <div className="rounded-full bg-primary text-on-primary px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] shadow-lg shadow-primary/25">
+              Post my streak
             </div>
           </div>
         </div>

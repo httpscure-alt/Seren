@@ -1,17 +1,25 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// Minimal route protection for production hardening.
-// We keep it permissive for now (UI demo), but gate obvious admin/clinician routes.
+/**
+ * Edge middleware — lightweight session check for protected routes.
+ * We can't call Prisma here (Edge runtime), so we only verify that a
+ * NextAuth JWT cookie exists.  Role enforcement happens inside each
+ * page/API via `requireRole()`.
+ */
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // Only gate page routes — API routes handle their own auth via requireRole()
   const isProtected =
-    pathname.startsWith("/physician") || pathname.startsWith("/admin");
+    (pathname.startsWith("/physician") || pathname.startsWith("/admin")) &&
+    !pathname.startsWith("/api/");
 
   if (!isProtected) return NextResponse.next();
 
-  // NextAuth session cookie is httpOnly; this is a lightweight guard.
-  // Real enforcement is also done server-side via `auth()` checks.
+  // NextAuth writes an httpOnly JWT cookie; its mere presence means
+  // the user has an active session.  The actual role check is done
+  // server-side in each page / API route.
   const hasSession =
     req.cookies.get("next-auth.session-token") ||
     req.cookies.get("__Secure-next-auth.session-token");
@@ -29,4 +37,3 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: ["/physician/:path*", "/admin/:path*"],
 };
-

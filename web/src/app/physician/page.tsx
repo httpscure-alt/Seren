@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNavbar } from "@/components/SiteNavbar";
 import { requireRole } from "@/lib/authz";
@@ -37,9 +36,25 @@ export default async function PhysicianPortalPage() {
         },
       },
       user: { select: { email: true, name: true } },
+      regimenLines: {
+        orderBy: { sortOrder: "asc" },
+        select: {
+          id: true,
+          sortOrder: true,
+          usageSlot: true,
+          brandRaw: true,
+          nameRaw: true,
+          userNote: true,
+          source: true,
+          product: {
+            select: { id: true, brand: true, name: true, activesSummary: true },
+          },
+        },
+      },
     },
   });
 
+  // Show demo cases only when the queue is empty (useful for a fresh DB)
   const mockCases =
     cases.length > 0
       ? cases
@@ -67,10 +82,19 @@ export default async function PhysicianPortalPage() {
               contentJson: {
                 aiDraft: {
                   severity: "Moderate",
-                  condition: "Inflammatory acne with barrier stress and reactive sensitivity.",
+                  condition:
+                    "Inflammatory acne with barrier stress and reactive sensitivity.",
                   routine: {
-                    morning: ["Gentle cleanser", "Barrier moisturizer", "SPF 50+"],
-                    evening: ["Gentle cleanse", "Azelaic acid (low %) alternate nights", "Barrier repair cream"],
+                    morning: [
+                      "Gentle cleanser",
+                      "Barrier moisturizer",
+                      "SPF 50+",
+                    ],
+                    evening: [
+                      "Gentle cleanse",
+                      "Azelaic acid (low %) alternate nights",
+                      "Barrier repair cream",
+                    ],
                   },
                 },
                 clinicianEdits: {
@@ -80,6 +104,23 @@ export default async function PhysicianPortalPage() {
               },
             },
             user: { email: "emmy.noviawati@demo.local", name: "Emmy Noviawati" },
+            regimenLines: [
+              {
+                id: "mock-reg-1",
+                sortOrder: 0,
+                usageSlot: "BOTH",
+                brandRaw: "Azarine",
+                nameRaw: "Hydrasoothe Sunscreen Gel SPF50",
+                userNote: null,
+                source: "PICKED",
+                product: {
+                  id: "mock-prod",
+                  brand: "Azarine",
+                  name: "Hydrasoothe Sunscreen Gel SPF50 PA++++",
+                  activesSummary: "Chemical UV filters; lightweight gel base.",
+                },
+              },
+            ],
           },
           {
             id: "mock-case-2",
@@ -91,17 +132,15 @@ export default async function PhysicianPortalPage() {
             uploads: [],
             report: null,
             user: { email: "sarah.jenkins@demo.local", name: "Sarah Jenkins" },
+            regimenLines: [],
           },
         ] as any[]);
 
   return (
     <div className="flex flex-col min-h-screen bg-surface text-on-surface overflow-x-hidden">
       <SiteNavbar />
-
       <PhysicianPortalClient initialCases={mockCases as any} />
-
       <SiteFooter />
     </div>
   );
 }
-

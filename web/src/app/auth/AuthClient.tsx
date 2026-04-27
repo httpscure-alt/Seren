@@ -254,6 +254,11 @@ export function AuthClient({
                   Log in
                 </button>
               </div>
+              <p className="mt-4 text-xs text-on-surface-variant/80 leading-relaxed max-w-md">
+                Platform staff (admin / dermatologist demo accounts): choose{" "}
+                <span className="text-on-surface">Log in</span>, not Create — seeded passwords can be
+                shorter than 8 characters.
+              </p>
 
               <form className="mt-8 text-left space-y-6" onSubmit={onSubmit}>
                 {mode === "signup" ? (

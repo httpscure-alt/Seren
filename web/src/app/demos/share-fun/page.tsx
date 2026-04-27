@@ -4,6 +4,16 @@ import { SiteNavbar } from "@/components/SiteNavbar";
 
 const variants = [
   {
+    href: "/demos/share-fun/program-mock",
+    title: "Program mock — share · Points · creators",
+    desc: "Three flows on one page: shareable card journey, Seren Points earn/see/redeem, creator vs member table + dashboard.",
+  },
+  {
+    href: "/demos/share-fun/wrapped",
+    title: "★ Share + discover (on-brand)",
+    desc: "Design-system colors & type; left = progress, right = what Seren is + check-in CTA.",
+  },
+  {
     href: "/demos/share-fun/d",
     title: "Option D — Journey stamp",
     desc: "A collectible stamp vibe: week marker + focus. Calm but shareable.",
@@ -29,28 +39,36 @@ export default function ShareFunIndexPage() {
         <header className="max-w-3xl">
           <p className="text-[10px] uppercase tracking-[0.28em] text-on-surface/45 mb-4">Demos</p>
           <h1 className="text-3xl sm:text-4xl font-headline tracking-[-0.02em]">
-            Fun share card variants (D–F)
+            Fun share cards
           </h1>
           <p className="mt-4 text-on-surface-variant leading-[1.65]">
-            These keep privacy safe (no faces, no acne callouts) while adding “delight” so people
-            actually want to share.
+            Start with <span className="text-on-surface font-medium">Wrapped + invite</span> if the goal
+            is “I’d post this” <em>and</em> “my friend would tap.” The rest are layout experiments.
           </p>
-          <p className="mt-6 text-sm">
+          <p className="mt-6 flex flex-wrap gap-x-3 gap-y-2 text-sm">
+            <Link className="text-primary underline underline-offset-4" href="/demos">
+              All demos
+            </Link>
             <Link className="text-primary underline underline-offset-4" href="/demos/share-variants">
               Compare the clinical variants (A–C)
             </Link>
           </p>
         </header>
 
-        <section className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <section className="mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {variants.map((v) => (
             <Link
               key={v.href}
               href={v.href}
-              className="seren-card p-8 sm:p-9 hover:bg-surface-container transition-colors"
+              className={[
+                "seren-card p-8 sm:p-9 hover:bg-surface-container transition-colors",
+                v.href.includes("wrapped")
+                  ? "ring-2 ring-primary/25 bg-gradient-to-br from-primary/5 to-transparent md:col-span-2 xl:col-span-3"
+                  : "",
+              ].join(" ")}
             >
               <p className="text-[10px] uppercase tracking-[0.28em] text-on-surface/45 mb-3">
-                Variant
+                {v.href.includes("wrapped") ? "Recommended" : "Variant"}
               </p>
               <p className="text-lg font-headline tracking-tight">{v.title}</p>
               <p className="mt-2 text-sm text-on-surface-variant leading-relaxed">{v.desc}</p>

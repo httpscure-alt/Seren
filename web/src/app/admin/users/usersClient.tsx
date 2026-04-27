@@ -9,6 +9,7 @@ type Row = {
   email: string;
   name: string | null;
   role: "USER" | "PHYSICIAN" | "ADMIN";
+  emailVerified: string | null;
   createdAt: string;
   _count: { cases: number; subscriptions: number; payments: number };
 };
@@ -69,6 +70,7 @@ export function AdminUsersClient({ initialUsers }: { initialUsers: Row[] }) {
           <thead className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
             <tr className="border-b border-outline-variant/10">
               <th className="text-left py-3 px-5">User</th>
+              <th className="text-left py-3 px-5">Verified</th>
               <th className="text-left py-3 px-5">Role</th>
               <th className="text-left py-3 px-5">Cases</th>
               <th className="text-left py-3 px-5">Subscriptions</th>
@@ -82,6 +84,13 @@ export function AdminUsersClient({ initialUsers }: { initialUsers: Row[] }) {
                 <td className="py-4 px-5">
                   <div className="text-on-surface font-medium">{u.name ?? u.email}</div>
                   <div className="text-xs text-on-surface/45">{u.email}</div>
+                </td>
+                <td className="py-4 px-5 text-xs text-on-surface-variant">
+                  {u.emailVerified ? (
+                    <span className="text-primary">Yes</span>
+                  ) : (
+                    <span className="text-on-surface/45">No</span>
+                  )}
                 </td>
                 <td className="py-4 px-5 text-on-surface">{u.role}</td>
                 <td className="py-4 px-5">{u._count.cases}</td>
@@ -119,7 +128,7 @@ export function AdminUsersClient({ initialUsers }: { initialUsers: Row[] }) {
             ))}
             {!filtered.length ? (
               <tr>
-                <td className="py-10 px-5 text-center text-on-surface/45" colSpan={6}>
+                <td className="py-10 px-5 text-center text-on-surface/45" colSpan={7}>
                   No matches.
                 </td>
               </tr>

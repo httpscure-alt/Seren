@@ -10,6 +10,7 @@ export default async function AdminUsersPage() {
       email: true,
       name: true,
       role: true,
+      emailVerified: true,
       createdAt: true,
       _count: { select: { cases: true, subscriptions: true, payments: true } },
     },

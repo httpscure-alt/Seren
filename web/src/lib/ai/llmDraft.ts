@@ -59,12 +59,30 @@ export function buildAiCaseInputFromJobInput(inputJson: unknown): AiCaseInput {
       (Array.isArray(intake?.barrierSigns) && (intake!.barrierSigns as unknown[]).length > 0),
   );
 
+  const regimenRaw = intake?.regimen;
+  let currentRegimen: AiCaseInput["currentRegimen"] = null;
+  if (Array.isArray(regimenRaw) && regimenRaw.length > 0) {
+    currentRegimen = regimenRaw.map((r: Record<string, unknown>) => {
+      const brandRaw = typeof r.brandRaw === "string" ? r.brandRaw : "";
+      const nameRaw = typeof r.nameRaw === "string" ? r.nameRaw : "";
+      const catalog = r.catalog && typeof r.catalog === "object" ? (r.catalog as Record<string, unknown>) : null;
+      return {
+        line: `${brandRaw} ${nameRaw}`.trim() || String(r.nameRaw ?? ""),
+        usage: String(r.usageSlot ?? "UNKNOWN"),
+        catalogActivesSummary:
+          catalog && typeof catalog.activesSummary === "string" ? catalog.activesSummary : null,
+        source: String(r.source ?? "PICKED"),
+      };
+    });
+  }
+
   return {
     symptoms,
     note,
     budgetTier: intake?.budgetTier as AiCaseInput["budgetTier"],
     routineStyle: intake?.routineStyle as AiCaseInput["routineStyle"],
     isSensitiveSkin,
+    currentRegimen,
   };
 }
 

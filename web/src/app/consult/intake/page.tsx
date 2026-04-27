@@ -1,5 +1,6 @@
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNavbar } from "@/components/SiteNavbar";
+import { DevDemoLinksBanner } from "@/components/DevDemoLinksBanner";
 import { IntakeClient } from "@/app/consult/intake/IntakeClient";
 import { getDictionary } from "@/i18n/getDictionary";
 

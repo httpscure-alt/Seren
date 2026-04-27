@@ -12,10 +12,12 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "db:seed": "prisma db seed",
+    "db:scrape": "tsx prisma/scraper.ts",
     "worker": "tsx scripts/ai-worker.ts",
     "worker:once": "tsx scripts/ai-worker.ts --once",
     "reminders:once": "tsx scripts/subscription-reminders.ts",
     "create:staff": "tsx scripts/create-staff-user.ts",
+    "brand:png": "node scripts/render-brand-png.mjs",
     "test:e2e": "playwright test",
     "vercel:sync-env": "node scripts/sync-vercel-prod-env.mjs"
   },
@@ -50,5 +52,8 @@
     "tsx": "^4.21.0",
     "typescript": "^5",
     "vercel": "^52.0.0"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

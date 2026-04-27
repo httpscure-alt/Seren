@@ -9,8 +9,9 @@ function Frame({ children }: { children: React.ReactNode }) {
         OG preview frame (mock)
       </p>
       <div className="w-full aspect-[1200/630] max-w-[1200px] mx-auto">{children}</div>
-      <p className="mt-6 text-xs text-on-surface/45 leading-relaxed">
-        “Collectible stamp” energy — easy to share without feeling like an ad.
+      <p className="mt-6 text-sm text-on-surface-variant leading-relaxed">
+        Bold split layout: dark hero for thumb-stopping contrast + warm “stamp” panel for collectible
+        energy. Still no clinical photos.
       </p>
     </div>
   );
@@ -18,76 +19,71 @@ function Frame({ children }: { children: React.ReactNode }) {
 
 function StampCard() {
   return (
-    <div className="w-full h-full rounded-[28px] overflow-hidden border border-outline-variant/10 shadow-[0_30px_90px_-60px_rgba(47,51,48,0.55)] bg-surface-container-lowest relative">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(249,232,179,0.75),transparent_55%),radial-gradient(circle_at_85%_20%,rgba(211,226,247,0.85),transparent_55%),radial-gradient(circle_at_55%_78%,rgba(205,232,218,0.78),transparent_60%),radial-gradient(circle_at_35%_80%,rgba(248,215,223,0.65),transparent_60%)]" />
-      <div className="absolute inset-0 opacity-[0.12] [background-image:radial-gradient(#2f3330_0.55px,transparent_0.55px)] [background-size:14px_14px]" />
+    <div className="w-full h-full rounded-[24px] overflow-hidden shadow-[0_36px_120px_-28px_rgba(61,99,116,0.5)] ring-[3px] ring-[#c9a227]/35 flex min-h-[320px]">
+      {/* High-contrast hero column — reads instantly in a tiny OG thumbnail */}
+      <div className="relative w-[42%] min-w-[200px] bg-gradient-to-br from-primary via-[#2f4f5c] to-[#1e3a45] p-8 sm:p-10 flex flex-col justify-between text-on-primary">
+        <div className="absolute -right-8 top-1/2 -translate-y-1/2 size-[180px] rounded-full bg-[#e8c547]/25 blur-3xl" />
+        <div className="absolute top-6 right-6 rounded-full bg-on-primary/15 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-on-primary border border-on-primary/25">
+          Unlocked
+        </div>
+        <div className="relative">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-on-primary/75">
+            Seren skin journey
+          </p>
+          <p className="mt-4 text-sm font-medium text-[#f4e4a6] uppercase tracking-widest">Week</p>
+          <p className="mt-1 text-[4.5rem] sm:text-[5.5rem] font-headline font-light tracking-[-0.06em] leading-[0.85] text-white drop-shadow-sm">
+            1
+          </p>
+          <p className="mt-4 text-sm leading-relaxed text-on-primary/90 max-w-[28ch]">
+            Post-worthy progress: barrier reset + daily SPF. Derm-reviewed.
+          </p>
+        </div>
+        <div className="relative flex flex-wrap gap-2">
+          {["Shareable", "No face photos", "Private by default"].map((t) => (
+            <span
+              key={t}
+              className="rounded-full bg-black/20 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-on-primary/95 border border-on-primary/20"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
 
-      <div className="relative h-full p-10 grid grid-cols-12 gap-8">
-        <div className="col-span-7 flex flex-col justify-between">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.28em] text-on-surface/55">
-              Seren skin journey
-            </p>
-            <p className="mt-5 text-6xl font-headline tracking-tight leading-[0.9]">
-              Week 1
-            </p>
-            <p className="mt-4 text-base text-on-surface-variant leading-relaxed max-w-[52ch]">
-              Barrier reset + sunscreen consistency. Calm, simple, repeatable.
-            </p>
+      {/* Warm stamp panel — collectible energy */}
+      <div className="flex-1 relative bg-gradient-to-br from-[#fdf8ee] via-[#f7f4ec] to-[#eef6f4] p-8 sm:p-10 flex flex-col justify-between">
+        <div className="absolute inset-0 opacity-[0.09] [background-image:radial-gradient(#305767_0.65px,transparent_0.65px)] [background-size:12px_12px]" />
+        <div className="relative rounded-[1.75rem] border-2 border-dashed border-primary/25 bg-white/90 p-7 shadow-inner shadow-primary/5">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-primary">Journey stamp</p>
+              <p className="mt-3 text-xs font-mono tracking-wide text-on-surface/55">SRN‑8821</p>
+              <p className="mt-2 text-3xl font-headline tracking-tight text-primary">Barrier focus</p>
+            </div>
+            <div className="grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-[#c9a227] to-[#a67c00] text-white shadow-lg shadow-amber-900/20">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path
+                  d="M12 2l2.2 6.8H21l-5.5 4 2.1 6.7L12 15.9 6.4 19.5l2.1-6.7L3 8.8h6.8L12 2z"
+                  fill="currentColor"
+                  opacity="0.95"
+                />
+              </svg>
+            </div>
           </div>
-
-          <div className="rounded-[2rem] bg-surface/70 backdrop-blur border border-outline-variant/12 p-7">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-                  Today’s focus
-                </p>
-                <p className="mt-2 text-xl font-headline tracking-tight">
-                  Keep it gentle. Keep it daily.
-                </p>
-              </div>
-              <span className="rounded-full bg-primary/10 border border-primary/15 text-primary px-3 py-1 text-[10px] uppercase tracking-[0.22em] shrink-0">
-                Derm‑reviewed
-              </span>
-            </div>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {["AM 3 steps", "PM 2 steps", "Sensitive‑safe"].map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full bg-surface border border-outline-variant/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] text-on-surface/70"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
+          <p className="mt-4 text-sm text-on-surface leading-relaxed">
+            Reset → protect → one new active, slowly.
+          </p>
+          <div className="mt-5 rounded-xl bg-primary/8 px-4 py-3 border border-primary/15">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">Today</p>
+            <p className="mt-1 text-base font-headline tracking-tight text-on-surface">
+              Gentle wins. Show it off.
+            </p>
           </div>
         </div>
-
-        <div className="col-span-5 flex flex-col justify-between">
-          <div className="rounded-[2rem] bg-surface/70 backdrop-blur border border-outline-variant/12 p-7">
-            <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45 mb-4">
-              Stamp
-            </p>
-            <div className="rounded-[1.75rem] border border-outline-variant/15 bg-surface p-6">
-              <p className="text-[10px] uppercase tracking-[0.28em] text-on-surface/45">
-                SRN‑8821
-              </p>
-              <p className="mt-3 text-3xl font-headline tracking-tight">Barrier</p>
-              <p className="mt-2 text-sm text-on-surface-variant leading-relaxed">
-                Reset • protect • then introduce one active slowly.
-              </p>
-              <div className="mt-5 h-px w-full bg-outline-variant/15" />
-              <p className="mt-4 text-xs text-on-surface/45">
-                No clinical photos in previews.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between gap-4">
-            <p className="text-xs text-on-surface/45">Seren</p>
-            <div className="rounded-full bg-surface border border-outline-variant/12 px-4 py-2 text-xs uppercase tracking-[0.2em] font-headline text-on-surface/70">
-              View report
-            </div>
+        <div className="relative flex items-center justify-between gap-4 pt-2">
+          <p className="text-xs font-semibold text-primary">seren.skin</p>
+          <div className="rounded-full btn-gradient text-on-primary px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] shadow-[0_12px_36px_-16px_rgba(61,99,116,0.65)]">
+            Share my week
           </div>
         </div>
       </div>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Square lockup (200×200): circular S mark + wordmark, for app listings that require a square master.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" fill="none" role="img" aria-label="Seren">
+  <defs>
+    <linearGradient id="sqGrad" x1="16" y1="12" x2="84" y2="92" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3d6374"/>
+      <stop offset="1" stop-color="#305767"/>
+    </linearGradient>
+    <filter id="sqSh" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#2f3330" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="200" height="200" fill="#faf9f6"/>
+  <g transform="translate(100 72) scale(0.62) translate(-48 -48)">
+    <circle cx="48" cy="48" r="34" fill="url(#sqGrad)" filter="url(#sqSh)"/>
+    <path
+      d="M61.8 34.8c-2.7-3.1-7.2-5.2-13.2-5.2-8.4 0-14 4.2-14 10.6 0 5.3 3.9 7.8 11.1 9.1l2.7.5c4.2.8 6.1 1.9 6.1 3.9 0 2.4-2.6 3.9-6.6 3.9-4.2 0-7.3-1.4-9.4-3.7l-5.5 5.1c3.6 4.1 8.7 6 14.9 6 9.2 0 15.5-4.4 15.5-11.2 0-5.7-4.1-8.3-11.7-9.7l-2.7-.5c-3.7-.7-5.5-1.6-5.5-3.5 0-2.2 2.2-3.6 5.7-3.6 3.4 0 6.2 1.2 7.8 3l4.8-4.7Z"
+      fill="#f0f9ff"
+      opacity="0.98"
+    />
+  </g>
+  <style type="text/css">
+    @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@500&amp;display=swap");
+    .wm {
+      font-family: "Manrope", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      fill: #2f3330;
+    }
+  </style>
+  <text x="100" y="158" text-anchor="middle" class="wm">Seren</text>
+</svg>

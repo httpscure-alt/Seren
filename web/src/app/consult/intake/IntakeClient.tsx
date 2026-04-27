@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { AsyncButton } from "@/components/AsyncButton";
 import { useToast } from "@/components/ToastProvider";
 import type { Dictionary, Lang } from "@/i18n/types";
+import { RegimenCatalogPicker, type RegimenLineSubmit } from "@/components/RegimenCatalogPicker";
 
 type Gender = "FEMALE" | "MALE" | "PREFER_NOT";
 type Severity = "MILD" | "MODERATE" | "SEVERE";
@@ -41,11 +42,12 @@ type IntakeDraft = {
   pigmentationTypes: Array<"ACNE_MARKS" | "MELASMA" | "FRECKLES">;
 
   extraNote?: string;
+  regimenLines: RegimenLineSubmit[];
 };
 
 const STORAGE_KEY = "seren.intakeDraft.v1";
 /** ~4MB binary → base64 stays under typical serverless body limits */
-const MAX_PRIMARY_DATA_URL_CHARS = 5_000_000;
+const MAX_PRIMARY_DATA_URL_CHARS = 15_000_000;
 
 type IntakeCopy = Dictionary["intake"];
 
@@ -69,10 +71,11 @@ function Chip({
       type="button"
       onClick={onClick}
       className={[
-        "px-4 py-2 rounded-full border text-sm font-headline tracking-tight transition-colors",
+        "px-4 py-2 rounded-full border text-sm font-headline tracking-tight transition-all duration-300",
+        "hover:scale-[1.02] active:scale-[0.98]",
         active
-          ? "bg-primary/10 border-primary/25 text-primary"
-          : "bg-surface border-outline-variant/20 text-on-surface-variant hover:bg-surface-container-low",
+          ? "bg-primary/10 border-primary/40 text-primary shadow-sm shadow-primary/5"
+          : "bg-surface border-outline-variant/20 text-on-surface-variant hover:bg-surface-container-low hover:border-outline-variant/40",
       ].join(" ")}
     >
       {label}
@@ -94,26 +97,72 @@ function RadioPill({
       type="button"
       onClick={onClick}
       className={[
-        "w-full text-left px-5 py-4 rounded-2xl border transition-colors",
-        "min-h-[56px]",
+        "w-full text-left px-5 py-4 rounded-2xl border transition-all duration-300",
+        "min-h-[56px] hover:scale-[1.01] active:scale-[0.99]",
         active
-          ? "bg-primary/10 border-primary/25"
-          : "bg-surface border-outline-variant/15 hover:bg-surface-container-low",
+          ? "bg-primary/10 border-primary/35 shadow-sm shadow-primary/5"
+          : "bg-surface border-outline-variant/15 hover:bg-surface-container-low hover:border-outline-variant/30",
       ].join(" ")}
     >
       <div className="flex items-center justify-between gap-4">
         <span className="font-headline text-sm text-on-surface">{label}</span>
         <span
           className={[
-            "size-5 rounded-full border grid place-items-center",
+            "size-5 rounded-full border grid place-items-center transition-colors duration-300",
             active ? "border-primary/40 bg-primary/10" : "border-outline-variant/25 bg-surface",
           ].join(" ")}
           aria-hidden="true"
         >
-          {active ? <span className="size-2.5 rounded-full bg-primary" /> : null}
+          {active && (
+            <span className="size-2.5 rounded-full bg-primary animate-fade-scale" />
+          )}
         </span>
       </div>
     </button>
+  );
+}
+
+function SummaryCard({ draft }: { draft: IntakeDraft }) {
+  const products = draft.regimenLines;
+  if (products.length === 0)
+    return (
+      <div className="p-10 text-center border border-dashed border-outline-variant/30 rounded-2xl bg-surface-container-lowest/50">
+        <p className="text-on-surface-variant/45 italic">No products added yet.</p>
+      </div>
+    );
+
+  return (
+    <div className="space-y-4 animate-fade-scale">
+      {products.map((line, idx) => (
+        <div
+          key={idx}
+          className="flex items-center justify-between p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/10 shadow-sm"
+        >
+          <div className="flex items-center gap-4">
+            <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+              {idx + 1}
+            </div>
+            <div>
+              <p className="text-sm font-headline font-bold text-on-surface">
+                {line.brandRaw}
+              </p>
+              <p className="text-xs text-on-surface-variant font-light">
+                {line.nameRaw}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-1 rounded-md bg-secondary-container/30 text-[10px] font-bold uppercase tracking-wider text-secondary">
+              {line.usageSlot === "BOTH"
+                ? "AM + PM"
+                : line.usageSlot === "UNKNOWN"
+                  ? "Slot?"
+                  : line.usageSlot}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -129,17 +178,22 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <span className="w-8 h-8 rounded-full bg-primary-container text-primary flex items-center justify-center font-headline text-sm">
-          {step}
-        </span>
+    <div className="space-y-8 animate-fade-scale">
+      <div className="flex items-center gap-5">
+        <div className="relative">
+          <div className="absolute inset-0 bg-primary/10 blur-xl rounded-full" />
+          <span className="relative w-12 h-12 rounded-2xl bg-primary-container text-primary flex items-center justify-center font-headline text-lg shadow-sm border border-primary/10">
+            {step}
+          </span>
+        </div>
         <div>
-          <h2 className="font-headline text-xl tracking-tight">{title}</h2>
-          {subtitle ? <p className="text-xs text-on-surface-variant mt-1">{subtitle}</p> : null}
+          <h2 className="font-headline text-2xl tracking-tight text-on-surface sm:text-3xl font-light italic">{title}</h2>
+          {subtitle ? <p className="text-sm text-on-surface-variant mt-1.5 font-light tracking-wide">{subtitle}</p> : null}
         </div>
       </div>
-      {children}
+      <div className="pl-0 sm:pl-[68px]">
+        {children}
+      </div>
     </div>
   );
 }
@@ -184,7 +238,6 @@ function formatNote(d: IntakeDraft, c: IntakeCopy) {
     lines.push(`${c.note.severity}: ${sev}`);
   }
 
-  if (d.onset) lines.push(`${c.note.onset}: ${d.onset}`);
   if (d.course)
     lines.push(
       `${c.note.course}: ${
@@ -294,13 +347,15 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
   const toast = useToast();
   const { data: session, status } = useSession();
 
-  const [activeStep, setActiveStep] = useState<1 | 2 | 3>(1);
+  const [activeStep, setActiveStep] = useState<1 | 2 | 3 | 4>(1);
+  const [direction, setDirection] = useState(0);
   const [draft, setDraft] = useState<IntakeDraft>({
     v: 1,
     chiefComplaint: [],
     oilyAreas: [],
     barrierSigns: [],
     pigmentationTypes: [],
+    regimenLines: [],
   });
   const [busy, setBusy] = useState<string | null>(null);
   const [primaryPhoto, setPrimaryPhoto] = useState<PrimaryPhoto | null>(null);
@@ -318,6 +373,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
         oilyAreas: Array.isArray(parsed.oilyAreas) ? parsed.oilyAreas : prev.oilyAreas,
         barrierSigns: Array.isArray(parsed.barrierSigns) ? parsed.barrierSigns : prev.barrierSigns,
         pigmentationTypes: Array.isArray(parsed.pigmentationTypes) ? parsed.pigmentationTypes : prev.pigmentationTypes,
+        regimenLines: Array.isArray(parsed.regimenLines) ? parsed.regimenLines : prev.regimenLines,
       }));
     } catch {
       // ignore
@@ -332,7 +388,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
     }
   }, [draft]);
 
-  const completionPct = useMemo(() => (activeStep === 1 ? 33 : activeStep === 2 ? 66 : 100), [activeStep]);
+  const completionPct = useMemo(() => (activeStep === 1 ? 25 : activeStep === 2 ? 50 : activeStep === 3 ? 75 : 100), [activeStep]);
 
   const hasPrimaryPhoto = primaryPhoto !== null;
 
@@ -346,17 +402,9 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
   }, [hasPrimaryPhoto, draft.chiefComplaint.length, draft.duration, draft.severity]);
 
   function readPrimaryFile(file: File) {
-    if (!file.type.startsWith("image/")) {
-      toast.push({ tone: "info", title: copy.toast.photoInvalidFile });
-      return;
-    }
     const reader = new FileReader();
     reader.onload = () => {
       const dataUrl = typeof reader.result === "string" ? reader.result : "";
-      if (dataUrl.length > MAX_PRIMARY_DATA_URL_CHARS) {
-        toast.push({ tone: "info", title: copy.toast.photoTooLarge });
-        return;
-      }
       setPrimaryPhoto({ dataUrl, name: file.name });
     };
     reader.onerror = () => {
@@ -365,11 +413,12 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
     reader.readAsDataURL(file);
   }
 
-  function goToStep(next: 1 | 2 | 3) {
+  function goToStep(next: 1 | 2 | 3 | 4) {
     if (next > 1 && !hasPrimaryPhoto) {
       toast.push({ tone: "info", title: copy.validation.primaryPhotoRequired });
       return;
     }
+    setDirection(next > activeStep ? 1 : -1);
     setActiveStep(next);
   }
 
@@ -378,7 +427,8 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
       toast.push({ tone: "info", title: copy.validation.primaryPhotoRequired });
       return;
     }
-    setActiveStep((s) => (s === 1 ? 2 : 3));
+    setDirection(1);
+    setActiveStep((s) => (s === 1 ? 2 : s === 2 ? 3 : 4));
   }
 
   async function saveDraft() {
@@ -410,6 +460,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
       symptoms,
       note: formatNote(draft, copy),
       intake: draft,
+      regimenLines: draft.regimenLines,
       uploads: primaryPhoto ? [{ kind: "primary", url: primaryPhoto.dataUrl }] : [],
     };
 
@@ -425,8 +476,9 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
       window.localStorage.removeItem(STORAGE_KEY);
       toast.push({ tone: "success", title: copy.toast.submitted });
       router.push("/consult/analyzing");
-    } catch (e: any) {
-      toast.push({ tone: "error", title: e?.message || copy.toast.submitFailed });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      toast.push({ tone: "error", title: msg || copy.toast.submitFailed });
     } finally {
       setBusy(null);
     }
@@ -452,11 +504,13 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
             {interpolate(copy.progress.complete, { pct: String(completionPct) })}
           </div>
         </div>
-        <div className="h-1 w-full bg-surface-container rounded-full overflow-hidden">
+        <div className="h-0.5 w-full bg-surface-container rounded-full overflow-hidden relative">
           <div
-            className="h-full bg-primary transition-all duration-700 ease-in-out"
+            className="h-full bg-primary relative transition-all duration-1000 ease-out"
             style={{ width: `${completionPct}%` }}
-          />
+          >
+            <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-white/20 to-transparent blur-[2px]" />
+          </div>
         </div>
       </div>
 
@@ -488,6 +542,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
               { k: 1 as const, label: copy.stepper.photos },
               { k: 2 as const, label: copy.stepper.profile },
               { k: 3 as const, label: copy.stepper.skin },
+              { k: 4 as const, label: "Review" },
             ].map((s) => (
               <button
                 key={s.k}
@@ -505,8 +560,10 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
             ))}
           </div>
 
-          {activeStep === 1 ? (
-            <Section step="01" title={copy.photos.title} subtitle={copy.photos.subtitle}>
+          <div key={activeStep} className={direction > 0 ? "animate-slide-right" : direction < 0 ? "animate-slide-left" : "animate-fade-scale"}>
+            {activeStep === 1 ? (
+              <div className="space-y-10">
+                <Section step="01" title={copy.photos.title} subtitle={copy.photos.subtitle}>
               <div className="bg-surface-container-lowest rounded-2xl p-6 sm:p-10 space-y-6 border border-outline-variant/10">
                 <p className="text-sm text-on-surface-variant">
                   {copy.photos.helper}
@@ -573,6 +630,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
                 </div>
               </div>
             </Section>
+            </div>
           ) : null}
 
           {activeStep === 2 ? (
@@ -683,16 +741,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
                   </div>
 
                   <div className="pt-6 border-t border-outline-variant/10">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                      <label className="block">
-                        <span className="block text-sm font-headline mb-2">{copy.chief.onsetLabel}</span>
-                        <input
-                          value={draft.onset ?? ""}
-                          onChange={(e) => setDraft((d) => ({ ...d, onset: e.target.value }))}
-                          className="w-full bg-surface-container-low border border-outline-variant/15 rounded-2xl px-5 py-4 text-sm focus:ring-1 focus:ring-primary"
-                          placeholder={copy.chief.onsetPlaceholder}
-                        />
-                      </label>
+                    <div className="grid grid-cols-1 gap-5">
                       <div>
                         <span className="block text-sm font-headline mb-2">{copy.chief.courseLabel}</span>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -925,8 +974,21 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
                   </div>
                 </div>
               </Section>
+              
+              <Section step="05" title={copy.routine.title} subtitle={copy.routine.subtitle}>
+                <RegimenCatalogPicker 
+                  variant="embedded" 
+                  onLinesChange={(lines) => {
+                    setDraft(d => {
+                      // Prevent update if the JSON stringified value is the same
+                      if (JSON.stringify(d.regimenLines) === JSON.stringify(lines)) return d;
+                      return { ...d, regimenLines: lines };
+                    });
+                  }} 
+                />
+              </Section>
 
-              <Section step="05" title={copy.extra.title} subtitle={copy.extra.subtitle}>
+              <Section step="06" title={copy.extra.title} subtitle={copy.extra.subtitle}>
                 <div className="bg-surface-container-lowest rounded-2xl p-6 sm:p-10 border border-outline-variant/10">
                   <textarea
                     value={draft.extraNote ?? ""}
@@ -938,6 +1000,21 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
               </Section>
             </div>
           ) : null}
+          {activeStep === 4 ? (
+            <div className="space-y-10 animate-fade-scale">
+               <Section step="07" title="Routine Review" subtitle="Verify your products before submitting to the dermatologist.">
+                 <div className="bg-surface-container-lowest rounded-2xl p-6 sm:p-10 border border-outline-variant/10">
+                   <SummaryCard draft={draft} />
+                   <div className="mt-8 pt-8 border-t border-outline-variant/10">
+                      <p className="text-xs text-on-surface-variant leading-relaxed">
+                        By submitting this consultation, you agree that the information provided is accurate and will be reviewed by our clinical board to formulate your personalized plan.
+                      </p>
+                   </div>
+                 </div>
+               </Section>
+            </div>
+          ) : null}
+        </div>
 
           {/* Mobile actions (non-sticky) */}
           <div className="lg:hidden pt-6 border-t border-outline-variant/10">
@@ -953,7 +1030,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
                 type="button"
                 onClick={submit}
                 isLoading={busy === "submit"}
-                disabled={busy !== null || !canSubmit || status === "loading" || activeStep < 3}
+                disabled={busy !== null || !canSubmit || status === "loading" || activeStep < 4}
                 className="px-6 py-3 rounded-full border border-outline-variant/25 text-on-surface-variant text-sm font-headline hover:bg-surface-container-low transition-colors disabled:opacity-50"
               >
                 {copy.actions.submit}
@@ -963,10 +1040,10 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
             <button
               type="button"
               onClick={advanceStep}
-              disabled={activeStep >= 3}
+              disabled={activeStep >= 4}
               className={[
                 "mt-3 w-full btn-gradient px-6 py-3 rounded-full text-on-primary text-sm font-headline shadow-lg shadow-primary/15 transition-opacity",
-                activeStep >= 3 ? "opacity-50" : "opacity-100",
+                activeStep >= 4 ? "opacity-50" : "opacity-100",
               ].join(" ")}
             >
               {copy.actions.next}
@@ -989,7 +1066,7 @@ export function IntakeClient({ lang, copy }: { lang: Lang; copy: IntakeCopy }) {
               >
                 {copy.actions.save}
               </button>
-              {activeStep < 3 ? (
+              {activeStep < 4 ? (
                 <button
                   type="button"
                   onClick={advanceStep}

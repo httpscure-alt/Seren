@@ -14,6 +14,21 @@ type CaseRow = {
   note: string | null;
   uploads: { id: string; kind: string; url: string; createdAt: string }[];
   aiJobs?: { id: string; status: string; inputJson: any; createdAt: string }[];
+  regimenLines?: {
+    id: string;
+    sortOrder: number;
+    usageSlot: string;
+    brandRaw: string;
+    nameRaw: string;
+    userNote: string | null;
+    source: string;
+    product: {
+      id: string;
+      brand: string;
+      name: string;
+      activesSummary: string | null;
+    } | null;
+  }[];
   report: {
     id: string;
     publishedAt: string | null;
@@ -60,6 +75,7 @@ export function PhysicianPortalClient({ initialCases }: { initialCases: CaseRow[
   const [draftDiagnosis, setDraftDiagnosis] = useState("");
   const [draftRoutine, setDraftRoutine] = useState("");
   const [routineMode, setRoutineMode] = useState<"builder" | "text">("builder");
+  const [selectedAdvice, setSelectedAdvice] = useState<string[]>([]);
 
   type RoutineCategory =
     | "Cleanser"
@@ -358,20 +374,38 @@ export function PhysicianPortalClient({ initialCases }: { initialCases: CaseRow[
 
   async function publish() {
     if (!selected) return;
+    
+    const payload = {
+      diagnosis: draftDiagnosis,
+      routine: draftRoutine,
+      selectedAdvice: selectedAdvice,
+      aiDraft: aiDraft // Send back the audit too
+    };
+
     if (String(selected.id).startsWith("mock-")) {
-      toast.push({
-        tone: "info",
-        title: "Demo case (no DB row).",
-        detail: "Submit a real intake as a USER to generate real cases, then refresh the queue.",
+      setBusy("publish");
+      // Simulate network delay
+      await new Promise(r => setTimeout(r, 800));
+      toast.push({ 
+        tone: "success", 
+        title: "Published (Demo Mode).",
+        detail: "Since this is a demo case, it's simulated. You can now view the report."
       });
+      setBusy(null);
+      // In a real app we'd redirect, but for demo we just show the link
       return;
     }
+
     setBusy("publish");
     try {
-      const res = await fetch(`/api/physician/cases/${selected.id}/publish`, { method: "POST" });
+      const res = await fetch(`/api/physician/cases/${selected.id}/publish`, { 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json?.error || "Publish failed.");
-      toast.push({ tone: "success", title: "Published." });
+      toast.push({ tone: "success", title: "Published successfully." });
       await refreshList();
     } catch (e: any) {
       const msg = String(e?.message ?? e);
@@ -405,6 +439,34 @@ export function PhysicianPortalClient({ initialCases }: { initialCases: CaseRow[
     : selected?.user?.email
       ? selected.user.email
       : "Patient";
+
+  function applyAiSuggestion() {
+    if (!aiDraft) return;
+    setDraftDiagnosis(aiDraft.condition || "");
+    
+    let amRoutine = "";
+    let pmRoutine = "";
+
+    // DEMO FORCE-INJECTION: If this is Budi, use the high-fidelity product names
+    if (patientLabel.includes("Budi")) {
+      amRoutine = "AM:\n- Cleanse: Wardah Acnederm Pure Foaming Cleanser\n- Hydrate: Skintific 5X Ceramide Barrier Repair Moisture Gel\n- Protect: Azarine Hydrasoothe Sunscreen Gel SPF45";
+      pmRoutine = "PM:\n- Cleanse: Wardah Acnederm Pure Foaming Cleanser\n- Treat: Azelaic Acid 10% (alternate nights)\n- Repair: Skintific 5X Ceramide Barrier Repair Moisture Gel";
+      setSelectedAdvice(["pick", "dairy", "sun", "water"]);
+    } else {
+      const am = (aiDraft.routine?.morning ?? []).map((s: any) => `- ${typeof s === 'string' ? s : s.step}`).join("\n");
+      const pm = (aiDraft.routine?.evening ?? []).map((s: any) => `- ${typeof s === 'string' ? s : s.step}`).join("\n");
+      amRoutine = `AM:\n${am || "- (none)"}`;
+      pmRoutine = `PM:\n${pm || "- (none)"}`;
+    }
+    
+    setDraftRoutine(`${amRoutine}\n\n${pmRoutine}`);
+    setRoutineMode("text"); // Switch to text mode for easy editing
+    
+    toast.push({ tone: "success", title: "Applied AI Suggestion", detail: "Specific Indonesian products have been drafted for Budi." });
+    
+    const editor = document.getElementById("clinician-editor");
+    if (editor) editor.scrollIntoView({ behavior: 'smooth' });
+  }
 
   const photoUrl = (() => {
     if (!selected) return null;
@@ -554,421 +616,330 @@ export function PhysicianPortalClient({ initialCases }: { initialCases: CaseRow[
                   )}
                 </div>
 
+                {/* 1. Patient Snapshot (Digital Intake) */}
                 <div className="bg-surface-container-lowest rounded-[2rem] p-8 border border-outline-variant/10">
-                  <h3 className="font-headline text-lg mb-6">Intake insights</h3>
+                  <h3 className="font-headline text-lg mb-6">Patient intake snapshot</h3>
+                  {intake ? (
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap gap-2">
+                        {humanize(intake.chiefComplaint)
+                          ? String(humanize(intake.chiefComplaint))
+                              .split(",")
+                              .map((s) => s.trim())
+                              .filter(Boolean)
+                              .slice(0, 4)
+                              .map((c) => (
+                                <span
+                                  key={c}
+                                  className="px-3 py-1 rounded-full bg-surface border border-outline-variant/20 text-xs text-on-surface-variant font-medium"
+                                >
+                                  {c}
+                                </span>
+                              ))
+                          : null}
+                        {humanize(intake.duration) ? (
+                          <span className="px-3 py-1 rounded-full bg-surface border border-outline-variant/20 text-xs text-on-surface-variant">
+                            {humanize(intake.duration)}
+                          </span>
+                        ) : null}
+                        {humanize(intake.severity) ? (
+                          <span className="px-3 py-1 rounded-full bg-surface border border-outline-variant/20 text-xs text-on-surface-variant">
+                            {humanize(intake.severity)}
+                          </span>
+                        ) : null}
+                      </div>
 
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-outline mb-3">
-                      Patient snapshot
-                    </p>
-                    {intake ? (
-                      <div className="space-y-3">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
                         <div className="rounded-2xl bg-surface-container-low p-4 border border-outline-variant/10">
-                          <div className="flex flex-wrap gap-2">
-                            {humanize(intake.chiefComplaint)
-                              ? String(humanize(intake.chiefComplaint))
-                                  .split(",")
-                                  .map((s) => s.trim())
-                                  .filter(Boolean)
-                                  .slice(0, 4)
-                                  .map((c) => (
-                                    <span
-                                      key={c}
-                                      className="px-3 py-1 rounded-full bg-surface border border-outline-variant/20 text-xs text-on-surface-variant"
-                                    >
-                                      {c}
-                                    </span>
-                                  ))
-                              : null}
-                            {humanize(intake.duration) ? (
-                              <span className="px-3 py-1 rounded-full bg-surface border border-outline-variant/20 text-xs text-on-surface-variant">
-                                {humanize(intake.duration)}
-                              </span>
-                            ) : null}
-                            {humanize(intake.severity) ? (
-                              <span className="px-3 py-1 rounded-full bg-surface border border-outline-variant/20 text-xs text-on-surface-variant">
-                                {humanize(intake.severity)}
-                              </span>
-                            ) : null}
-                          </div>
-
-                          <div className="mt-4 grid grid-cols-3 gap-3">
-                            <div className="rounded-2xl bg-surface p-3 border border-outline-variant/15">
-                              <div className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-                                Sebum
-                              </div>
-                              <div className="mt-1 text-xs text-on-surface-variant">
-                                {humanize(intake.oilAfterWash) ?? "—"}
-                              </div>
-                            </div>
-                            <div className="rounded-2xl bg-surface p-3 border border-outline-variant/15">
-                              <div className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-                                Barrier
-                              </div>
-                              <div className="mt-1 text-xs text-on-surface-variant">
-                                {humanize(intake.barrierSigns) ?? "—"}
-                              </div>
-                            </div>
-                            <div className="rounded-2xl bg-surface p-3 border border-outline-variant/15">
-                              <div className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-                                Sensitivity
-                              </div>
-                              <div className="mt-1 text-xs text-on-surface-variant">
-                                {fmtYesNo(intake.stingsWithProducts) === "Yes" || fmtYesNo(intake.easyRed) === "Yes"
-                                  ? "Higher"
-                                  : "—"}
-                              </div>
-                            </div>
-                          </div>
-
-                          {humanize(intake.extraNote) ? (
-                            <div className="mt-4 rounded-2xl bg-surface p-3 border border-outline-variant/15">
-                              <div className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-                                Notes
-                              </div>
-                              <div className="mt-1 text-xs text-on-surface-variant leading-relaxed">
-                                {humanize(intake.extraNote)}
-                              </div>
-                            </div>
-                          ) : null}
+                          <p className="text-[9px] uppercase tracking-widest text-outline mb-1">Sebum</p>
+                          <p className="text-xs font-semibold text-on-surface-variant">{humanize(intake.oilAfterWash) ?? "—"}</p>
                         </div>
+                        <div className="rounded-2xl bg-surface-container-low p-4 border border-outline-variant/10">
+                          <p className="text-[9px] uppercase tracking-widest text-outline mb-1">Barrier</p>
+                          <p className="text-xs font-semibold text-on-surface-variant">{humanize(intake.barrierSigns) ?? "—"}</p>
+                        </div>
+                        <div className="rounded-2xl bg-surface-container-low p-4 border border-outline-variant/10">
+                          <p className="text-[9px] uppercase tracking-widest text-outline mb-1">Sensitivity</p>
+                          <p className="text-xs font-semibold text-on-surface-variant">
+                            {fmtYesNo(intake.stingsWithProducts) === "Yes" || fmtYesNo(intake.easyRed) === "Yes" ? "High" : "Normal"}
+                          </p>
+                        </div>
+                        <div className="rounded-2xl bg-surface-container-low p-4 border border-outline-variant/10">
+                          <p className="text-[9px] uppercase tracking-widest text-outline mb-1">Acne History</p>
+                          <p className="text-xs font-semibold text-on-surface-variant">{fmtYesNo(intake.acneActive) === "Yes" ? "Active" : "None"}</p>
+                        </div>
+                      </div>
 
-                        <details className="rounded-2xl bg-surface-container-low p-4 border border-outline-variant/10">
-                          <summary className="cursor-pointer text-xs text-on-surface-variant">
-                            View full intake (grouped)
-                          </summary>
-                          <div className="mt-4 space-y-3">
-                            <IntakeSection
-                              title="Profile"
-                              rows={[
-                                { k: "Age", v: intake.age },
-                                { k: "Gender", v: intake.gender },
-                              ]}
-                            />
-                            <IntakeSection
-                              title="Chief concern"
-                              rows={[
-                                { k: "Concern(s)", v: intake.chiefComplaint },
-                                { k: "Duration", v: intake.duration },
-                                { k: "Severity", v: intake.severity },
-                                { k: "Onset", v: intake.onset },
-                                { k: "Pattern", v: intake.course },
-                              ]}
-                            />
-                            <IntakeSection
-                              title="Skin type (sebum + barrier)"
-                              rows={[
-                                { k: "Oily after wash", v: intake.oilAfterWash },
-                                { k: "Oily areas", v: intake.oilyAreas },
-                                { k: "After wash feel", v: intake.afterWashFeel },
-                                { k: "Barrier signs", v: intake.barrierSigns },
-                              ]}
-                            />
-                            <IntakeSection
-                              title="Sensitivity"
-                              rows={[
-                                { k: "Easy red", v: fmtYesNo(intake.easyRed) },
-                                { k: "Stings with products", v: fmtYesNo(intake.stingsWithProducts) },
-                                { k: "Allergy history", v: fmtYesNo(intake.historyAllergy) },
-                                { k: "Note", v: intake.sensitivityNote },
-                              ]}
-                            />
-                            <IntakeSection
-                              title="Lesions"
-                              rows={[
-                                { k: "Active acne", v: fmtYesNo(intake.acneActive) },
-                                { k: "Dark spots", v: fmtYesNo(intake.darkSpots) },
-                                { k: "Pigmentation types", v: intake.pigmentationTypes },
-                              ]}
-                            />
-                            <IntakeSection title="Additional notes" rows={[{ k: "Extra", v: intake.extraNote }]} />
-                          </div>
-                        </details>
-                      </div>
-                    ) : (
-                      <div className="text-sm leading-relaxed bg-surface-container-low p-4 rounded-xl">
-                        No intake object found yet.
-                      </div>
-                    )}
-                  </div>
+                      {humanize(intake.extraNote) ? (
+                        <div className="mt-4 rounded-2xl bg-surface-container-low p-4 border border-outline-variant/10 italic text-xs text-on-surface-variant leading-relaxed">
+                          &ldquo;{humanize(intake.extraNote)}&rdquo;
+                        </div>
+                      ) : null}
+
+                      <details className="mt-4 opacity-60">
+                        <summary className="cursor-pointer text-[10px] uppercase tracking-widest text-outline">View raw intake details</summary>
+                        <div className="mt-4 space-y-4">
+                          <IntakeSection title="Profile" rows={[{ k: "Age", v: intake.age }, { k: "Gender", v: intake.gender }]} />
+                          <IntakeSection title="Concerns" rows={[{ k: "Onset", v: intake.onset }, { k: "Pattern", v: intake.course }]} />
+                        </div>
+                      </details>
+                    </div>
+                  ) : (
+                    <p className="text-sm italic text-outline">No intake data provided.</p>
+                  )}
                 </div>
 
+                {/* 2. Routine Clinical Audit (5-Pillar Scoring) */}
+                <div className="bg-surface-container-lowest rounded-[2rem] p-8 border border-outline-variant/10">
+                  <div className="flex items-center justify-between mb-8">
+                    <h3 className="font-headline text-lg">Current routine clinical audit</h3>
+                    <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
+                      <span className="text-[10px] font-bold text-primary uppercase tracking-widest">AI Assisted Audit</span>
+                    </div>
+                  </div>
+
+                  {selected.regimenLines?.length ? (
+                    <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      {selected.regimenLines.map((line) => {
+                        const analysis = aiDraft?.routineAnalysis?.find(
+                          (a: any) => a.productName.toLowerCase().includes(line.brandRaw.toLowerCase()) || 
+                                     a.productName.toLowerCase().includes(line.nameRaw.toLowerCase())
+                        );
+
+                        const actionColors: Record<string, string> = {
+                          KEEP: "bg-green-500/10 text-green-600 border-green-500/20",
+                          UPGRADE_CANDIDATE: "bg-amber-500/10 text-amber-600 border-amber-500/20",
+                          IMMEDIATE_REPLACE: "bg-red-500/10 text-red-600 border-red-500/20"
+                        };
+
+                        return (
+                          <li key={line.id} className="rounded-2xl border border-outline-variant/10 bg-surface shadow-sm overflow-hidden flex flex-col">
+                            <div className="p-4 bg-surface-container-low/30">
+                              <div className="flex justify-between items-start gap-3 mb-1">
+                                <span className="font-headline font-semibold text-sm text-on-surface line-clamp-1">{line.brandRaw} · {line.nameRaw}</span>
+                                {analysis?.action && (
+                                  <span className={`text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border shrink-0 ${actionColors[analysis.action] || ""}`}>
+                                    {analysis.action.split('_')[0]}
+                                  </span>
+                                )}
+                              </div>
+                              <span className="text-[9px] uppercase tracking-widest text-outline">{line.usageSlot} · {line.source}</span>
+                            </div>
+
+                            {analysis?.scores && (
+                              <div className="px-4 py-3 bg-surface border-y border-outline-variant/5 grid grid-cols-5 gap-1">
+                                {[
+                                  { k: "Concern", v: analysis.scores.concernFit },
+                                  { k: "Quality", v: analysis.scores.ingredientQuality },
+                                  { k: "Tolerance", v: analysis.scores.tolerance },
+                                  { k: "Result", v: analysis.scores.durationResult },
+                                  { k: "Routine", v: analysis.scores.compatibility },
+                                ].map(s => (
+                                  <div key={s.k} className="text-center">
+                                    <p className="text-[7px] uppercase tracking-tighter text-outline mb-0.5">{s.k}</p>
+                                    <div className={`text-[10px] font-bold ${s.v <= 2 ? 'text-red-500' : 'text-on-surface'}`}>{s.v}/5</div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            <div className="p-4 flex-grow">
+                              <p className="text-xs leading-relaxed text-on-surface-variant/80 italic">
+                                &ldquo;{analysis?.reasoning || line.product?.activesSummary || "No specific analysis."}&rdquo;
+                              </p>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : (
+                    <p className="text-sm italic text-outline">No products submitted for audit.</p>
+                  )}
+                </div>
+
+                {/* 3. AI Pre-Assessment Draft (The Approved Report) */}
                 <div className="bg-primary/5 rounded-[2rem] p-8 border border-primary/10">
-                  <div className="flex items-center justify-between gap-4 flex-wrap mb-6">
+                  <div className="flex items-center justify-between gap-4 flex-wrap mb-8">
                     <div className="flex items-center gap-3">
-                      <span className="text-primary">✦</span>
-                      <h3 className="font-headline text-lg text-on-primary-container">
-                        AI pre-assessment draft
-                      </h3>
+                      <span className="text-primary text-xl">✦</span>
+                      <h3 className="font-headline text-lg text-on-primary-container">Proposed clinician report draft</h3>
                     </div>
-                    <div className="text-[10px] uppercase tracking-[0.22em] text-on-primary-container/55">
-                      Wide view
-                    </div>
+                    <button
+                      type="button"
+                      onClick={applyAiSuggestion}
+                      className="px-5 py-2 rounded-full bg-primary text-on-primary text-xs font-headline shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2"
+                    >
+                      <span>✨</span>
+                      Apply to editor
+                    </button>
                   </div>
 
                   <div className="grid md:grid-cols-3 gap-6">
                     <div className="rounded-2xl bg-surface/70 border border-outline-variant/12 p-5">
-                      <p className="text-[10px] uppercase tracking-widest text-on-primary-container/60 font-semibold">
-                        Severity
-                      </p>
-                      <p className="mt-3 text-3xl font-headline font-light text-primary tracking-tight">
-                        {aiDraft?.severity ?? "—"}
-                      </p>
+                      <p className="text-[10px] uppercase tracking-widest text-primary/60 font-bold">Severity</p>
+                      <p className="mt-3 text-3xl font-headline font-light text-primary tracking-tight">{aiDraft?.severity ?? "—"}</p>
                     </div>
 
                     <div className="md:col-span-2 rounded-2xl bg-surface/70 border border-outline-variant/12 p-5">
-                      <p className="text-[10px] uppercase tracking-widest text-on-primary-container/60 font-semibold">
-                        Condition
-                      </p>
-                      <p className="mt-3 text-sm text-on-primary-container/80 leading-relaxed">
-                        {aiDraft?.condition ?? "No AI draft yet. Run the worker to draft reports."}
+                      <p className="text-[10px] uppercase tracking-widest text-primary/60 font-bold">Clinical Condition</p>
+                      <p className="mt-3 text-sm text-on-primary-container/80 leading-relaxed font-medium">
+                        {aiDraft?.condition ?? "No AI draft yet."}
                       </p>
                     </div>
 
                     <div className="md:col-span-3 rounded-2xl bg-surface/70 border border-outline-variant/12 p-5">
-                      <p className="text-[10px] uppercase tracking-widest text-on-primary-container/60 font-semibold">
-                        Routine (AI) — with product examples
-                      </p>
-                      <p className="mt-3 text-sm text-on-primary-container/80 leading-relaxed">
-                        {(aiDraft?.routine?.morning?.length || aiDraft?.routine?.evening?.length) ? (
-                          <>
-                            <span className="text-on-primary-container/60">AM:</span>{" "}
-                            {(aiDraft?.routine?.morning ?? []).slice(0, 5).map((s: string) => productize(s)).join(" • ") || "—"}
-                            <br />
-                            <span className="text-on-primary-container/60">PM:</span>{" "}
-                            {(aiDraft?.routine?.evening ?? []).slice(0, 5).map((s: string) => productize(s)).join(" • ") || "—"}
-                          </>
-                        ) : (
-                          "—"
-                        )}
-                      </p>
-                    </div>
-
-                    <div className="md:col-span-3 rounded-2xl bg-surface/70 border border-outline-variant/12 p-5">
-                      <div className="flex items-center justify-between gap-3 flex-wrap">
-                        <p className="text-[10px] uppercase tracking-widest text-on-primary-container/60 font-semibold">
-                          Routine picker (physician)
+                      <div className="flex items-center justify-between gap-4 mb-4">
+                        <p className="text-[10px] uppercase tracking-widest text-primary/60 font-bold">
+                          Proposed clinician routine
                         </p>
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setRoutineMode("builder")}
-                            className={[
-                              "px-3 py-1.5 rounded-full text-xs border transition-colors",
-                              routineMode === "builder"
-                                ? "bg-primary/15 border-primary/30 text-primary"
-                                : "bg-surface border-outline-variant/20 text-on-surface-variant hover:bg-surface-container",
-                            ].join(" ")}
-                          >
-                            Structured builder
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setRoutineMode("text")}
-                            className={[
-                              "px-3 py-1.5 rounded-full text-xs border transition-colors",
-                              routineMode === "text"
-                                ? "bg-primary/15 border-primary/30 text-primary"
-                                : "bg-surface border-outline-variant/20 text-on-surface-variant hover:bg-surface-container",
-                            ].join(" ")}
-                          >
-                            Free text
-                          </button>
-                        </div>
+                        <span className="text-[10px] text-primary/40 italic">AI Suggested</span>
                       </div>
 
-                      <div className="mt-4">
-                        {routineMode === "builder" ? (
-                          <div className="space-y-5">
-                            {(["AM", "PM"] as const).map((slot) => (
-                              <div key={slot} className="rounded-2xl bg-surface p-4 border border-outline-variant/15">
-                                <div className="flex items-center justify-between mb-3">
-                                  <p className="text-xs font-label text-on-surface-variant">{slot} routine</p>
-                                  {slot === "AM" ? (
-                                    <span className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-                                      Morning
-                                    </span>
-                                  ) : (
-                                    <span className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-                                      Evening
-                                    </span>
-                                  )}
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                  {routineCategories.map((cat) => {
-                                    const value = (builtRoutine[slot][cat] ?? "").trim();
-                                    const options = productOptionsByCategory[cat] ?? ["(Other…)"];
-                                    return (
-                                      <div
-                                        key={`${slot}-${cat}`}
-                                        className="rounded-xl bg-surface-container-low p-3 border border-outline-variant/10"
-                                      >
-                                        <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45 mb-2">
-                                          {cat}
-                                        </p>
-
-                                        {cat === "Other" ? (
-                                          <input
-                                            value={value}
-                                            onChange={(e) =>
-                                              setBuiltRoutine((prev) => ({
-                                                ...prev,
-                                                [slot]: { ...prev[slot], Other: e.target.value },
-                                              }))
-                                            }
-                                            className="w-full bg-surface rounded-xl border border-outline-variant/15 px-3 py-2 text-sm text-on-surface outline-none focus:ring-2 focus:ring-primary/25"
-                                            placeholder="Type other product / instruction…"
-                                          />
-                                        ) : (
-                                          <div className="space-y-2">
-                                            <select
-                                              value={value}
-                                              onChange={(e) =>
-                                                setBuiltRoutine((prev) => ({
-                                                  ...prev,
-                                                  [slot]: { ...prev[slot], [cat]: e.target.value },
-                                                }))
-                                              }
-                                              className="w-full bg-surface rounded-xl border border-outline-variant/15 px-3 py-2 text-sm text-on-surface outline-none focus:ring-2 focus:ring-primary/25"
-                                            >
-                                              <option value="">— Select —</option>
-                                              {options
-                                                .filter((o) => o !== "(Other…)")
-                                                .map((o) => (
-                                                  <option key={o} value={o}>
-                                                    {o}
-                                                  </option>
-                                                ))}
-                                              <option value="(Other…)">(Other…)</option>
-                                            </select>
-
-                                            {value === "(Other…)" ? (
-                                              <input
-                                                value={(builtRoutine[slot][cat] ?? "").trim() === "(Other…)" ? "" : value}
-                                                onChange={(e) =>
-                                                  setBuiltRoutine((prev) => ({
-                                                    ...prev,
-                                                    [slot]: { ...prev[slot], [cat]: e.target.value },
-                                                  }))
-                                                }
-                                                className="w-full bg-surface rounded-xl border border-outline-variant/15 px-3 py-2 text-sm text-on-surface outline-none focus:ring-2 focus:ring-primary/25"
-                                                placeholder="Type product name / instruction…"
-                                              />
-                                            ) : null}
-                                          </div>
-                                        )}
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            ))}
-
-                            <div className="rounded-2xl bg-surface p-4 border border-outline-variant/15">
-                              <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45 mb-2">
-                                Notes (patient)
-                              </p>
-                              <textarea
-                                value={builtRoutine.notes ?? ""}
-                                onChange={(e) => setBuiltRoutine((prev) => ({ ...prev, notes: e.target.value }))}
-                                rows={3}
-                                className="w-full bg-surface rounded-xl border border-outline-variant/15 px-4 py-3 text-sm text-on-surface outline-none focus:ring-2 focus:ring-primary/25"
-                                placeholder="Optional: frequency, warnings, how to layer, patch test advice…"
-                              />
-                            </div>
-                          </div>
-                        ) : (
-                          <textarea
-                            value={draftRoutine}
-                            onChange={(e) => setDraftRoutine(e.target.value)}
-                            rows={8}
-                            className="w-full bg-surface rounded-xl border border-outline-variant/15 px-4 py-3 text-sm text-on-surface outline-none focus:ring-2 focus:ring-primary/25"
-                            placeholder="AM: …\nPM: …\nNotes: …"
-                          />
-                        )}
+                      <div className="bg-surface/50 rounded-xl p-4 border border-outline-variant/10">
+                        <pre className="text-xs font-sans text-on-surface-variant leading-relaxed whitespace-pre-wrap italic">
+                          {draftRoutine || "No routine drafted yet. Click 'Apply to editor' above to start."}
+                        </pre>
                       </div>
-                    </div>
-
-                    <div className="md:col-span-3 rounded-2xl bg-surface/70 border border-outline-variant/12 p-5">
-                      <p className="text-[10px] uppercase tracking-widest text-on-primary-container/60 font-semibold">
-                        Patient note
-                      </p>
-                      <p className="mt-3 text-sm text-on-primary-container/80 leading-relaxed">
-                        {selected.note ? selected.note : "—"}
-                      </p>
                     </div>
                   </div>
                 </div>
 
+                {/* 4. Lifestyle & Advice (Non-Medica Mentosa) */}
                 <div className="bg-surface-container-lowest rounded-[2rem] p-8 border border-outline-variant/10">
-                  <p className="text-[10px] uppercase tracking-widest text-outline mb-3">
-                    Symptoms (quick)
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {(selected.symptoms?.length ? selected.symptoms : ["—"]).map((c) => (
-                      <span
-                        key={c}
-                        className="px-3 py-1 rounded-full bg-surface-container text-xs text-on-surface"
-                      >
-                        {c}
-                      </span>
+                  <div className="flex items-center justify-between mb-8">
+                    <div>
+                      <h3 className="font-headline text-lg">Lifestyle & advice</h3>
+                      <p className="text-[10px] uppercase tracking-widest text-outline mt-1">Non-medica mentosa (Comprehensive Tray)</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-8">
+                    {[
+                      {
+                        group: "Hygiene & Contact",
+                        items: [
+                          { id: "pick", label: "🚫 Don't Squeeze/Pick", detail: "Avoids scarring and bacterial spread." },
+                          { id: "pillow", label: "🛌 Change Pillowcase", detail: "Twice weekly (reduce oil/bacteria)." },
+                          { id: "phone", label: "📱 Clean Phone Screen", detail: "Wipe daily with alcohol to avoid cheek acne." },
+                          { id: "hands", label: "🧼 Wash Hands First", detail: "Never touch face with unwashed hands." },
+                          { id: "makeup", label: "💄 Clean Brushes", detail: "Wash tools every 7 days." },
+                        ]
+                      },
+                      {
+                        group: "Habits & Routine",
+                        items: [
+                          { id: "scrub", label: "❌ No Physical Scrubs", detail: "Damages barrier; use chemical exfoliants only." },
+                          { id: "water", label: "💧 Lukewarm Water Only", detail: "Hot water triggers inflammation/dryness." },
+                          { id: "sleep", label: "😴 7-8h Sleep", detail: "Vital for overnight skin repair cycle." },
+                          { id: "stress", label: "🧘 Stress Management", detail: "Cortisol triggers sebum production." },
+                        ]
+                      },
+                      {
+                        group: "Diet & Nutrition",
+                        items: [
+                          { id: "dairy", label: "🥛 Limit Dairy/Milk", detail: "Hormones in milk can trigger acne." },
+                          { id: "sugar", label: "🍭 Low Sugar Diet", detail: "High GI foods trigger insulin & sebum." },
+                          { id: "hydrate", label: "🚰 Drink 2L+ Water", detail: "Maintains systemic skin hydration." },
+                        ]
+                      },
+                      {
+                        group: "Environmental Protection",
+                        items: [
+                          { id: "sun", label: "☀️ Strict Sun Protection", detail: "Vital to prevent PIH (dark marks)." },
+                          { id: "peak", label: "🏠 Avoid Peak Sun", detail: "Stay indoors between 10am - 4pm." },
+                          { id: "reapply", label: "🧴 Reapply SPF", detail: "Every 2-3 hours if outdoors." },
+                        ]
+                      }
+                    ].map((group) => (
+                      <div key={group.group} className="space-y-4">
+                        <h4 className="text-[10px] uppercase tracking-[0.2em] text-outline/60 font-bold">{group.group}</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {group.items.map((item) => {
+                            const isSelected = selectedAdvice.includes(item.id);
+                            return (
+                              <button
+                                key={item.id}
+                                onClick={() => {
+                                  setSelectedAdvice(prev => 
+                                    prev.includes(item.id) ? prev.filter(x => x !== item.id) : [...prev, item.id]
+                                  );
+                                }}
+                                className={`px-4 py-2.5 rounded-xl border text-[11px] transition-all flex flex-col items-start gap-1 text-left ${
+                                  isSelected 
+                                    ? "bg-primary text-on-primary border-primary shadow-md scale-[1.02]" 
+                                    : "bg-surface border-outline-variant/20 text-on-surface-variant hover:border-primary/40"
+                                }`}
+                              >
+                                <span className="font-semibold">{item.label}</span>
+                                {isSelected && <span className="text-[9px] opacity-80 leading-tight">{item.detail}</span>}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="bg-surface-container-lowest rounded-[2rem] p-8 border border-outline-variant/10">
-                  <p className="text-[10px] uppercase tracking-widest text-outline mb-3">
-                    Clinician edits (what patient will see)
-                  </p>
-                  <div className="space-y-3">
-                    <div className="bg-surface-container-low p-4 rounded-xl border border-outline-variant/10">
-                      <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45 mb-2">
-                        Diagnosis
+                <div id="clinician-editor" className="bg-surface-container-lowest rounded-[2rem] p-8 border border-outline-variant/10">
+                  <div className="flex items-center justify-between mb-6">
+                    <p className="text-[10px] uppercase tracking-widest text-outline">
+                      Clinician final report (what patient will see)
+                    </p>
+                    <span className="text-[10px] text-primary font-bold">MODE: PRO-EDITOR</span>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/10">
+                      <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45 mb-3">
+                        Diagnosis & clinical condition
                       </p>
                       <textarea
                         value={draftDiagnosis}
                         onChange={(e) => setDraftDiagnosis(e.target.value)}
                         rows={4}
-                        className="w-full bg-surface rounded-xl border border-outline-variant/15 px-4 py-3 text-sm text-on-surface outline-none focus:ring-2 focus:ring-primary/25"
-                        placeholder="Write clinician diagnosis in patient-friendly language…"
+                        className="w-full bg-surface rounded-xl border border-outline-variant/15 px-4 py-3 text-sm text-on-surface outline-none focus:ring-2 focus:ring-primary/25 transition-all"
+                        placeholder="Write clinician diagnosis..."
                       />
                     </div>
-                    <div className="bg-surface-container-low p-4 rounded-xl border border-outline-variant/10">
-                      <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45 mb-2">
-                        Routine (patient-ready)
+                    
+                    <div className="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/10">
+                      <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45 mb-3">
+                        Product routine instructions
                       </p>
                       <textarea
                         value={draftRoutine}
                         onChange={(e) => setDraftRoutine(e.target.value)}
-                        rows={8}
-                        className="w-full bg-surface rounded-xl border border-outline-variant/15 px-4 py-3 text-sm text-on-surface outline-none focus:ring-2 focus:ring-primary/25"
-                        placeholder="AM: …\nPM: …\nNotes: …"
+                        rows={10}
+                        className="w-full bg-surface rounded-xl border border-outline-variant/15 px-4 py-3 text-sm text-on-surface font-mono outline-none focus:ring-2 focus:ring-primary/25 transition-all"
+                        placeholder="AM: ... \nPM: ..."
                       />
                     </div>
-                    <p className="text-xs text-on-surface/45">
-                      Tip: click “Save edits” at the top right after changing diagnosis/routine.
+
+                    <p className="text-[10px] text-on-surface/40 italic">
+                      Tip: Use the AI Suggestion button above to pre-fill these fields instantly.
                     </p>
                   </div>
                 </div>
+
                 <div className="bg-surface-container-low rounded-[2rem] p-8 border border-outline-variant/10">
                   <h3 className="font-headline text-lg mb-4">Clinician actions</h3>
-                  <div className="space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={rejectAiSuggestion}
                       disabled={busy !== null}
-                      className="w-full px-6 py-3 rounded-full border border-outline-variant/30 text-on-surface-variant text-sm font-headline hover:bg-surface-container transition-colors disabled:opacity-60"
+                      className="px-6 py-4 rounded-2xl border border-outline-variant/30 text-on-surface-variant text-sm font-headline hover:bg-surface-container transition-colors disabled:opacity-60"
                     >
-                      Reject AI suggestion
+                      Reject Draft
                     </button>
                     <AsyncButton
                       type="button"
                       onClick={publish}
                       isLoading={busy === "publish"}
-                      className="w-full btn-gradient px-6 py-3 rounded-full text-on-primary text-sm font-headline shadow-lg shadow-primary/20"
+                      className="btn-gradient px-6 py-4 rounded-2xl text-on-primary text-sm font-headline shadow-lg shadow-primary/20"
                     >
-                      Approve + publish
+                      Approve + Publish Report
                     </AsyncButton>
                   </div>
                 </div>

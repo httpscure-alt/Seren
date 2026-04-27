@@ -65,6 +65,18 @@ export default function BudgetTierDemosPage() {
             person.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
+            <Link className="text-primary underline underline-offset-4" href="/demos">
+              All demos
+            </Link>
+            <span className="text-on-surface/25" aria-hidden>
+              ·
+            </span>
+            <Link className="text-primary underline underline-offset-4" href="/demos/intake-routine-mock">
+              Intake · routine (mock)
+            </Link>
+            <span className="text-on-surface/25" aria-hidden>
+              ·
+            </span>
             <Link className="text-primary underline underline-offset-4" href="/demos/budget-tier/option-a">
               Option A (in intake)
             </Link>

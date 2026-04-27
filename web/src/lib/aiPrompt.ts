@@ -30,6 +30,15 @@ export type AiCaseInput = {
   budgetTier?: BudgetTier;
   routineStyle?: RoutineStyle;
   isSensitiveSkin?: boolean;
+  /**
+   * Grounded regimen lines (catalog actives when matched). LLM context only — not a label claim.
+   */
+  currentRegimen?: Array<{
+    line: string;
+    usage: string;
+    catalogActivesSummary?: string | null;
+    source: string;
+  }> | null;
 };
 
 export type PromptBundle = {
@@ -94,10 +103,44 @@ const OUTPUT_SCHEMA = {
       },
       required: ["morning", "evening"],
     },
+    routineAnalysis: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          productName: { type: "string" },
+          scores: {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              concernFit: { type: "integer", minimum: 0, maximum: 5 },
+              ingredientQuality: { type: "integer", minimum: 0, maximum: 5 },
+              tolerance: { type: "integer", minimum: 0, maximum: 5 },
+              durationResult: { type: "integer", minimum: 0, maximum: 5 },
+              compatibility: { type: "integer", minimum: 0, maximum: 5 },
+            },
+            required: ["concernFit", "ingredientQuality", "tolerance", "durationResult", "compatibility"],
+          },
+          action: { type: "string", enum: ["KEEP", "UPGRADE_CANDIDATE", "IMMEDIATE_REPLACE"] },
+          reasoning: { type: "string" },
+        },
+        required: ["productName", "scores", "action", "reasoning"],
+      },
+    },
     next7Days: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 6 },
     next30Days: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 6 },
   },
-  required: ["conditionSummary", "severity", "keySignals", "safety", "routine", "next7Days", "next30Days"],
+  required: [
+    "conditionSummary",
+    "severity",
+    "keySignals",
+    "safety",
+    "routine",
+    "routineAnalysis",
+    "next7Days",
+    "next30Days",
+  ],
 } as const;
 
 function json(v: unknown) {
@@ -141,6 +184,18 @@ export function buildAiDraftPrompt(args: {
     "- Always include sunscreen in the morning routine unless explicitly impossible.",
     "- Keep routines simple and realistic. Avoid stacking multiple strong actives.",
     "",
+    "Current regimen analysis (5-Pillar Scoring Framework):",
+    "For EVERY product in `currentRegimen`, you must provide a mathematical score (0-5) based on these strict clinical pillars:",
+    "1. Concern Fit: 0-2 (mismatch) -> suggest replace; 3-5 (matches concern, e.g. BHA for acne).",
+    "2. Ingredient Quality: Evaluate formulation. Weak/no actives -> upgrade candidate.",
+    "3. Tolerance: Any user-reported redness/stinging/breakout -> score 0-1 and set action to IMMEDIATE_REPLACE.",
+    "4. Duration vs Result: <2 weeks (neutral); 6-8+ weeks with no improvement -> score 0-2 and suggest change.",
+    "5. Routine Compatibility: Check conflicts (e.g. retinol + exfoliating acid same day). Conflict -> score 0-2.",
+    "",
+    "Action Logic:",
+    "- score 0-2 on key pillars -> REPLACE_CANDIDATE / IMMEDIATE_REPLACE.",
+    "- score 3-5 -> KEEP.",
+    "",
     `All drafts will be reviewed by ${clinicianName}.`,
   ].join("\n");
 
@@ -156,6 +211,7 @@ export function buildAiDraftPrompt(args: {
         routineStyle: styleLabel(input.routineStyle),
         sensitiveSkin: Boolean(input.isSensitiveSkin),
       },
+      currentRegimen: input.currentRegimen?.length ? input.currentRegimen : null,
     }),
     "",
     "Catalog (only allowed recommendations):",

@@ -120,6 +120,15 @@ export const id: Dictionary = {
       placeholder:
         "Contoh: sedang hamil/menyusui, sering outdoor, baru ganti skincare, dll.",
     },
+    routine: {
+      title: "Rutinitas saat ini",
+      subtitle: "Bantu dokter kulit melihat produk apa yang kamu pakai sekarang — biar nggak ada bahan aktif yang dobel.",
+      searchLabel: "Ketik nama brand atau produk",
+      searchPlaceholder: "mis. CeraVe, sunscreen, dll.",
+      noMatch: "Nggak ada? Pilih \"Can't find it\" dan jelaskan di bawah.",
+      usageLabel: "Kapan kamu pakainya?",
+      addAnother: "+ Tambah produk lain",
+    },
     actions: { save: "Simpan", next: "Lanjut", submit: "Kirim", previous: "← Kembali" },
     validation: {
       requiredToSubmit:

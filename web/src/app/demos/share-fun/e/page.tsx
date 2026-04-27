@@ -13,8 +13,9 @@ function Frame({ children }: { children: React.ReactNode }) {
         OG preview frame (mock)
       </p>
       <div className="w-full aspect-[1200/630] max-w-[1200px] mx-auto">{children}</div>
-      <p className="mt-6 text-xs text-on-surface/45 leading-relaxed">
-        “Polaroid” without vulnerability — uses abstract texture instead of a face.
+      <p className="mt-6 text-sm text-on-surface-variant leading-relaxed">
+        Dark “aurora” canvas so the card pops in feeds; polaroid stays bright. Abstract or opt-in
+        texture only—no faces by default.
       </p>
     </div>
   );
@@ -37,47 +38,47 @@ function PolaroidCard({
   photoUrl?: string;
 }) {
   return (
-    <div className="w-full h-full rounded-[28px] overflow-hidden border border-outline-variant/10 shadow-[0_30px_90px_-60px_rgba(47,51,48,0.55)] bg-surface-container-lowest relative">
-      {/* Brand-tinted blobs (Seren) */}
-      <div className="absolute -top-24 -left-24 size-[420px] rounded-full bg-primary/18 blur-3xl" />
-      <div className="absolute -top-28 -right-24 size-[440px] rounded-full bg-tertiary-container/55 blur-3xl" />
-      <div className="absolute -bottom-28 left-[25%] size-[520px] rounded-full bg-secondary-container/55 blur-3xl" />
-      <div className="absolute inset-0 opacity-[0.1] [background-image:linear-gradient(to_right,rgba(47,51,48,0.22)_1px,transparent_1px),linear-gradient(to_bottom,rgba(47,51,48,0.22)_1px,transparent_1px)] [background-size:28px_28px]" />
+    <div className="w-full h-full rounded-[24px] overflow-hidden ring-2 ring-primary/20 shadow-[0_40px_100px_-30px_rgba(48,87,103,0.55)] bg-[#0f1c22] relative">
+      {/* Saturated aurora — reads as “premium” not “clinical beige” */}
+      <div className="absolute -top-32 -left-32 size-[480px] rounded-full bg-primary/45 blur-3xl" />
+      <div className="absolute -top-20 right-0 size-[400px] rounded-full bg-[#7fb8d4]/35 blur-3xl" />
+      <div className="absolute -bottom-24 left-1/3 size-[560px] rounded-full bg-[#e8c547]/22 blur-3xl" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0f1c22] via-transparent to-transparent opacity-90" />
 
-      <div className="relative h-full p-10 grid grid-cols-12 gap-8">
+      <div className="relative h-full p-10 grid grid-cols-12 gap-8 text-white">
         <div className="col-span-7 flex flex-col justify-between">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.28em] text-on-surface/55">Seren</p>
-            <p className="mt-5 text-5xl font-headline tracking-tight leading-[0.95]">
-              My routine is finally
-              <br />
-              consistent.
+            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#a8d4e8]">Seren</p>
+            <p className="mt-5 text-5xl sm:text-6xl font-headline tracking-[-0.03em] leading-[0.95]">
+              My routine is finally{" "}
+              <span className="italic font-light text-[#ffe08a]">consistent.</span>
             </p>
-            <p className="mt-4 text-base text-on-surface-variant leading-relaxed max-w-[52ch]">
-              7 days of a calm routine — simple steps, derm reviewed.
+            <p className="mt-5 text-base leading-relaxed max-w-[52ch] text-white/85">
+              7 days in — simple steps, derm-reviewed. The kind of win people{" "}
+              <span className="font-semibold text-white">actually post.</span>
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="rounded-full bg-primary/10 border border-primary/15 text-primary px-3 py-1 text-[10px] uppercase tracking-[0.22em]">
-              Routine plan
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full bg-white/15 border border-white/25 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm">
+              Real plan
             </span>
-            <span className="rounded-full bg-surface border border-outline-variant/10 text-on-surface/70 px-3 py-1 text-[10px] uppercase tracking-[0.22em]">
-              Sensitive‑safe
+            <span className="rounded-full bg-[#305767]/80 border border-white/15 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-on-primary">
+              Sensitive-safe
             </span>
-            <span className="rounded-full bg-surface border border-outline-variant/10 text-on-surface/70 px-3 py-1 text-[10px] uppercase tracking-[0.22em]">
-              5 minutes
+            <span className="rounded-full bg-[#c9a227]/25 border border-[#e8c547]/40 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#ffe9a8]">
+              ~5 min / day
             </span>
           </div>
         </div>
 
         <div className="col-span-5 flex flex-col justify-between">
-          <div className="rounded-[2rem] bg-surface/70 backdrop-blur border border-outline-variant/12 p-7">
-            <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45 mb-4">
-              Polaroid
+          <div className="rounded-[1.75rem] bg-white/10 backdrop-blur-md border border-white/20 p-6 shadow-xl">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/60 mb-4">
+              Polaroid moment
             </p>
-            <div className="rounded-[1.75rem] bg-surface border border-outline-variant/12 p-5">
-              <div className="rounded-[1.25rem] overflow-hidden border border-outline-variant/12 bg-surface-container-lowest relative aspect-[1/1]">
+            <div className="rounded-[1.35rem] bg-white p-4 shadow-2xl shadow-black/25">
+              <div className="rounded-[1rem] overflow-hidden border-[3px] border-primary/20 bg-[#eef4f6] relative aspect-[1/1]">
                 {includePhoto && photoUrl ? (
                   <>
                     <div
@@ -96,29 +97,29 @@ function PolaroidCard({
                   </>
                 )}
                 <div className="absolute inset-0 opacity-[0.14] [background-image:radial-gradient(#2f3330_0.55px,transparent_0.55px)] [background-size:16px_16px]" />
-                <div className="absolute inset-x-0 bottom-0 p-4">
-                  <div className="rounded-2xl bg-surface/75 backdrop-blur border border-outline-variant/12 px-4 py-3">
-                    <p className="text-[10px] uppercase tracking-[0.28em] text-on-surface/45">
-                      SRN‑8821 • Week 1
+                <div className="absolute inset-x-0 bottom-0 p-3">
+                  <div className="rounded-xl bg-gradient-to-r from-primary to-primary-dim px-4 py-3 text-on-primary shadow-lg">
+                    <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-on-primary/85">
+                      SRN‑8821 · Week 1
                     </p>
-                    <p className="mt-1 text-sm font-headline tracking-tight">Barrier first</p>
+                    <p className="mt-1 text-base font-headline tracking-tight">Barrier first</p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-5 flex items-center justify-between gap-3">
-                <p className="text-xs text-on-surface/55">— Seren</p>
-                <span className="text-xs text-on-surface/45">
-                  {includePhoto ? "Photo included (opt‑in)" : "No photos shared"}
+              <div className="mt-4 flex items-center justify-between gap-3">
+                <p className="text-xs font-semibold text-primary">— Seren</p>
+                <span className="text-[10px] font-medium uppercase tracking-wider text-on-surface/55">
+                  {includePhoto ? "Opt-in texture" : "Abstract only"}
                 </span>
               </div>
             </div>
           </div>
 
           <div className="flex items-center justify-between gap-4">
-            <p className="text-xs text-on-surface/45">seren.skin</p>
-            <div className="rounded-full bg-surface border border-outline-variant/12 px-4 py-2 text-xs uppercase tracking-[0.2em] font-headline text-on-surface/70">
-              See routine
+            <p className="text-xs font-semibold text-white/70">seren.skin</p>
+            <div className="rounded-full btn-gradient text-on-primary px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] shadow-lg">
+              Brag (share)
             </div>
           </div>
         </div>
@@ -127,8 +128,9 @@ function PolaroidCard({
   );
 }
 
-export default function ShareFunE({ searchParams }: PageProps) {
-  const paramPhoto = readParam(searchParams?.photo);
+export default async function ShareFunE({ searchParams }: PageProps) {
+  const resolvedParams = await searchParams;
+  const paramPhoto = readParam(resolvedParams?.photo);
   const photoUrl = paramPhoto ?? "/demo/clinical-board-example.png";
   const includePhoto = !!photoUrl;
   return (

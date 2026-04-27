@@ -6,11 +6,25 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authOptions";
 import { rateLimit } from "@/lib/rateLimit";
 import { log } from "@/lib/logger";
+import {
+  enrichRegimenLinesForIntake,
+  regimenProductIdsValid,
+} from "@/lib/regimenEnrichment";
+
+const regimenLineSchema = z.object({
+  productId: z.string().cuid().optional().nullable(),
+  brandRaw: z.string().min(1).max(120),
+  nameRaw: z.string().min(1).max(200),
+  usageSlot: z.enum(["UNKNOWN", "AM", "PM", "BOTH"]).default("UNKNOWN"),
+  userNote: z.string().max(500).optional().nullable(),
+  source: z.enum(["PICKED", "FREE_TEXT"]).default("PICKED"),
+});
 
 const schema = z.object({
   symptoms: z.array(z.string().min(1).max(80)).max(30).default([]),
   note: z.string().max(4000).optional(),
   intake: z.record(z.string(), z.any()).optional(),
+  regimenLines: z.array(regimenLineSchema).max(20).optional(),
   // For now we accept placeholders; production should use signed uploads.
   uploads: z
     .array(
@@ -54,6 +68,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid payload." }, { status: 400 });
   }
 
+  const regimenPayload = parsed.data.regimenLines ?? [];
+  const enrichedRegimen =
+    regimenPayload.length > 0 ? await enrichRegimenLinesForIntake(prisma, regimenPayload) : [];
+  if (!regimenProductIdsValid(regimenPayload, enrichedRegimen)) {
+    return NextResponse.json(
+      { ok: false, error: "One or more product IDs are invalid or inactive." },
+      { status: 400 },
+    );
+  }
+
+  const intakeForAi = {
+    ...(parsed.data.intake ?? {}),
+    ...(enrichedRegimen.length ? { regimen: enrichedRegimen } : {}),
+  };
+
   // Ensure publicId uniqueness (cheap retry loop).
   let publicId = makePublicCaseId();
   for (let i = 0; i < 5; i++) {
@@ -74,13 +103,27 @@ export async function POST(req: Request) {
             create: parsed.data.uploads.map((u) => ({ kind: u.kind, url: u.url })),
           }
         : undefined,
+      regimenLines:
+        enrichedRegimen.length > 0
+          ? {
+              create: enrichedRegimen.map((row) => ({
+                sortOrder: row.sortOrder,
+                usageSlot: row.usageSlot,
+                productId: row.productId,
+                brandRaw: row.brandRaw,
+                nameRaw: row.nameRaw,
+                userNote: row.userNote,
+                source: row.source,
+              })),
+            }
+          : undefined,
       aiJobs: {
         create: {
           status: "QUEUED",
           inputJson: {
             symptoms: parsed.data.symptoms,
             note: parsed.data.note ?? null,
-            intake: parsed.data.intake ?? null,
+            intake: intakeForAi,
           },
         },
       },
@@ -88,7 +131,11 @@ export async function POST(req: Request) {
         create: {
           actorId: userId,
           action: "case.submitted",
-          meta: { symptomsCount: parsed.data.symptoms.length, hasIntake: !!parsed.data.intake },
+          meta: {
+            symptomsCount: parsed.data.symptoms.length,
+            hasIntake: !!parsed.data.intake,
+            regimenLineCount: enrichedRegimen.length,
+          },
         },
       },
     },

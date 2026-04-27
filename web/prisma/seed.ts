@@ -6,16 +6,21 @@
  */
 import "dotenv/config";
 import bcrypt from "bcryptjs";
-import { PrismaClient, Role } from "@prisma/client";
+import { Prisma, PrismaClient, Role } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
+import { SKINCARE_CATALOG_SEED } from "../src/lib/skincareCatalogSeed";
 
 const PHYSICIAN_EMAIL = "dermatologist@seren.local";
-const ADMIN_EMAIL = "admin@seren.local";
+const ADMIN_EMAIL     = "admin@seren.local";
 
-const defaultPass = process.env.SEED_STAFF_PASSWORD ?? "1234";
+// Production staff
+const PROD_PHYSICIAN_EMAIL = "ririsastirespati@seren.id";
+const PROD_ADMIN_EMAIL     = "admin@seren.id";
+
+const defaultPass   = process.env.SEED_STAFF_PASSWORD ?? "1234";
 const PHYSICIAN_PASS = process.env.SEED_PHYSICIAN_PASSWORD ?? defaultPass;
-const ADMIN_PASS = process.env.SEED_ADMIN_PASSWORD ?? defaultPass;
+const ADMIN_PASS     = process.env.SEED_ADMIN_PASSWORD    ?? defaultPass;
 
 async function upsertStaff(
   prisma: PrismaClient,
@@ -53,14 +58,12 @@ async function main() {
   const adapter = new PrismaPg(pool);
   const prisma = new PrismaClient({ adapter });
 
-  await upsertStaff(
-    prisma,
-    PHYSICIAN_EMAIL,
-    PHYSICIAN_PASS,
-    Role.PHYSICIAN,
-    "Dr. Riris Asti Respati",
-  );
-  await upsertStaff(prisma, ADMIN_EMAIL, ADMIN_PASS, Role.ADMIN, "Seren Admin");
+  await upsertStaff(prisma, PHYSICIAN_EMAIL, PHYSICIAN_PASS, Role.PHYSICIAN, "Dr. Riris Asti Respati");
+  await upsertStaff(prisma, ADMIN_EMAIL,     ADMIN_PASS,     Role.ADMIN,      "Seren Admin");
+
+  // Production staff accounts
+  await upsertStaff(prisma, PROD_PHYSICIAN_EMAIL, PHYSICIAN_PASS, Role.PHYSICIAN, "Dr. Riris Asti Respati, SpDVE");
+  await upsertStaff(prisma, PROD_ADMIN_EMAIL,     ADMIN_PASS,     Role.ADMIN,     "Seren Super Admin");
 
   // Friends & family invite coupon (Option B) — used at signup to auto-grant access.
   await prisma.coupon.upsert({
@@ -78,10 +81,41 @@ async function main() {
     },
   });
 
+  for (const row of SKINCARE_CATALOG_SEED) {
+    await prisma.skincareProduct.upsert({
+      where: { slug: row.slug },
+      create: {
+        brand: row.brand,
+        name: row.name,
+        slug: row.slug,
+        market: row.market ?? null,
+        activesSummary: row.activesSummary ?? null,
+        category: row.category ?? null,
+        ingredientsJson: row.ingredientsJson
+          ? (row.ingredientsJson as Prisma.InputJsonValue)
+          : undefined,
+      },
+      update: {
+        brand: row.brand,
+        name: row.name,
+        market: row.market ?? null,
+        activesSummary: row.activesSummary ?? null,
+        category: row.category ?? null,
+        ingredientsJson: row.ingredientsJson
+          ? (row.ingredientsJson as Prisma.InputJsonValue)
+          : undefined,
+        isActive: true,
+      },
+    });
+  }
+
   console.log("Seed OK — staff accounts:");
-  console.log(`  PHYSICIAN  ${PHYSICIAN_EMAIL}`);
-  console.log(`  ADMIN      ${ADMIN_EMAIL}`);
+  console.log(`  PHYSICIAN  ${PHYSICIAN_EMAIL}  (dev/local)`);
+  console.log(`  ADMIN      ${ADMIN_EMAIL}  (dev/local)`);
+  console.log(`  PHYSICIAN  ${PROD_PHYSICIAN_EMAIL}  (production)`);
+  console.log(`  ADMIN      ${PROD_ADMIN_EMAIL}  (production)`);
   console.log("  (passwords from env SEED_* or defaults in prisma/seed.ts)");
+  console.log(`  Skincare catalog: ${SKINCARE_CATALOG_SEED.length} products (by slug upsert)`);
 
   await prisma.$disconnect();
   await pool.end();
