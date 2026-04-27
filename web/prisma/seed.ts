@@ -8,7 +8,7 @@ import "dotenv/config";
 import bcrypt from "bcryptjs";
 import { Prisma, PrismaClient, Role } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
+import { Pool, type PoolConfig } from "pg";
 import { SKINCARE_CATALOG_SEED } from "../src/lib/skincareCatalogSeed";
 
 const PHYSICIAN_EMAIL = "dermatologist@seren.local";
@@ -54,7 +54,7 @@ async function main() {
     throw new Error("DATABASE_URL is required for seeding.");
   }
 
-  let ssl: Parameters<typeof Pool>[0]["ssl"] | undefined;
+  let ssl: PoolConfig["ssl"] | undefined;
   try {
     const u = new URL(connectionString);
     if (u.hostname.endsWith(".pooler.supabase.com")) ssl = { rejectUnauthorized: false };

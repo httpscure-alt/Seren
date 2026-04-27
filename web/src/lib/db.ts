@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
+import { Pool, type PoolConfig } from "pg";
 import { DATABASE_URL_BUILD_PLACEHOLDER } from "@/lib/database-url-placeholder";
 
 const globalForPrisma = globalThis as unknown as {
@@ -47,7 +47,7 @@ function makeClient() {
     }
   }
 
-  let ssl: Parameters<typeof Pool>[0]["ssl"] | undefined;
+  let ssl: PoolConfig["ssl"] | undefined;
   try {
     const u = new URL(connectionString);
     // Supabase pooler certificates may not chain to Node's default trust store.

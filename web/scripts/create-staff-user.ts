@@ -10,7 +10,7 @@ import "dotenv/config";
 import bcrypt from "bcryptjs";
 import { PrismaClient, Role } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
+import { Pool, type PoolConfig } from "pg";
 
 function arg(name: string): string | undefined {
   const prefix = `--${name}=`;
@@ -47,7 +47,7 @@ Customer accounts: use /auth (role is always USER).
     process.exit(1);
   }
 
-  let ssl: Parameters<typeof Pool>[0]["ssl"] | undefined;
+  let ssl: PoolConfig["ssl"] | undefined;
   try {
     const u = new URL(connectionString);
     if (u.hostname.endsWith(".pooler.supabase.com")) ssl = { rejectUnauthorized: false };
