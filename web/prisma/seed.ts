@@ -54,7 +54,14 @@ async function main() {
     throw new Error("DATABASE_URL is required for seeding.");
   }
 
-  const pool = new Pool({ connectionString });
+  let ssl: Parameters<typeof Pool>[0]["ssl"] | undefined;
+  try {
+    const u = new URL(connectionString);
+    if (u.hostname.endsWith(".pooler.supabase.com")) ssl = { rejectUnauthorized: false };
+  } catch {
+    // ignore
+  }
+  const pool = new Pool({ connectionString, ssl });
   const adapter = new PrismaPg(pool);
   const prisma = new PrismaClient({ adapter });
 

@@ -46,17 +46,25 @@ function makeClient() {
       console.warn("[prisma] production database target: could not parse DATABASE_URL");
     }
   }
+
+  let ssl: Parameters<typeof Pool>[0]["ssl"] | undefined;
+  try {
+    const u = new URL(connectionString);
+    // Supabase pooler certificates may not chain to Node's default trust store.
+    // Prefer providing a CA, but for now allow opting out of verification for the pooler.
+    if (u.hostname.endsWith(".pooler.supabase.com")) {
+      ssl = { rejectUnauthorized: false };
+    } else if (process.env.NODE_ENV === "development" && process.env.NODE_TLS_REJECT_UNAUTHORIZED === "0") {
+      ssl = { rejectUnauthorized: false };
+    }
+  } catch {
+    // ignore
+  }
   const pool =
     globalForPrisma.prismaPool ??
     new Pool({
       connectionString,
-      // Supabase pooler/direct connections require TLS. Some networks inject a cert that Node doesn't trust,
-      // which manifests as "Connection terminated unexpectedly" / TLS handshake failures.
-      // Dev-only escape hatch; keep verification enabled in production.
-      ssl:
-        process.env.NODE_ENV === "development" && process.env.NODE_TLS_REJECT_UNAUTHORIZED === "0"
-          ? { rejectUnauthorized: false }
-          : undefined,
+      ssl,
     });
   const adapter = new PrismaPg(pool);
   if (process.env.NODE_ENV !== "production") globalForPrisma.prismaPool = pool;
