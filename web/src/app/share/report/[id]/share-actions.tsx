@@ -31,6 +31,13 @@ export function ShareActions({ publicId }: { publicId: string }) {
       </p>
 
       <div className="mt-6 space-y-3">
+        <Link
+          href="/consult/welcome"
+          className="w-full inline-flex items-center justify-center btn-gradient text-on-primary px-6 py-3 rounded-full text-xs uppercase tracking-[0.2em] font-headline shadow-sm"
+        >
+          Get my plan
+        </Link>
+
         <button
           type="button"
           onClick={copy}
@@ -43,7 +50,7 @@ export function ShareActions({ publicId }: { publicId: string }) {
           href={`/report/${publicId.toLowerCase()}`}
           className="w-full inline-flex items-center justify-center rounded-full border border-outline-variant/25 px-6 py-3 text-xs uppercase tracking-[0.2em] font-headline text-on-surface-variant hover:bg-surface-container transition-colors"
         >
-          Open full report (login)
+          View full report (login)
         </Link>
 
         <Link
