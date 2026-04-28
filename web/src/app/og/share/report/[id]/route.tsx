@@ -78,10 +78,10 @@ export async function GET(req: Request, { params }: { params: Promise<Params> })
             <div
               style={{
                 position: "absolute",
-                left: 0,
-                top: 0,
-                right: 0,
-                bottom: 0,
+                left: "0px",
+                top: "0px",
+                right: "0px",
+                bottom: "0px",
                 background:
                   "linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.52))",
               }}
