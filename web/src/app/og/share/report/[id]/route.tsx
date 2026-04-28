@@ -35,10 +35,10 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
           }}
         >
           <div>
-            <div style={{ fontSize: 18, letterSpacing: 2.8, textTransform: "uppercase", opacity: 0.7 }}>
+            <div style={{ fontSize: 18, letterSpacing: "2.8px", textTransform: "uppercase", opacity: 0.7 }}>
               Seren
             </div>
-            <div style={{ marginTop: 18, fontSize: 56, lineHeight: 1.05, letterSpacing: -1.5 }}>
+            <div style={{ marginTop: 18, fontSize: 56, lineHeight: 1.05, letterSpacing: "-1.5px" }}>
               My skin plan.
               <br />
               Built to follow.
@@ -56,7 +56,7 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
               border: "1px solid #E6E6E3",
               background: "#F6F5F1",
               fontSize: 18,
-              letterSpacing: 2.4,
+              letterSpacing: "2.4px",
               textTransform: "uppercase",
               opacity: 0.8,
             }}
@@ -84,7 +84,7 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
                 <div style={{ fontSize: 18, letterSpacing: 2.8, textTransform: "uppercase", opacity: 0.55 }}>
                   Skin report preview
                 </div>
-                <div style={{ marginTop: 16, fontSize: 48, letterSpacing: -1.2, lineHeight: 1.05 }}>
+                <div style={{ marginTop: 16, fontSize: 48, letterSpacing: "-1.2px", lineHeight: 1.05 }}>
                   Barrier-first routine
                 </div>
                 <div style={{ marginTop: 16, fontSize: 24, opacity: 0.7, lineHeight: 1.35 }}>
@@ -100,7 +100,7 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
                   border: "1px solid #CFE0E6",
                   color: "#305767",
                   fontSize: 16,
-                  letterSpacing: 2.2,
+                  letterSpacing: "2.2px",
                   textTransform: "uppercase",
                   alignSelf: "flex-start",
                 }}
@@ -126,10 +126,10 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
                     textAlign: "center",
                   }}
                 >
-                  <div style={{ fontSize: 16, letterSpacing: 2.4, textTransform: "uppercase", opacity: 0.55 }}>
+                  <div style={{ fontSize: 16, letterSpacing: "2.4px", textTransform: "uppercase", opacity: 0.55 }}>
                     {m.k}
                   </div>
-                  <div style={{ marginTop: 10, fontSize: 40, letterSpacing: -1.2 }}>
+                  <div style={{ marginTop: 10, fontSize: 40, letterSpacing: "-1.2px" }}>
                     {m.v}
                   </div>
                 </div>
@@ -146,7 +146,7 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
                 border: "1px solid #E6E6E3",
                 background: "#F6F5F1",
                 fontSize: 18,
-                letterSpacing: 2.4,
+                letterSpacing: "2.4px",
                 textTransform: "uppercase",
                 opacity: 0.8,
               }}
