@@ -22,12 +22,9 @@ export async function GET(req: Request, { params }: { params: Promise<Params> })
 
   let photoDataUrl: string | null = null;
   try {
-    const res = await fetch(`${origin}/doctors/dr-riris.png`);
-    if (res.ok) {
-      const ab = await res.arrayBuffer();
-      const b64 = toBase64(ab);
-      photoDataUrl = `data:image/png;base64,${b64}`;
-    }
+    // NOTE: embedding large base64 images can cause OG rendering to blank.
+    // Keep the URL; Satori will fetch it.
+    photoDataUrl = `${origin}/doctors/dr-riris.png`;
   } catch {
     // ignore; we'll render without photo if fetch fails
   }
