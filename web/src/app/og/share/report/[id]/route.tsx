@@ -32,8 +32,8 @@ export async function GET(req: Request, { params }: { params: Promise<Params> })
     // ignore; we'll render without photo if fetch fails
   }
 
-  // Share-card OG image (matches /share/report layout).
-  // Today: uses clinician photo. Later: patient front photo (opt-in + token).
+  // Share-card OG image.
+  // Keep styles conservative: Satori is strict and may blank the image on unsupported CSS.
   return new ImageResponse(
     (
       <div
@@ -43,60 +43,34 @@ export async function GET(req: Request, { params }: { params: Promise<Params> })
           display: "flex",
           backgroundColor: "#FAF9F6",
           color: "#2F3330",
-          padding: "44px",
+          padding: "40px",
           fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial",
         }}
       >
         <div
           style={{
-            width: "100%",
-            height: "100%",
-            borderRadius: "28px",
-            overflow: "hidden",
-            backgroundColor: "#FFFFFF",
-            border: "1px solid rgba(47,51,48,0.10)",
+            width: "1120px",
+            height: "550px",
             display: "flex",
+            backgroundColor: "#FFFFFF",
+            borderRadius: "28px",
+            borderWidth: "1px",
+            borderStyle: "solid",
+            borderColor: "#E6E6E3",
+            overflow: "hidden",
           }}
         >
-          <div style={{ width: "420px", height: "100%", position: "relative" }}>
+          <div style={{ width: "420px", height: "550px" }}>
             {photoDataUrl ? (
               <img
                 src={photoDataUrl}
                 width={420}
-                height={630}
-                style={{ width: "420px", height: "630px", objectFit: "cover" }}
+                height={550}
+                style={{ width: "420px", height: "550px", objectFit: "cover" }}
               />
             ) : (
-              <div
-                style={{
-                  width: "420px",
-                  height: "630px",
-                  backgroundColor: "#305767",
-                }}
-              />
+              <div style={{ width: "420px", height: "550px", backgroundColor: "#305767" }} />
             )}
-            <div
-              style={{
-                position: "absolute",
-                left: "0px",
-                top: "0px",
-                right: "0px",
-                bottom: "0px",
-                background:
-                  "linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.52))",
-              }}
-            />
-            <div style={{ position: "absolute", left: "28px", bottom: "28px" }}>
-              <div style={{ fontSize: "18px", color: "rgba(255,255,255,0.82)" }}>
-                Dermatologist-reviewed
-              </div>
-              <div style={{ marginTop: "10px", fontSize: "40px", color: "#FFFFFF" }}>
-                Seren skin report
-              </div>
-              <div style={{ marginTop: "10px", fontSize: "22px", color: "rgba(255,255,255,0.82)" }}>
-                Dr. Riris Asti Respati, SpDVE
-              </div>
-            </div>
           </div>
 
           <div
@@ -109,66 +83,59 @@ export async function GET(req: Request, { params }: { params: Promise<Params> })
             }}
           >
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
-                <div>
-                  <div style={{ fontSize: "18px", opacity: 0.55 }}>Report preview</div>
-                  <div style={{ marginTop: "14px", fontSize: "52px", lineHeight: 1.05 }}>
-                    Barrier-first routine
-                  </div>
-                  <div style={{ marginTop: "16px", fontSize: "24px", opacity: 0.7, lineHeight: 1.35 }}>
-                    Safe preview. No clinical photos included.
-                  </div>
+              <div style={{ fontSize: "18px", opacity: 0.55 }}>Seren • Report preview</div>
+              <div style={{ marginTop: "14px", fontSize: "52px", lineHeight: 1.05 }}>
+                Barrier-first routine
+              </div>
+              <div style={{ marginTop: "14px", fontSize: "24px", opacity: 0.7, lineHeight: 1.35 }}>
+                Safe preview. No clinical photos included.
+              </div>
+
+              <div style={{ marginTop: "22px", display: "flex", gap: "14px" }}>
+                <div
+                  style={{
+                    width: "176px",
+                    padding: "16px",
+                    borderRadius: "18px",
+                    borderWidth: "1px",
+                    borderStyle: "solid",
+                    borderColor: "#E6E6E3",
+                    backgroundColor: "#F6F5F1",
+                    textAlign: "center",
+                  }}
+                >
+                  <div style={{ fontSize: "14px", opacity: 0.55 }}>Clarity</div>
+                  <div style={{ marginTop: "10px", fontSize: "40px" }}>7.8</div>
                 </div>
                 <div
                   style={{
-                    padding: "8px 14px",
-                    borderRadius: "999px",
-                    backgroundColor: "rgba(61,99,116,0.10)",
-                    border: "1px solid rgba(61,99,116,0.18)",
-                    color: "rgb(61,99,116)",
-                    fontSize: "16px",
-                    alignSelf: "flex-start",
+                    width: "176px",
+                    padding: "16px",
+                    borderRadius: "18px",
+                    borderWidth: "1px",
+                    borderStyle: "solid",
+                    borderColor: "#E6E6E3",
+                    backgroundColor: "#F6F5F1",
+                    textAlign: "center",
                   }}
                 >
-                  Signed
+                  <div style={{ fontSize: "14px", opacity: 0.55 }}>Barrier</div>
+                  <div style={{ marginTop: "10px", fontSize: "40px" }}>6.4</div>
                 </div>
-              </div>
-
-              <div style={{ marginTop: "26px", display: "flex", gap: "16px" }}>
-                {[
-                  ["Clarity", "7.8"],
-                  ["Barrier", "6.4"],
-                  ["Inflamm.", "4.9"],
-                ].map(([k, v]) => (
-                  <div
-                    key={k}
-                    style={{
-                      width: "176px",
-                      borderRadius: "22px",
-                      padding: "18px",
-                      backgroundColor: "rgba(238,241,238,0.6)",
-                      border: "1px solid rgba(47,51,48,0.08)",
-                      textAlign: "center",
-                    }}
-                  >
-                    <div style={{ fontSize: "16px", opacity: 0.55 }}>{k}</div>
-                    <div style={{ marginTop: "10px", fontSize: "44px" }}>{v}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div
-                style={{
-                  marginTop: "22px",
-                  borderRadius: "22px",
-                  backgroundColor: "#FFFFFF",
-                  border: "1px solid rgba(47,51,48,0.08)",
-                  padding: "18px",
-                }}
-              >
-                <div style={{ fontSize: "16px", opacity: 0.55 }}>Next 7 days</div>
-                <div style={{ marginTop: "10px", fontSize: "24px", opacity: 0.75, lineHeight: 1.35 }}>
-                  Barrier-first routine, then introduce one active slowly.
+                <div
+                  style={{
+                    width: "176px",
+                    padding: "16px",
+                    borderRadius: "18px",
+                    borderWidth: "1px",
+                    borderStyle: "solid",
+                    borderColor: "#E6E6E3",
+                    backgroundColor: "#F6F5F1",
+                    textAlign: "center",
+                  }}
+                >
+                  <div style={{ fontSize: "14px", opacity: 0.55 }}>Inflamm.</div>
+                  <div style={{ marginTop: "10px", fontSize: "40px" }}>4.9</div>
                 </div>
               </div>
             </div>
@@ -179,10 +146,12 @@ export async function GET(req: Request, { params }: { params: Promise<Params> })
                 style={{
                   padding: "12px 18px",
                   borderRadius: "999px",
-                  border: "1px solid rgba(47,51,48,0.12)",
-                  backgroundColor: "rgba(255,255,255,0.7)",
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  borderColor: "#E6E6E3",
+                  backgroundColor: "#F6F5F1",
                   fontSize: "18px",
-                  opacity: 0.8,
+                  opacity: 0.85,
                 }}
               >
                 View report
