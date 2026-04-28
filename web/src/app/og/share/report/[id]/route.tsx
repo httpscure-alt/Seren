@@ -7,8 +7,33 @@ type Params = { id: string };
 export async function GET(req: Request, { params }: { params: Promise<Params> }) {
   const { id } = await params;
   const publicId = String(id).toUpperCase();
+  const origin = new URL(req.url).origin;
 
-  // Share-card OG image. Keep it extremely compatible to avoid blank thumbnails.
+  function toBase64(bytes: ArrayBuffer) {
+    const u8 = new Uint8Array(bytes);
+    let s = "";
+    // Chunk to avoid call stack / arg limits
+    for (let i = 0; i < u8.length; i += 0x8000) {
+      s += String.fromCharCode(...u8.subarray(i, i + 0x8000));
+    }
+    // btoa is available in Edge runtime
+    return btoa(s);
+  }
+
+  let photoDataUrl: string | null = null;
+  try {
+    const res = await fetch(`${origin}/doctors/dr-riris.png`);
+    if (res.ok) {
+      const ab = await res.arrayBuffer();
+      const b64 = toBase64(ab);
+      photoDataUrl = `data:image/png;base64,${b64}`;
+    }
+  } catch {
+    // ignore; we'll render without photo if fetch fails
+  }
+
+  // Share-card OG image (matches /share/report layout).
+  // Today: uses clinician photo. Later: patient front photo (opt-in + token).
   return new ImageResponse(
     (
       <div
@@ -16,23 +41,154 @@ export async function GET(req: Request, { params }: { params: Promise<Params> })
           width: "1200px",
           height: "630px",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
           backgroundColor: "#FAF9F6",
           color: "#2F3330",
-          padding: "72px",
+          padding: "44px",
           fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial",
         }}
       >
-        <div style={{ fontSize: "22px", opacity: 0.7 }}>Seren</div>
-        <div style={{ marginTop: "16px", fontSize: "64px", lineHeight: 1.05 }}>
-          Share report card
-        </div>
-        <div style={{ marginTop: "12px", fontSize: "26px", opacity: 0.7 }}>
-          {`SRN: ${publicId}`}
-        </div>
-        <div style={{ marginTop: "28px", fontSize: "22px", opacity: 0.65 }}>
-          Safe preview • no photos • no diagnosis
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            borderRadius: "28px",
+            overflow: "hidden",
+            backgroundColor: "#FFFFFF",
+            border: "1px solid rgba(47,51,48,0.10)",
+            display: "flex",
+          }}
+        >
+          <div style={{ width: "420px", height: "100%", position: "relative" }}>
+            {photoDataUrl ? (
+              <img
+                src={photoDataUrl}
+                width={420}
+                height={630}
+                style={{ width: "420px", height: "630px", objectFit: "cover" }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: "420px",
+                  height: "630px",
+                  backgroundColor: "#305767",
+                }}
+              />
+            )}
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                background:
+                  "linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.52))",
+              }}
+            />
+            <div style={{ position: "absolute", left: "28px", bottom: "28px" }}>
+              <div style={{ fontSize: "18px", color: "rgba(255,255,255,0.82)" }}>
+                Dermatologist-reviewed
+              </div>
+              <div style={{ marginTop: "10px", fontSize: "40px", color: "#FFFFFF" }}>
+                Seren skin report
+              </div>
+              <div style={{ marginTop: "10px", fontSize: "22px", color: "rgba(255,255,255,0.82)" }}>
+                Dr. Riris Asti Respati, SpDVE
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              flex: 1,
+              padding: "44px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
+                <div>
+                  <div style={{ fontSize: "18px", opacity: 0.55 }}>Report preview</div>
+                  <div style={{ marginTop: "14px", fontSize: "52px", lineHeight: 1.05 }}>
+                    Barrier-first routine
+                  </div>
+                  <div style={{ marginTop: "16px", fontSize: "24px", opacity: 0.7, lineHeight: 1.35 }}>
+                    Safe preview. No clinical photos included.
+                  </div>
+                </div>
+                <div
+                  style={{
+                    padding: "8px 14px",
+                    borderRadius: "999px",
+                    backgroundColor: "rgba(61,99,116,0.10)",
+                    border: "1px solid rgba(61,99,116,0.18)",
+                    color: "rgb(61,99,116)",
+                    fontSize: "16px",
+                    alignSelf: "flex-start",
+                  }}
+                >
+                  Signed
+                </div>
+              </div>
+
+              <div style={{ marginTop: "26px", display: "flex", gap: "16px" }}>
+                {[
+                  ["Clarity", "7.8"],
+                  ["Barrier", "6.4"],
+                  ["Inflamm.", "4.9"],
+                ].map(([k, v]) => (
+                  <div
+                    key={k}
+                    style={{
+                      width: "176px",
+                      borderRadius: "22px",
+                      padding: "18px",
+                      backgroundColor: "rgba(238,241,238,0.6)",
+                      border: "1px solid rgba(47,51,48,0.08)",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div style={{ fontSize: "16px", opacity: 0.55 }}>{k}</div>
+                    <div style={{ marginTop: "10px", fontSize: "44px" }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div
+                style={{
+                  marginTop: "22px",
+                  borderRadius: "22px",
+                  backgroundColor: "#FFFFFF",
+                  border: "1px solid rgba(47,51,48,0.08)",
+                  padding: "18px",
+                }}
+              >
+                <div style={{ fontSize: "16px", opacity: 0.55 }}>Next 7 days</div>
+                <div style={{ marginTop: "10px", fontSize: "24px", opacity: 0.75, lineHeight: 1.35 }}>
+                  Barrier-first routine, then introduce one active slowly.
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ fontSize: "20px", opacity: 0.55 }}>{`Seren • ${publicId}`}</div>
+              <div
+                style={{
+                  padding: "12px 18px",
+                  borderRadius: "999px",
+                  border: "1px solid rgba(47,51,48,0.12)",
+                  backgroundColor: "rgba(255,255,255,0.7)",
+                  fontSize: "18px",
+                  opacity: 0.8,
+                }}
+              >
+                View report
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     ),
