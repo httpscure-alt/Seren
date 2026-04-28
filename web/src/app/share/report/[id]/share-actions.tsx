@@ -14,7 +14,8 @@ export function ShareActions({ publicId }: { publicId: string }) {
     try {
       const url = shareUrl || "";
       if (!url) return;
-      await navigator.clipboard.writeText(url);
+      const message = `Baru dapet *Seren skin plan* — simple dan masuk akal. Mau liat share card-nya?\n${url}`;
+      await navigator.clipboard.writeText(message);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1200);
     } catch {
@@ -35,7 +36,7 @@ export function ShareActions({ publicId }: { publicId: string }) {
           onClick={copy}
           className="w-full btn-gradient text-on-primary px-6 py-3 rounded-full text-xs uppercase tracking-[0.2em] font-headline shadow-sm"
         >
-          {copied ? "Copied" : "Copy share link"}
+          {copied ? "Copied message + link" : "Copy message + link"}
         </button>
 
         <Link
