@@ -31,8 +31,8 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
             Safe preview. No photos. No diagnosis.
           </div>
 
-          <div style={{ marginTop: 36, fontSize: 34 }}>
-            Report ID: <span style={{ opacity: 0.8 }}>{publicId}</span>
+          <div style={{ marginTop: 36, fontSize: 34, opacity: 0.8 }}>
+            {`Report ID: ${publicId}`}
           </div>
 
           <div style={{ marginTop: 36, display: "flex", gap: "18px" }}>
