@@ -7,7 +7,6 @@ type Params = { id: string };
 export async function GET(req: Request, { params }: { params: Promise<Params> }) {
   const { id } = await params;
   const publicId = String(id).toUpperCase();
-  const origin = new URL(req.url).origin;
 
   // Share-card OG image. Today: uses clinician photo; later: patient front photo (opt-in + token).
   return new ImageResponse(
@@ -34,37 +33,33 @@ export async function GET(req: Request, { params }: { params: Promise<Params> })
             display: "flex",
           }}
         >
-          {/* Left photo panel */}
-          <div style={{ width: "420px", height: "100%", position: "relative" }}>
-            <img
-              src={`${origin}/doctors/dr-riris.png`}
-              width={420}
-              height={630}
-              style={{ objectFit: "cover", width: "420px", height: "630px" }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background: "linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.52))",
-              }}
-            />
-            <div style={{ position: "absolute", left: "28px", bottom: "28px" }}>
-              <div
-                style={{
-                  fontSize: 18,
-                  letterSpacing: "2.4px",
-                  textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.82)",
-                }}
-              >
-                Dermatologist-reviewed
+          {/* Left panel (image placeholder for OG stability) */}
+          <div
+            style={{
+              width: "420px",
+              height: "100%",
+              padding: "44px",
+              background:
+                "radial-gradient(circle at 20% 20%, rgba(190,242,220,0.70), transparent 55%), radial-gradient(circle at 80% 25%, rgba(211,226,247,0.75), transparent 60%), radial-gradient(circle at 55% 85%, rgba(248,215,223,0.55), transparent 60%)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <div style={{ fontSize: 18, letterSpacing: "2.4px", textTransform: "uppercase", opacity: 0.7 }}>
+                Seren
               </div>
-              <div style={{ marginTop: "10px", fontSize: 40, color: "#FFFFFF" }}>Seren skin report</div>
-              <div style={{ marginTop: "10px", fontSize: 22, color: "rgba(255,255,255,0.82)" }}>
-                Dr. Riris Asti Respati, SpDVE
+              <div style={{ marginTop: "16px", fontSize: 46, lineHeight: 1.05 }}>
+                Dermatologist-
+                <br />
+                reviewed plan
+              </div>
+              <div style={{ marginTop: "16px", fontSize: 22, opacity: 0.7, lineHeight: 1.35 }}>
+                Shareable card preview.
               </div>
             </div>
+            <div style={{ fontSize: 20, opacity: 0.65 }}>No clinical photos</div>
           </div>
 
           {/* Right content panel */}

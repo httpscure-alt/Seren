@@ -17,8 +17,8 @@ export async function GET() {
           color: "#2F3330",
         }}
       >
-        <div style={{ fontSize: 40, letterSpacing: -0.5 }}>Seren</div>
-        <div style={{ marginTop: 18, fontSize: 72, letterSpacing: -2, lineHeight: 1.05 }}>
+        <div style={{ fontSize: 40, letterSpacing: "-0.5px" }}>Seren</div>
+        <div style={{ marginTop: 18, fontSize: 72, letterSpacing: "-2px", lineHeight: 1.05 }}>
           Clinical skin analysis,
           <br />
           reviewed by dermatologists.
