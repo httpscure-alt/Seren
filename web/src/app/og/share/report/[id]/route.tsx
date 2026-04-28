@@ -16,10 +16,9 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
           width: "1200px",
           height: "630px",
           display: "flex",
-          background: "linear-gradient(135deg, #FAF9F6 0%, #EEF1EE 100%)",
+          background: "#F6F5F1",
           color: "#2F3330",
           padding: "44px",
-          gap: "28px",
           fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial",
         }}
       >
@@ -28,9 +27,8 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
             width: "420px",
             borderRadius: "28px",
             padding: "36px",
-            background:
-              "radial-gradient(circle at 20% 20%, rgba(190,242,220,0.75), transparent 55%), radial-gradient(circle at 80% 25%, rgba(211,226,247,0.8), transparent 60%), radial-gradient(circle at 55% 85%, rgba(248,215,223,0.6), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85))",
-            border: "1px solid rgba(47,51,48,0.08)",
+            background: "#FFFFFF",
+            border: "1px solid #E6E6E3",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
@@ -55,8 +53,8 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
               alignSelf: "flex-start",
               padding: "10px 16px",
               borderRadius: "999px",
-              border: "1px solid rgba(47,51,48,0.12)",
-              background: "rgba(255,255,255,0.7)",
+              border: "1px solid #E6E6E3",
+              background: "#F6F5F1",
               fontSize: 18,
               letterSpacing: 2.4,
               textTransform: "uppercase",
@@ -71,12 +69,13 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
           style={{
             flex: 1,
             borderRadius: "28px",
-            background: "rgba(255,255,255,0.85)",
-            border: "1px solid rgba(47,51,48,0.08)",
+            background: "#FFFFFF",
+            border: "1px solid #E6E6E3",
             padding: "40px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            marginLeft: "28px",
           }}
         >
           <div>
@@ -97,9 +96,9 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
                   height: 36,
                   padding: "8px 14px",
                   borderRadius: 999,
-                  background: "rgba(61,99,116,0.10)",
-                  border: "1px solid rgba(61,99,116,0.18)",
-                  color: "rgb(61,99,116)",
+                  background: "#EFF5F7",
+                  border: "1px solid #CFE0E6",
+                  color: "#305767",
                   fontSize: 16,
                   letterSpacing: 2.2,
                   textTransform: "uppercase",
@@ -122,8 +121,8 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
                     width: 170,
                     borderRadius: 22,
                     padding: "18px 18px",
-                    background: "rgba(238,241,238,0.6)",
-                    border: "1px solid rgba(47,51,48,0.08)",
+                    background: "#F6F5F1",
+                    border: "1px solid #E6E6E3",
                     textAlign: "center",
                   }}
                 >
@@ -144,8 +143,8 @@ export async function GET(_: Request, { params }: { params: Promise<Params> }) {
               style={{
                 padding: "12px 18px",
                 borderRadius: 999,
-                border: "1px solid rgba(47,51,48,0.12)",
-                background: "rgba(255,255,255,0.7)",
+                border: "1px solid #E6E6E3",
+                background: "#F6F5F1",
                 fontSize: 18,
                 letterSpacing: 2.4,
                 textTransform: "uppercase",
