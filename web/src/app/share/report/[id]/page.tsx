@@ -4,8 +4,34 @@ import { SiteNavbar } from "@/components/SiteNavbar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { prisma } from "@/lib/db";
 import { ShareActions } from "./share-actions";
+import type { Metadata } from "next";
 
 type Params = { id: string };
+
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { id } = await params;
+  const publicId = String(id).toUpperCase();
+  const title = `Share report • ${publicId}`;
+  const description =
+    "Share preview of a dermatologist-reviewed routine. Safe by default: no photos and no private medical details.";
+  const ogImage = `/og/share/report/${publicId.toLowerCase()}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `Seren share card ${publicId}` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
+  };
+}
 
 export default async function ShareReportPage({ params }: { params: Promise<Params> }) {
   const { id } = await params;
