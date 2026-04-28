@@ -14,7 +14,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const title = `Share report • ${publicId}`;
   const description =
     "Share preview of a dermatologist-reviewed routine. Safe by default: no photos and no private medical details.";
-  const ogImage = `/og/share/report/${publicId.toLowerCase()}`;
+  // Temporary: use a stable static image for previews.
+  // Our dynamic OG renderer is flaky in production (0-byte images when Satori rejects styles).
+  const ogImage = `/doctors/dr-riris.png`;
 
   return {
     title,
