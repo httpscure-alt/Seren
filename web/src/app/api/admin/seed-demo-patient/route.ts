@@ -135,9 +135,18 @@ async function ensureAuthorized(req: Request) {
   const session = await getServerSession(authOptions).catch(() => null);
   const role = (session as any)?.role as string | undefined;
   const isStaff = !!session?.user?.email && (role === "ADMIN" || role === "PHYSICIAN");
-  if (!isStaff) {
-    throw new Error("unauthorized");
-  }
+  if (isStaff) return;
+
+  // Last-resort: allow creating ONE fixed demo account (idempotent),
+  // so a patient POV is always accessible even if staff login is blocked.
+  const url = new URL(req.url);
+  const publicDemo = url.searchParams.get("demo") === "1";
+  const isFixedTarget =
+    (url.searchParams.get("email") ?? "").trim().toLowerCase() === "patient.demo@seren.id" ||
+    !url.searchParams.get("email");
+  if (publicDemo && isFixedTarget) return;
+
+  throw new Error("unauthorized");
 }
 
 export async function POST(req: Request) {
