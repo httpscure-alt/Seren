@@ -99,7 +99,7 @@ export default function ClinicalNotesPage() {
                       {n.status}
                     </span>
                     <Link
-                      href={`/report/${n.id.toLowerCase()}`}
+                      href="/demos/share-report"
                       className="btn-gradient text-on-primary px-5 py-2.5 rounded-full text-sm font-medium tracking-wide shadow-sm"
                     >
                       Open report

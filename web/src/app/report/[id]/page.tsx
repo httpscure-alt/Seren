@@ -71,6 +71,7 @@ const ADVICE_MAP: Record<string, { label: string; detail: string; icon: string }
 
 export default async function ReportPage({ params }: { params: Promise<Params> }) {
   const { id } = await params;
+  const publicId = String(id).toUpperCase();
 
   // ── Auth guard ────────────────────────────────────────────────────────────
   const session = await getServerSession(authOptions);
@@ -89,7 +90,7 @@ export default async function ReportPage({ params }: { params: Promise<Params> }
 
   // ── Fetch the case ────────────────────────────────────────────────────────
   const caseData = await prisma.case.findFirst({
-    where: { publicId: String(id).toUpperCase() },
+    where: { publicId },
     select: {
       id: true,
       publicId: true,
@@ -103,18 +104,7 @@ export default async function ReportPage({ params }: { params: Promise<Params> }
 
   // Ownership check: only the case owner (or staff) can view
   if (!caseData) {
-    return (
-      <div className="flex flex-col min-h-screen bg-surface">
-        <SiteNavbar />
-        <main className="seren-container py-32 text-center">
-          <h1 className="font-headline text-3xl">Report not found.</h1>
-          <Link href="/results" className="mt-8 inline-block text-primary font-bold underline">
-            Back to dashboard
-          </Link>
-        </main>
-        <SiteFooter />
-      </div>
-    );
+    redirect("/results");
   }
 
   if (!isStaff && caseData.userId !== userId) {
@@ -167,6 +157,20 @@ export default async function ReportPage({ params }: { params: Promise<Params> }
               <p className="mt-7 text-on-surface-variant leading-[1.75] max-w-[60ch]">
                 Verified results from Dr. Riris Asti Respati based on your clinical photos and assessment.
               </p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                <Link
+                  href={`/share/report/${publicId.toLowerCase()}`}
+                  className="rounded-full border border-outline-variant/25 bg-surface px-6 py-3 text-sm font-medium tracking-wide text-on-surface-variant hover:bg-surface-container-low transition-colors text-center"
+                >
+                  Share
+                </Link>
+                <Link
+                  href="/results"
+                  className="rounded-full border border-outline-variant/25 bg-surface px-6 py-3 text-sm font-medium tracking-wide text-on-surface-variant hover:bg-surface-container-low transition-colors text-center"
+                >
+                  Back to dashboard
+                </Link>
+              </div>
             </div>
 
             <div className="col-span-12 lg:col-span-5">

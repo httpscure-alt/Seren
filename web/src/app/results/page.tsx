@@ -69,24 +69,11 @@ export default async function ResultsDashboardPage() {
     return "Skin routine update";
   }
 
-  const demoUpdates = [
-    {
-      publicId: "SRN-8821",
-      createdAt: new Date("2024-09-12T00:00:00Z"),
-      report: { publishedAt: new Date("2024-09-12T00:00:00Z") },
-    },
-    {
-      publicId: "SRN-7710",
-      createdAt: new Date("2024-07-02T00:00:00Z"),
-      report: { publishedAt: new Date("2024-07-02T00:00:00Z") },
-    },
-  ] as const;
-
-  const updateItems: Array<{
+  const updateItems = cases as Array<{
     publicId: string;
     createdAt: Date;
     report?: { publishedAt?: Date | null } | null;
-  }> = cases.length ? (cases as any) : (demoUpdates as any);
+  }>;
 
   const latest = cases[0] ?? null;
   const latestIsReady = !!latest?.report?.publishedAt;
@@ -172,7 +159,8 @@ export default async function ResultsDashboardPage() {
               </div>
 
               <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {updateItems.map((c) => {
+                {updateItems.length ? (
+                  updateItems.map((c) => {
                   const ready = !!c.report?.publishedAt;
                   const pubId = String(c.publicId).toUpperCase();
                   const isOpened = openedSet.has(pubId);
@@ -235,7 +223,30 @@ export default async function ResultsDashboardPage() {
                       </div>
                     </Link>
                   );
-                })}
+                })
+                ) : (
+                  <div className="col-span-1 sm:col-span-2 rounded-[2.5rem] bg-surface-container-lowest p-7 sm:p-9 border border-outline-variant/10 shadow-[0_18px_60px_-40px_rgba(47,51,48,0.14)]">
+                    <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">No reports yet</p>
+                    <p className="mt-3 font-headline tracking-tight text-xl">Start your first consultation</p>
+                    <p className="mt-3 text-sm text-on-surface-variant leading-relaxed">
+                      Once your report is signed, it will show up here.
+                    </p>
+                    <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                      <Link
+                        href="/consult/welcome"
+                        className="btn-gradient text-on-primary px-6 py-3 rounded-full text-sm font-medium tracking-wide shadow-sm text-center"
+                      >
+                        Start consultation
+                      </Link>
+                      <Link
+                        href="/demos/share-report"
+                        className="rounded-full border border-outline-variant/25 bg-surface px-6 py-3 text-sm font-medium tracking-wide text-on-surface-variant hover:bg-surface-container-low transition-colors text-center"
+                      >
+                        See demo share card
+                      </Link>
+                    </div>
+                  </div>
+                )}
 
                 {hasNewInbox ? (
                   <Link
