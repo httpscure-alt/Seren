@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/authOptions";
 
 function isAuthorized(req: Request): boolean {
   const secret = process.env.CRON_SECRET;
@@ -11,7 +13,13 @@ function isAuthorized(req: Request): boolean {
 
 export async function POST(req: Request) {
   if (!isAuthorized(req)) {
-    return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+    // Allow staff (ADMIN/PHYSICIAN) to trigger from browser session.
+    const session = await getServerSession(authOptions).catch(() => null);
+    const role = (session as any)?.role as string | undefined;
+    const isStaff = !!session?.user?.email && (role === "ADMIN" || role === "PHYSICIAN");
+    if (!isStaff) {
+      return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+    }
   }
 
   const body = await req.json().catch(() => ({} as any));
