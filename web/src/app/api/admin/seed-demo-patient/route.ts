@@ -11,18 +11,7 @@ function isAuthorized(req: Request): boolean {
   return auth === `Bearer ${secret}`;
 }
 
-export async function POST(req: Request) {
-  if (!isAuthorized(req)) {
-    // Allow staff (ADMIN/PHYSICIAN) to trigger from browser session.
-    const session = await getServerSession(authOptions).catch(() => null);
-    const role = (session as any)?.role as string | undefined;
-    const isStaff = !!session?.user?.email && (role === "ADMIN" || role === "PHYSICIAN");
-    if (!isStaff) {
-      return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
-    }
-  }
-
-  const body = await req.json().catch(() => ({} as any));
+async function handle(req: Request, body: any) {
   const email = String(body?.email || "patient.demo@seren.id")
     .trim()
     .toLowerCase();
@@ -135,6 +124,53 @@ export async function POST(req: Request) {
         code: typeof e?.code === "string" ? e.code : undefined,
         message: typeof e?.message === "string" ? e.message : String(e),
       },
+      { status: 500 },
+    );
+  }
+}
+
+async function ensureAuthorized(req: Request) {
+  if (isAuthorized(req)) return;
+  // Allow staff (ADMIN/PHYSICIAN) to trigger from browser session.
+  const session = await getServerSession(authOptions).catch(() => null);
+  const role = (session as any)?.role as string | undefined;
+  const isStaff = !!session?.user?.email && (role === "ADMIN" || role === "PHYSICIAN");
+  if (!isStaff) {
+    throw new Error("unauthorized");
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    await ensureAuthorized(req);
+    const body = await req.json().catch(() => ({} as any));
+    return await handle(req, body);
+  } catch (e: any) {
+    if (String(e?.message) === "unauthorized") {
+      return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+    }
+    throw e;
+  }
+}
+
+export async function GET(req: Request) {
+  try {
+    await ensureAuthorized(req);
+    // Allow seeding by just opening in browser.
+    const { searchParams } = new URL(req.url);
+    const body = {
+      email: searchParams.get("email") ?? undefined,
+      password: searchParams.get("password") ?? undefined,
+      name: searchParams.get("name") ?? undefined,
+      publicId: searchParams.get("publicId") ?? undefined,
+    };
+    return await handle(req, body);
+  } catch (e: any) {
+    if (String(e?.message) === "unauthorized") {
+      return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+    }
+    return NextResponse.json(
+      { ok: false, error: "seed_failed", message: typeof e?.message === "string" ? e.message : String(e) },
       { status: 500 },
     );
   }
