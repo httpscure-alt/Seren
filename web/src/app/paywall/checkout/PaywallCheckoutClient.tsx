@@ -17,8 +17,9 @@ export function PaywallCheckoutClient() {
 
   const plan = (sp.get("plan") ?? "journey") as "single" | "journey";
   const next = sp.get("next") ?? "/results";
+  const coupon = sp.get("coupon") ?? "";
 
-  const payload = useMemo(() => ({ plan, next }), [plan, next]);
+  const payload = useMemo(() => ({ plan, next, coupon }), [plan, next, coupon]);
 
   useEffect(() => {
     (async () => {

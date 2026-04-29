@@ -6,10 +6,12 @@ import { prisma } from "@/lib/db";
 import { midtransAuthHeader, midtransConfig } from "@/lib/midtrans";
 import { hasActiveSubscription } from "@/lib/entitlement";
 import { xenditAuthHeader, xenditConfig, xenditIdempotencyKey } from "@/lib/xendit";
+import { formatDiscountLineIdr, isCouponEligibleForPlan, validateCouponCode } from "@/lib/promotions";
 
 const schema = z.object({
   plan: z.enum(["single", "journey"]),
   next: z.string().min(1),
+  coupon: z.string().optional(),
 });
 
 function safeNext(maybePath: string) {
@@ -44,6 +46,19 @@ export async function POST(req: Request) {
 
   const next = safeNext(parsed.data.next);
   const plan = parsed.data.plan;
+  const couponInput = (parsed.data.coupon ?? "").trim();
+
+  const baseAmountIdr = planPriceIdr(plan);
+  let amountIdr = baseAmountIdr;
+  let couponMeta: any = null;
+  if (couponInput) {
+    const couponRes = await validateCouponCode(couponInput);
+    if (couponRes.ok && isCouponEligibleForPlan(couponRes.coupon, plan)) {
+      const { discountIdr, label } = formatDiscountLineIdr(couponRes.coupon, baseAmountIdr);
+      amountIdr = Math.max(0, baseAmountIdr - discountIdr);
+      couponMeta = { code: couponRes.normalizedCode, label, discountIdr, baseAmountIdr };
+    }
+  }
 
   const active = await hasActiveSubscription(userId);
   if (active) {
@@ -51,7 +66,6 @@ export async function POST(req: Request) {
   }
 
   const orderId = `SRN-PAY-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
-  const amountIdr = planPriceIdr(plan);
 
   await prisma.payment.create({
     data: {
@@ -60,9 +74,32 @@ export async function POST(req: Request) {
       orderId,
       amountIdr,
       status: "PENDING",
-      rawPayload: { plan, next } as any,
+      rawPayload: { plan, next, coupon: couponMeta } as any,
     },
   });
+
+  // Coupon made this order free (e.g. SERENFRIENDS 100% off). Activate without payment.
+  if (amountIdr <= 0) {
+    const startsAt = new Date();
+    const expiresAt = new Date(Date.now() + planDurationDays(plan) * 24 * 60 * 60 * 1000);
+    await prisma.subscription.create({
+      data: {
+        userId,
+        plan: planToDb(plan) as any,
+        status: "ACTIVE",
+        startsAt,
+        expiresAt,
+        renewAt: expiresAt,
+        provider: "MIDTRANS",
+        providerRef: orderId,
+      },
+    });
+    await prisma.payment.update({
+      where: { orderId },
+      data: { status: "SUCCEEDED", rawPayload: { plan, next, coupon: couponMeta, free: true } as any },
+    });
+    return NextResponse.json({ ok: true, redirectUrl: next, free: true });
+  }
 
   // Provider switch: keep existing frontend flow but route to Xendit when configured.
   // NOTE: Payment.provider enum currently only has MIDTRANS; we track actual provider in rawPayload until schema migration.
