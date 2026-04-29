@@ -1,6 +1,6 @@
-/* Explicit file import avoids Turbopack resolving the `tailwindcss` package from a parent folder. */
-@import "../../node_modules/tailwindcss/index.css";
-/* Direct `index.css` import does not auto-discover templates — scan all app source for utilities. */
+@import "tailwindcss";
+
+/* Tailwind v4: explicitly declare source globs for utility discovery. */
 @source "../**/*.{js,ts,jsx,tsx}";
 
 :root {
