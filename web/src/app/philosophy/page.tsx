@@ -3,13 +3,14 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNavbar } from "@/components/SiteNavbar";
 import { getDictionary } from "@/i18n/getDictionary";
 import type { Metadata } from "next";
+import { siteOgForPath } from "@/lib/marketingOg";
 
 export const metadata: Metadata = {
   title: "Philosophy",
   description:
     "A calmer, clinical approach to skin clarity—AI-assisted assessment with dermatologist review and routines built to be followed.",
   alternates: { canonical: "/philosophy" },
-  openGraph: { url: "/philosophy" },
+  ...siteOgForPath("/philosophy"),
 };
 
 export default async function PhilosophyPage() {

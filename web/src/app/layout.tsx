@@ -36,14 +36,12 @@ export const metadata: Metadata = {
     title: "Seren — clinical skin analysis",
     description:
       "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
-    images: [{ url: "/og", width: 1200, height: 630, alt: "Seren" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Seren — clinical skin analysis",
     description:
       "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
-    images: ["/og"],
   },
   robots: {
     index: true,

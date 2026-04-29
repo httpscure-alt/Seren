@@ -3,13 +3,14 @@ import { getDictionary } from "@/i18n/getDictionary";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNavbar } from "@/components/SiteNavbar";
 import type { Metadata } from "next";
+import { siteOgForPath } from "@/lib/marketingOg";
 
 export const metadata: Metadata = {
   title: "Seren — clinical skin analysis",
   description:
     "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
   alternates: { canonical: "/" },
-  openGraph: { url: "/" },
+  ...siteOgForPath("/"),
 };
 
 export default async function Home() {

@@ -6,13 +6,14 @@ import {
 } from "@/components/LegalFrameworkLayout";
 import { getDictionary } from "@/i18n/getDictionary";
 import type { Metadata } from "next";
+import { siteOgForPath } from "@/lib/marketingOg";
 
 export const metadata: Metadata = {
   title: "Privacy policy",
   description:
     "How Seren collects, uses, and protects your account, consultation details, and clinical photos.",
   alternates: { canonical: "/privacy" },
-  openGraph: { url: "/privacy" },
+  ...siteOgForPath("/privacy"),
 };
 
 export default async function PrivacyPage() {

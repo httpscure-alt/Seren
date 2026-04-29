@@ -6,12 +6,13 @@ import {
 } from "@/components/LegalFrameworkLayout";
 import { getDictionary } from "@/i18n/getDictionary";
 import type { Metadata } from "next";
+import { siteOgForPath } from "@/lib/marketingOg";
 
 export const metadata: Metadata = {
   title: "Terms of service",
   description: "Terms governing the use of Seren and our clinical consultation experience.",
   alternates: { canonical: "/terms" },
-  openGraph: { url: "/terms" },
+  ...siteOgForPath("/terms"),
 };
 
 export default async function TermsPage() {

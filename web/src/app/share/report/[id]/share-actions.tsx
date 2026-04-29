@@ -3,18 +3,27 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-export function ShareActions({ publicId }: { publicId: string }) {
+export function ShareActions({
+  publicId,
+  viewerKind = "anon",
+}: {
+  publicId: string;
+  viewerKind?: "anon" | "user" | "staff";
+}) {
   const [copied, setCopied] = useState(false);
+
+  /** Same path as `generateMetadata` `openGraph.url` so scrapers and users hit one canonical share URL. */
   const shareUrl = useMemo(() => {
     if (typeof window === "undefined") return "";
-    return `${window.location.origin}/share/report/${publicId.toLowerCase()}`;
-  }, [publicId]);
+    const base = `${window.location.origin}/share/report/${publicId.toLowerCase()}`;
+    return viewerKind === "staff" ? `${base}?viewer=staff` : base;
+  }, [publicId, viewerKind]);
 
   async function copy() {
     try {
       const url = shareUrl || "";
       if (!url) return;
-      const message = `Baru dapet *Seren skin plan* — simple dan masuk akal. Mau liat share card-nya?\n${url}`;
+      const message = `${url}\nBaru dapet Seren skin plan - simple dan masuk akal. Mau liat share card-nya?`;
       await navigator.clipboard.writeText(message);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1200);
