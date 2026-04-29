@@ -1,6 +1,13 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 
+/** Directory containing this config + `package.json` + `node_modules/next` (`web/` on Vercel). */
+const packageRoot = path.resolve(__dirname);
+
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: packageRoot,
+  },
   allowedDevOrigins: ["192.168.68.109"],
   // Keep deploy tracing rooted at `web/` when a lockfile exists outside this folder.
   outputFileTracingRoot: __dirname,
@@ -11,9 +18,6 @@ const nextConfig: NextConfig = {
       { source: "/demos/email-mockups", destination: "/emails", permanent: false },
     ];
   },
-  // Do NOT set `turbopack.root` here: when it equals the app dir, CSS `@import "tailwindcss"`
-  // can resolve from the parent folder and fail with "Can't resolve 'tailwindcss' in '.../Seren'".
-  // See: https://github.com/vercel/next.js/issues/90307
   images: {
     remotePatterns: [
       {
