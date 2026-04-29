@@ -111,22 +111,22 @@ export default async function ShareReportPage({ params }: { params: Promise<Para
               <div className="px-7 sm:px-8 pb-7 sm:pb-8">
                 <div className="rounded-[2rem] bg-surface border border-outline-variant/12 overflow-hidden">
                   <div className="grid grid-cols-12 gap-0">
-                    <div className="col-span-12 sm:col-span-5 bg-surface-container-lowest border-b sm:border-b-0 sm:border-r border-outline-variant/10 p-4">
-                      <div className="relative w-full aspect-[1200/630] rounded-2xl overflow-hidden bg-surface">
-                        <Image
-                          src={heroImageSrc}
-                          alt="Seren share card"
-                          fill
-                          sizes="(max-width: 640px) 100vw, 240px"
-                          className="object-contain"
-                          priority
-                        />
+                    <div className="col-span-12 sm:col-span-5 bg-surface-container-lowest border-b sm:border-b-0 sm:border-r border-outline-variant/10 p-6 flex flex-col">
+                      <div className="flex-1 flex items-center justify-center">
+                        <div className="relative w-full max-w-[520px] aspect-[1200/630] rounded-2xl overflow-hidden bg-surface shadow-[0_18px_50px_-34px_rgba(47,51,48,0.45)]">
+                          <Image
+                            src={heroImageSrc}
+                            alt="Seren share card"
+                            fill
+                            sizes="(max-width: 640px) 100vw, 520px"
+                            className="object-contain"
+                            priority
+                          />
+                        </div>
                       </div>
 
-                      <div className="mt-4">
-                        <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-                          Share card preview
-                        </p>
+                      <div className="mt-5">
+                        <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">Share card preview</p>
                         <p className="mt-1 text-sm text-on-surface-variant font-headline tracking-tight">
                           Aura-only • Private by default
                         </p>
