@@ -69,7 +69,8 @@ export default async function ShareReportPage({ params }: { params: Promise<Para
     (caseData?.uploads ?? []).find((u) => String(u.kind).toLowerCase() === "primary") ??
     (caseData?.uploads ?? [])[0] ??
     null;
-  const heroImageSrc = primaryUpload?.url || "/doctors/dr-riris.png";
+  // This page is intentionally shareable: show the branded aura card (not a face) in the on-page preview too.
+  const heroImageSrc = "/og/share-thumb-concept-a.jpg";
   const content = (caseData?.report?.contentJson as any) || {};
   const aiDraft = content.aiDraft || {};
   const structured = aiDraft.structured || null;
@@ -113,23 +114,19 @@ export default async function ShareReportPage({ params }: { params: Promise<Para
                     <div className="col-span-12 sm:col-span-5 relative min-h-[220px] sm:min-h-[190px]">
                       <Image
                         src={heroImageSrc}
-                        alt={primaryUpload ? "Intake photo" : "Reviewing dermatologist"}
+                        alt="Seren share card"
                         fill
                         sizes="(max-width: 640px) 100vw, 240px"
                         className="object-cover"
                         priority
-                        unoptimized={
-                          typeof heroImageSrc === "string" &&
-                          (heroImageSrc.startsWith("data:") || heroImageSrc.startsWith("http"))
-                        }
                       />
                       <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.32))]" />
                       <div className="absolute left-4 bottom-4">
                         <p className="text-[10px] uppercase tracking-[0.22em] text-white/80">
-                          {primaryUpload ? "Your intake photo" : "Reviewing dermatologist"}
+                          Privacy-safe preview
                         </p>
                         <p className="text-sm text-white font-headline tracking-tight">
-                          {primaryUpload ? "Included on this web preview" : "Dr. Riris Asti Respati, SpDVE"}
+                          No faces • No diagnosis
                         </p>
                       </div>
                     </div>
