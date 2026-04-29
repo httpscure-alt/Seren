@@ -111,22 +111,24 @@ export default async function ShareReportPage({ params }: { params: Promise<Para
               <div className="px-7 sm:px-8 pb-7 sm:pb-8">
                 <div className="rounded-[2rem] bg-surface border border-outline-variant/12 overflow-hidden">
                   <div className="grid grid-cols-12 gap-0">
-                    <div className="col-span-12 sm:col-span-5 relative min-h-[220px] sm:min-h-[190px]">
-                      <Image
-                        src={heroImageSrc}
-                        alt="Seren share card"
-                        fill
-                        sizes="(max-width: 640px) 100vw, 240px"
-                        className="object-cover"
-                        priority
-                      />
-                      <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.32))]" />
-                      <div className="absolute left-4 bottom-4">
-                        <p className="text-[10px] uppercase tracking-[0.22em] text-white/80">
-                          Privacy-safe preview
+                    <div className="col-span-12 sm:col-span-5 bg-surface-container-lowest border-b sm:border-b-0 sm:border-r border-outline-variant/10 p-4">
+                      <div className="relative w-full aspect-[1200/630] rounded-2xl overflow-hidden bg-surface">
+                        <Image
+                          src={heroImageSrc}
+                          alt="Seren share card"
+                          fill
+                          sizes="(max-width: 640px) 100vw, 240px"
+                          className="object-contain"
+                          priority
+                        />
+                      </div>
+
+                      <div className="mt-4">
+                        <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
+                          Share card preview
                         </p>
-                        <p className="text-sm text-white font-headline tracking-tight">
-                          No faces • No diagnosis
+                        <p className="mt-1 text-sm text-on-surface-variant font-headline tracking-tight">
+                          Aura-only • Private by default
                         </p>
                       </div>
                     </div>
@@ -134,9 +136,9 @@ export default async function ShareReportPage({ params }: { params: Promise<Para
                     <div className="col-span-12 sm:col-span-7 p-5 sm:p-6 min-w-0">
                       <div className="flex items-start justify-between gap-4">
                         <div className="min-w-0">
-                          <p className="text-xs text-on-surface/60">Report</p>
+                          <p className="text-xs text-on-surface/60">Plan preview</p>
                           <p className="text-lg font-headline tracking-tight truncate">
-                            {caseData ? "Dermatologist-reviewed routine" : "Report preview"}
+                            {caseData ? "Day & Night routine overview" : "Routine overview"}
                           </p>
                         </div>
                         <span className="rounded-full bg-primary/10 border border-primary/15 text-primary px-3 py-1 text-[10px] uppercase tracking-[0.22em] shrink-0">
