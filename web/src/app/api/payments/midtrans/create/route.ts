@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/authOptions";
 import { prisma } from "@/lib/db";
 import { midtransAuthHeader, midtransConfig } from "@/lib/midtrans";
 import { hasActiveSubscription } from "@/lib/entitlement";
+import { xenditAuthHeader, xenditConfig, xenditIdempotencyKey } from "@/lib/xendit";
 
 const schema = z.object({
   plan: z.enum(["single", "journey"]),
@@ -62,6 +63,54 @@ export async function POST(req: Request) {
       rawPayload: { plan, next } as any,
     },
   });
+
+  // Provider switch: keep existing frontend flow but route to Xendit when configured.
+  // NOTE: Payment.provider enum currently only has MIDTRANS; we track actual provider in rawPayload until schema migration.
+  const paymentProvider = String(process.env.PAYMENT_PROVIDER || "MIDTRANS").toUpperCase();
+  if (paymentProvider === "XENDIT") {
+    const { secretKey } = xenditConfig();
+    if (!secretKey) {
+      return NextResponse.json({ ok: false, error: "Xendit is not configured." }, { status: 500 });
+    }
+
+    const origin = new URL(req.url).origin;
+    const body = {
+      external_id: orderId,
+      amount: amountIdr,
+      payer_email: session.user.email,
+      description: `Seren plan (${plan})`,
+      success_redirect_url: new URL(next, origin).toString(),
+      failure_redirect_url: new URL("/paywall/checkout?failed=1", origin).toString(),
+      currency: "IDR",
+    };
+
+    const res = await fetch("https://api.xendit.co/v2/invoices", {
+      method: "POST",
+      headers: {
+        Authorization: xenditAuthHeader(secretKey),
+        "Content-Type": "application/json",
+        "Idempotency-Key": xenditIdempotencyKey(orderId),
+      },
+      body: JSON.stringify(body),
+    });
+
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      await prisma.payment.update({
+        where: { orderId },
+        data: { status: "FAILED", rawPayload: { provider: "XENDIT", error: json } as any },
+      });
+      return NextResponse.json({ ok: false, error: "Xendit request failed." }, { status: 502 });
+    }
+
+    await prisma.payment.update({
+      where: { orderId },
+      data: { rawPayload: { provider: "XENDIT", invoice: json, plan, next } as any },
+    });
+
+    // Xendit Invoice returns `invoice_url` for hosted checkout.
+    return NextResponse.json({ ok: true, redirectUrl: json.invoice_url, orderId });
+  }
 
   const { serverKey, baseUrl } = midtransConfig();
   if (!serverKey) {
