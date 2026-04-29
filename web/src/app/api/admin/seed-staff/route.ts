@@ -11,9 +11,9 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 
 const STAFF = [
-  { email: "dermatologist@seren.local",  role: "PHYSICIAN" as const, name: "Dr. Riris Asti Respati" },
+  { email: "dermatologist@seren.local",  role: "PHYSICIAN" as const, name: "dr. Riris Asti Respati" },
   { email: "admin@seren.local",           role: "ADMIN"    as const, name: "Seren Admin" },
-  { email: "ririsastirespati@seren.id",  role: "PHYSICIAN" as const, name: "Dr. Riris Asti Respati, SpDVE" },
+  { email: "ririsastirespati@seren.id",  role: "PHYSICIAN" as const, name: "dr. Riris Asti Respati, SpDVE" },
   { email: "admin@seren.id",             role: "ADMIN"    as const, name: "Seren Super Admin" },
 ];
 

@@ -42,7 +42,7 @@ export type PhysicianAiDraftShape = {
   structured?: AiDraftLlmOutput;
 };
 
-export const DEFAULT_CLINICIAN_LABEL = "Dr. Riris Asti Respati, SpDVE";
+export const DEFAULT_CLINICIAN_LABEL = "dr. Riris Asti Respati, SpDVE";
 
 export function buildAiCaseInputFromJobInput(inputJson: unknown): AiCaseInput {
   const j = inputJson as Record<string, unknown> | null;

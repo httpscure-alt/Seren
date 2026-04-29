@@ -18,7 +18,7 @@ const NOTES: Note[] = [
   {
     id: "SRN-8821",
     date: "Sep 12, 2024 • 09:42",
-    clinician: "Dr. Riris Asti Respati, SpDVE",
+    clinician: "dr. Riris Asti Respati, SpDVE",
     reason: "Barrier stress + congestion",
     summary:
       "Findings consistent with mild inflammatory acne and compromised barrier. No red-flag symptoms reported in intake.",
@@ -160,7 +160,7 @@ export default function ClinicalNotesPage() {
                     Reviewing dermatologist
                   </p>
                   <p className="mt-2 font-headline tracking-tight">
-                    Dr. Riris Asti Respati, SpDVE
+                    dr. Riris Asti Respati, SpDVE
                   </p>
                 </div>
               </div>

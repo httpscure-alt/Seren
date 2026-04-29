@@ -7,10 +7,10 @@ const feed = [
     type: "today",
     eyebrow: "Today",
     title: "Your plan for today",
-    body: "Keep it simple. Barrier-first routine + sunscreen. If anything stings, stop the new product and message Dr. Riris.",
+    body: "Keep it simple. Barrier-first routine + sunscreen. If anything stings, stop the new product and message dr. Riris.",
     actions: [
       { label: "Do today’s routine", href: "/results/journey" },
-      { label: "Message Dr. Riris", href: "/results/inbox" },
+      { label: "Message dr. Riris", href: "/results/inbox" },
     ],
   },
   {

@@ -96,7 +96,7 @@ export function CareInboxClient() {
             Care inbox
           </p>
           <p className="mt-2 font-headline tracking-tight text-lg">
-            {thread?.title ?? "Dr. Riris"}
+            {thread?.title ?? "dr. Riris"}
           </p>
           <p className="mt-2 text-sm text-on-surface-variant leading-relaxed">
             Daily guidance + follow-ups live here. Send an update anytime.
@@ -143,7 +143,7 @@ export function CareInboxClient() {
                 >
                   <p className="whitespace-pre-wrap">{m.text}</p>
                   <p className="mt-2 text-[10px] uppercase tracking-[0.22em] text-on-surface/40">
-                    {isUser ? "You" : "Dr. Riris"}
+                    {isUser ? "You" : "dr. Riris"}
                   </p>
                 </div>
               </div>

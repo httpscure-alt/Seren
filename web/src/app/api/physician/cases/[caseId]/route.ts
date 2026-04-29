@@ -45,7 +45,7 @@ export async function PATCH(
 
   const nextContent = {
     ...current,
-    clinician: current?.clinician ?? { name: "Dr. Riris Asti Respati, SpDVE" },
+    clinician: current?.clinician ?? { name: "dr. Riris Asti Respati, SpDVE" },
     clinicianEdits,
   } as any;
 

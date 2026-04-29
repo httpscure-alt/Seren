@@ -82,7 +82,7 @@ export default function AnalyzingPage() {
                 },
                 {
                   title: "Physician verification",
-                  body: "Report being prepared by Dr. Riris Asti Respati, SpDVE",
+                  body: "Report being prepared by dr. Riris Asti Respati, SpDVE",
                   done: false,
                 },
               ].map((s) => (

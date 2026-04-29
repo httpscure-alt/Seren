@@ -85,7 +85,7 @@ function CardC() {
             <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45 mb-2">
               Reviewed by
             </p>
-            <p className="text-sm text-on-surface">Dr. Riris Asti Respati, SpDVE</p>
+            <p className="text-sm text-on-surface">dr. Riris Asti Respati, SpDVE</p>
             <p className="mt-4 text-xs text-on-surface/45">
               No clinical photos included in previews.
             </p>

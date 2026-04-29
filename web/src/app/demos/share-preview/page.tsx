@@ -23,7 +23,7 @@ function OgMockCard() {
             </p>
             <p className="mt-1 text-white text-xl font-headline tracking-tight">Seren skin report</p>
             <p className="mt-2 text-white/80 text-sm">
-              Dr. Riris Asti Respati, SpDVE
+              dr. Riris Asti Respati, SpDVE
             </p>
           </div>
         </div>

@@ -118,7 +118,7 @@ export default async function ResultsDashboardPage() {
                 Do today’s routine
               </p>
               <p className="mt-3 text-sm text-on-surface-variant leading-relaxed">
-                AM/PM checklist, then send a quick update to Dr. Riris. That’s the whole loop.
+                AM/PM checklist, then send a quick update to dr. Riris. That’s the whole loop.
               </p>
 
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -133,7 +133,7 @@ export default async function ResultsDashboardPage() {
                   className="rounded-full border border-outline-variant/25 bg-surface px-6 py-3 text-sm font-medium tracking-wide text-on-surface-variant hover:bg-surface-container-low transition-colors text-center"
                 >
                   <span className="inline-flex items-center justify-center gap-2">
-                    <span>Message Dr. Riris</span>
+                    <span>Message dr. Riris</span>
                     {hasNewInbox ? <span className="h-1.5 w-1.5 rounded-full bg-primary" /> : null}
                   </span>
                 </Link>
@@ -178,7 +178,7 @@ export default async function ResultsDashboardPage() {
                   const title = ready ? "Your plan is ready" : "We’re reviewing your case";
                   const subtitle = ready
                     ? "Routine + what to focus on this week"
-                    : "If anything changed, send a quick note to Dr. Riris";
+                    : "If anything changed, send a quick note to dr. Riris";
 
                   return (
                     <Link
@@ -258,7 +258,7 @@ export default async function ResultsDashboardPage() {
                         <p className="text-[10px] uppercase tracking-[0.22em] text-primary">
                           New • Inbox
                         </p>
-                        <p className="mt-2 font-headline tracking-tight text-lg">Message from Dr. Riris</p>
+                        <p className="mt-2 font-headline tracking-tight text-lg">Message from dr. Riris</p>
                       </div>
                     </div>
                     <p className="mt-5 font-headline tracking-tight text-lg">You have a new update</p>
@@ -293,7 +293,7 @@ export default async function ResultsDashboardPage() {
               <p className="text-[10px] uppercase tracking-[0.2em] text-on-surface/40 mb-4">Today</p>
               <h2 className="text-2xl font-headline font-light text-on-surface mb-2">Today’s check-in</h2>
               <p className="text-sm text-on-surface-variant leading-relaxed">
-                Do AM or PM, then send a quick update to Dr. Riris from your inbox.
+                Do AM or PM, then send a quick update to dr. Riris from your inbox.
               </p>
               <div className="mt-8 flex flex-col gap-3">
                 <Link

@@ -155,7 +155,7 @@ export default async function ReportPage({ params }: { params: Promise<Params> }
                 <span className="italic font-light text-primary/60">skin blueprint.</span>
               </h1>
               <p className="mt-7 text-on-surface-variant leading-[1.75] max-w-[60ch]">
-                Verified results from Dr. Riris Asti Respati based on your clinical photos and assessment.
+                Verified results from dr. Riris Asti Respati based on your clinical photos and assessment.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
                 <Link
@@ -180,7 +180,7 @@ export default async function ReportPage({ params }: { params: Promise<Params> }
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                   <div className="absolute left-6 right-6 bottom-6 rounded-3xl bg-surface/80 backdrop-blur-2xl border border-white/20 p-6 shadow-2xl">
                     <p className="text-[9px] uppercase tracking-[0.22em] text-on-surface/40 font-bold">Certified Clinician</p>
-                    <p className="mt-1 font-headline text-lg tracking-tight">Dr. Riris Asti Respati, SpDVE</p>
+                    <p className="mt-1 font-headline text-lg tracking-tight">dr. Riris Asti Respati, SpDVE</p>
                   </div>
                 </div>
               </div>

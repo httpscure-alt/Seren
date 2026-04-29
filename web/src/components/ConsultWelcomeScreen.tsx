@@ -122,7 +122,7 @@ export function ConsultWelcomeScreen() {
                   <div>
                     <p className="text-[10px] uppercase tracking-[0.28em] text-on-surface/45">Clinical lead</p>
                     <p className="mt-1 font-headline font-semibold tracking-tight text-on-surface">
-                      Dr. Riris Asti Respati, SpDVE
+                      dr. Riris Asti Respati, SpDVE
                     </p>
                   </div>
                 </div>

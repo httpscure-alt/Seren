@@ -41,7 +41,7 @@ export async function UiV2Philosophy({
       body:
         "“We combine clinical data with artistic intuition to treat the person, not just the symptom.”",
       left: "Clinical board",
-      right: "Dr. Riris Asti Respati, SpDVE",
+      right: "dr. Riris Asti Respati, SpDVE",
     },
     cta: "Start consultation",
     footer: { rights: "© Seren. All rights reserved.", privacy: "Privacy", terms: "Terms" },
@@ -66,7 +66,7 @@ export async function UiV2Philosophy({
       body:
         "“Data klinis + intuisi yang terlatih—untuk merawat orangnya, bukan hanya gejalanya.”",
       left: "Dewan klinis",
-      right: "Dr. Riris Asti Respati, SpDVE",
+      right: "dr. Riris Asti Respati, SpDVE",
     },
     cta: "Mulai konsultasi",
     footer: { rights: "© Seren. Semua hak dilindungi.", privacy: "Privasi", terms: "Ketentuan" },

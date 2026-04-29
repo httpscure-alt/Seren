@@ -72,7 +72,7 @@ export default function ResultsGalleryMock() {
                 Do today’s routine
               </p>
               <p className="mt-3 text-sm text-on-surface-variant leading-relaxed">
-                AM/PM checklist, then send a quick update to Dr. Riris. That’s the whole loop.
+                AM/PM checklist, then send a quick update to dr. Riris. That’s the whole loop.
               </p>
 
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -86,7 +86,7 @@ export default function ResultsGalleryMock() {
                   href="/results/inbox"
                   className="rounded-full border border-outline-variant/25 bg-surface px-6 py-3 text-sm font-medium tracking-wide text-on-surface-variant hover:bg-surface-container-low transition-colors text-center"
                 >
-                  Message Dr. Riris
+                  Message dr. Riris
                 </Link>
               </div>
             </div>

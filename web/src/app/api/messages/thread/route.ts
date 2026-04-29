@@ -26,7 +26,7 @@ async function ensureThread(userId: string) {
   if (existing) return existing.id;
 
   const created = await prisma.messageThread.create({
-    data: { userId, title: "Dr. Riris" },
+    data: { userId, title: "dr. Riris" },
     select: { id: true },
   });
 
@@ -36,7 +36,7 @@ async function ensureThread(userId: string) {
       threadId: created.id,
       role: "CLINICIAN",
       text:
-        "Hi — I’m Dr. Riris. I’ll guide your 30‑day routine here. Tap your AM/PM checklist, and if anything feels off, send me a note (you can attach a photo).",
+        "Hi — I’m dr. Riris. I’ll guide your 30‑day routine here. Tap your AM/PM checklist, and if anything feels off, send me a note (you can attach a photo).",
       meta: { seeded: true },
     },
   });

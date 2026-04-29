@@ -28,7 +28,7 @@ export async function POST(
   // ── Save report + update case status atomically ──────────────────────────
   const result = await prisma.$transaction(async (tx) => {
     const contentJson = {
-      clinician: { name: session.user?.name ?? "Dr. Riris Asti Respati, SpDVE" },
+      clinician: { name: session.user?.name ?? "dr. Riris Asti Respati, SpDVE" },
       clinicianEdits: {
         diagnosis: body.diagnosis ?? "",
         routine: body.routine ?? "",

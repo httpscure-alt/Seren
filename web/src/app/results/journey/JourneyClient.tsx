@@ -139,7 +139,7 @@ export function JourneyClient() {
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json?.error || "Failed to send update.");
-      setPostedToast("Update sent to Dr. Riris.");
+      setPostedToast("Update sent to dr. Riris.");
     } catch (e: any) {
       setError(String(e?.message ?? e));
     } finally {
@@ -266,7 +266,7 @@ export function JourneyClient() {
               Next step
             </p>
             <p className="mt-2 text-sm text-on-surface-variant leading-relaxed">
-              When you finish AM or PM, send a quick update to Dr. Riris. This keeps your care thread active and lets us adjust early if anything feels off.
+              When you finish AM or PM, send a quick update to dr. Riris. This keeps your care thread active and lets us adjust early if anything feels off.
             </p>
 
             <div className="mt-5 flex flex-col sm:flex-row gap-3">

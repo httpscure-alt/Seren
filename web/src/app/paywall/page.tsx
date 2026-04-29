@@ -21,6 +21,7 @@ export default async function PaywallPage({ searchParams }: Props) {
   const sp = (await searchParams) ?? {};
   const returnTo = safeReturnTo(sp.returnTo);
   const couponInput = sp.coupon ?? "";
+  const providerLabel = (process.env.PAYMENT_PROVIDER || "MIDTRANS").toUpperCase() === "XENDIT" ? "Xendit" : "Midtrans";
 
   const c = await cookies();
   const lang = normalizeLang(c.get(LANG_COOKIE)?.value);
@@ -44,14 +45,14 @@ export default async function PaywallPage({ searchParams }: Props) {
     promoApplied: isId ? "Kode promo diterapkan." : "Promo code applied.",
     promoInvalid: isId ? "Kode tidak valid." : "Invalid code.",
     disclaimer: isId
-      ? "Pembayaran diproses lewat Midtrans. Setelah berhasil, akses aktif otomatis."
-      : "Payments are processed via Midtrans. After success, access activates automatically.",
+      ? `Pembayaran diproses lewat ${providerLabel}. Setelah berhasil, akses aktif otomatis.`
+      : `Payments are processed via ${providerLabel}. After success, access activates automatically.`,
     back: isId ? "Kembali" : "Back",
-    continue: isId ? "Bayar dengan Midtrans" : "Pay with Midtrans",
+    continue: isId ? `Bayar dengan ${providerLabel}` : `Pay with ${providerLabel}`,
     recommended: isId ? "Direkomendasikan" : "Recommended",
     single: {
       title: isId ? "Laporan sekali" : "Single report",
-      price: "49k",
+      price: "Rp 49.000,-",
       desc: isId
         ? "Analisis dan rutinitas yang direview dokter kulit."
         : "Dermatologist-reviewed analysis and routine.",
@@ -60,7 +61,7 @@ export default async function PaywallPage({ searchParams }: Props) {
     },
     journey: {
       title: isId ? "Perjalanan kulit 30 hari" : "30-day skin journey",
-      price: "99k",
+      price: "Rp 99.000,-",
       desc: isId
         ? "Pendampingan berkelanjutan, evaluasi, dan penyesuaian rutinitas."
         : "Ongoing guidance, evaluation, and routine adjustments.",

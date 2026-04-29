@@ -165,7 +165,7 @@ export function buildAiDraftPrompt(args: {
   clinicianName?: string;
 }): PromptBundle {
   const { input, catalog } = args;
-  const clinicianName = args.clinicianName ?? "Dr. Riris Asti Respati, SpDVE";
+  const clinicianName = args.clinicianName ?? "dr. Riris Asti Respati, SpDVE";
 
   const system = [
     "You are Seren’s clinical drafting assistant.",

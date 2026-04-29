@@ -28,7 +28,7 @@ export default async function InboxPage() {
             Inbox
           </p>
           <h1 className="font-headline tracking-[-0.03em] leading-[1.0] text-3xl sm:text-4xl">
-            Dr. Riris
+            dr. Riris
           </h1>
           <p className="mt-5 text-on-surface-variant leading-relaxed">
             Send updates anytime. If something feels off, attach a photo and mention what changed.

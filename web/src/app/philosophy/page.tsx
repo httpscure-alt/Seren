@@ -115,7 +115,7 @@ export default async function PhilosophyPage() {
                 <div className="mt-7 h-px w-full bg-outline-variant/15" />
                 <p className="mt-6 text-xs text-on-surface/55 leading-relaxed">
                   {chip.clinicalBoard}:{" "}
-                  <span className="text-on-surface/70">Dr. Riris Asti Respati, SpDVE</span>
+                  <span className="text-on-surface/70">dr. Riris Asti Respati, SpDVE</span>
                 </p>
               </div>
             </aside>

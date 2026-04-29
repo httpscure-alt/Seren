@@ -148,7 +148,7 @@ function ShareableReportCard() {
                   Reviewing dermatologist
                 </p>
                 <p className="text-sm text-white font-headline tracking-tight">
-                  Dr. Riris Asti Respati, SpDVE
+                  dr. Riris Asti Respati, SpDVE
                 </p>
               </div>
             </div>

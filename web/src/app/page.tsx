@@ -4,6 +4,8 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNavbar } from "@/components/SiteNavbar";
 import type { Metadata } from "next";
 import { siteOgForPath } from "@/lib/marketingOg";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/authOptions";
 
 export const metadata: Metadata = {
   title: "Seren — clinical skin analysis",
@@ -15,6 +17,13 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const { dict } = await getDictionary();
+  const session = await getServerSession(authOptions);
+  const isSignedIn = !!session?.user?.email;
+
+  // CTA: always land on the paywall plan picker. Signed-out users are routed through auth first.
+  const paywallTarget = `/paywall?returnTo=${encodeURIComponent("/consult/welcome")}`;
+  const paywallHref = isSignedIn ? paywallTarget : `/auth?returnTo=${encodeURIComponent(paywallTarget)}`;
+
   const pricingCtaBase =
     "mt-10 inline-flex h-12 box-border items-center justify-center whitespace-nowrap rounded-full px-8 text-sm font-medium tracking-wide leading-none transition";
   const trust = [
@@ -207,12 +216,12 @@ export default async function Home() {
               <p className="text-xs uppercase tracking-[0.22em] text-on-surface/45 mb-6">
                 {dict.landing.pricingSingleTitle}
               </p>
-              <p className="text-5xl font-headline tracking-tighter">49k</p>
+              <p className="text-4xl sm:text-5xl font-headline tracking-tighter">Rp 49.000,-</p>
               <p className="text-on-surface-variant mt-3 leading-relaxed text-[0.95rem]">
                 {dict.landing.pricingSingleDesc}
               </p>
               <a
-                href="/consult/welcome"
+                href={paywallHref}
                 className={`${pricingCtaBase} border border-outline-variant/25 bg-surface text-on-surface hover:bg-surface-container-low`}
               >
                 {dict.landing.pricingSingleCta}
@@ -225,12 +234,12 @@ export default async function Home() {
               <p className="text-xs uppercase tracking-[0.22em] text-on-surface/45 mb-6">
                 {dict.landing.pricingJourneyTitle}
               </p>
-              <p className="text-5xl font-headline tracking-tighter">99k</p>
+              <p className="text-4xl sm:text-5xl font-headline tracking-tighter">Rp 99.000,-</p>
               <p className="text-on-surface-variant mt-3 leading-relaxed text-[0.95rem]">
                 {dict.landing.pricingJourneyDesc}
               </p>
               <a
-                href="/consult/welcome"
+                href={paywallHref}
                 className={`${pricingCtaBase} btn-gradient border border-transparent text-on-primary hover:brightness-[1.03]`}
               >
                 {dict.landing.pricingJourneyCta}
