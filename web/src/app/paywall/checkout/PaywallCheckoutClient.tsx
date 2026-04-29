@@ -10,6 +10,11 @@ export function PaywallCheckoutClient() {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
+  const providerLabel =
+    (process.env.NEXT_PUBLIC_PAYMENT_PROVIDER || "").toUpperCase() === "XENDIT"
+      ? "Xendit"
+      : "Midtrans";
+
   const plan = (sp.get("plan") ?? "journey") as "single" | "journey";
   const next = sp.get("next") ?? "/results";
 
@@ -51,9 +56,9 @@ export function PaywallCheckoutClient() {
           <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45 mb-4">
             Secure checkout
           </p>
-          <h1 className="font-headline tracking-tight text-2xl">Connecting to Midtrans…</h1>
+          <h1 className="font-headline tracking-tight text-2xl">Connecting to {providerLabel}…</h1>
           <p className="mt-3 text-sm text-on-surface-variant leading-relaxed">
-            We’ll open Midtrans to complete your payment. If nothing happens, tap below.
+            We’ll open {providerLabel} to complete your payment. If nothing happens, tap below.
           </p>
           <AsyncButton
             type="button"

@@ -12,8 +12,12 @@ function planDurationDays(plan: "SINGLE" | "JOURNEY_30D") {
 
 export async function POST(req: Request) {
   const { webhookToken } = xenditConfig();
-  const token = req.headers.get("x-callback-token") || "";
-  if (!webhookToken || token !== webhookToken) {
+  const token =
+    (req.headers.get("x-callback-token") ||
+      req.headers.get("X-CALLBACK-TOKEN") ||
+      req.headers.get("x-callback-token".toUpperCase()) ||
+      "").trim();
+  if (!webhookToken || token !== webhookToken.trim()) {
     return NextResponse.json({ ok: false, error: "Invalid webhook token." }, { status: 401 });
   }
 
