@@ -20,14 +20,31 @@ export async function SiteFooter() {
               © {new Date().getFullYear()} Seren. {dict.footer.rights}
             </span>
             <div className="rounded-2xl bg-surface-container-lowest border border-outline-variant/10 p-5 text-on-surface/55">
-              <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">Business information</p>
+              <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">Contact us</p>
               <p className="mt-2 leading-relaxed">
-                <span className="text-on-surface/60">Address:</span> {businessAddress}
+                <span className="text-on-surface/60">Phone:</span>{" "}
+                {contactPhone ? (
+                  <a
+                    className="text-on-surface/70 hover:text-primary transition-colors"
+                    href={`tel:${contactPhone.replace(/\s+/g, "")}`}
+                  >
+                    {contactPhone}
+                  </a>
+                ) : (
+                  "Set NEXT_PUBLIC_CONTACT_PHONE"
+                )}
               </p>
               <p className="mt-2 leading-relaxed">
-                <span className="text-on-surface/60">Contact:</span>{" "}
-                {contactPhone ? `Phone ${contactPhone}` : "Phone (set NEXT_PUBLIC_CONTACT_PHONE)"} •{" "}
-                {contactEmail}
+                <span className="text-on-surface/60">Email:</span>{" "}
+                <a
+                  className="text-on-surface/70 hover:text-primary transition-colors"
+                  href={`mailto:${contactEmail}`}
+                >
+                  {contactEmail}
+                </a>
+              </p>
+              <p className="mt-2 leading-relaxed">
+                <span className="text-on-surface/60">Address:</span> {businessAddress}
               </p>
             </div>
           </div>
