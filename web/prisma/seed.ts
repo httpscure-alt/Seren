@@ -78,6 +78,7 @@ async function main() {
 
   // Payment Gateway Test Accounts
   await upsertStaff(prisma, "duitku_test@seren.id", "password123", Role.USER, "Duitku Reviewer");
+  await upsertStaff(prisma, "httpscure@gmail.com", "12345678", Role.USER, "Xendit Reviewer");
 
   // Friends & family invite coupon (Option B) — used at signup to auto-grant access.
   await prisma.coupon.upsert({
