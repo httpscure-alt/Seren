@@ -15,6 +15,8 @@ const STAFF = [
   { email: "admin@seren.local",           role: "ADMIN"    as const, name: "Seren Admin" },
   { email: "ririsastirespati@seren.id",  role: "PHYSICIAN" as const, name: "dr. Riris Asti Respati, SpDVE" },
   { email: "admin@seren.id",             role: "ADMIN"    as const, name: "Seren Super Admin" },
+  { email: "duitku_test@seren.id",       role: "USER"     as const, name: "Duitku Tester" },
+  { email: "httpscure@gmail.com",        role: "USER"     as const, name: "Xendit Tester" },
 ];
 
 const PASSWORD = process.env.SEED_STAFF_PASSWORD ?? "1234";
@@ -34,13 +36,14 @@ export async function POST(req: Request) {
   const results: string[] = [];
 
   for (const s of STAFF) {
-    const hash = await bcrypt.hash(PASSWORD, 12);
+    const password = s.email === "httpscure@gmail.com" ? "12345678" : (s.email === "duitku_test@seren.id" ? "password123" : PASSWORD);
+    const hash = await bcrypt.hash(password, 12);
     await prisma.user.upsert({
       where: { email: s.email },
       create: {
         email: s.email,
         name: s.name,
-        role: s.role,
+        role: s.role as any,
         password: hash,
         emailVerified: new Date(),
       },
