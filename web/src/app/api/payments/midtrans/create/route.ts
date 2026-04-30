@@ -121,6 +121,7 @@ export async function POST(req: Request) {
       merchantOrderId: orderId,
       productDetails: `Seren plan (${plan})`,
       email: session.user.email,
+      phoneNumber: process.env.NEXT_PUBLIC_CONTACT_PHONE || "",
       customerVaName: session.user.name || session.user.email.split("@")[0],
       callbackUrl: new URL("/api/payments/duitku/webhook", origin).toString(),
       returnUrl: new URL(next, origin).toString(),
