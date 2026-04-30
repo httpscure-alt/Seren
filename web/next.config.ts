@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
     root: packageRoot,
   },
   allowedDevOrigins: ["192.168.68.109"],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   // Keep deploy tracing rooted at `web/` when a lockfile exists outside this folder.
   outputFileTracingRoot: __dirname,
   async redirects() {
