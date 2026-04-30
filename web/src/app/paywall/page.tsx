@@ -9,7 +9,7 @@ import {
   validateCouponCode,
 } from "@/lib/promotions";
 
-type Props = { searchParams?: Promise<{ returnTo?: string; coupon?: string }> };
+type Props = { searchParams?: Promise<{ returnTo?: string; coupon?: string; provider?: string }> };
 
 function safeReturnTo(maybePath: string | undefined) {
   if (!maybePath) return "/report/srn-8821";
@@ -21,8 +21,10 @@ export default async function PaywallPage({ searchParams }: Props) {
   const sp = (await searchParams) ?? {};
   const returnTo = safeReturnTo(sp.returnTo);
   const couponInput = sp.coupon ?? "";
-  const paymentProvider = (process.env.PAYMENT_PROVIDER || "").toUpperCase();
-  const providerLabel = paymentProvider === "XENDIT" ? "Xendit" : paymentProvider === "DUITKU" ? "Duitku" : "Midtrans";
+  const providerOverride = sp.provider?.toUpperCase();
+
+  const activeProvider = providerOverride || (process.env.PAYMENT_PROVIDER || "").toUpperCase();
+  const providerLabel = activeProvider === "XENDIT" ? "Xendit" : activeProvider === "DUITKU" ? "Duitku" : "Midtrans";
 
   const c = await cookies();
   const lang = normalizeLang(c.get(LANG_COOKIE)?.value);
@@ -76,6 +78,7 @@ export default async function PaywallPage({ searchParams }: Props) {
     params.set("plan", plan);
     params.set("next", returnTo);
     if (couponResult?.ok) params.set("coupon", couponResult.normalizedCode);
+    if (providerOverride) params.set("provider", providerOverride);
     return `/paywall/checkout?${params.toString()}`;
   };
 

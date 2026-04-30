@@ -12,6 +12,7 @@ const schema = z.object({
   plan: z.enum(["single", "journey"]),
   next: z.string().min(1),
   coupon: z.string().optional(),
+  provider: z.string().optional(),
 });
 
 function safeNext(maybePath: string) {
@@ -103,7 +104,7 @@ export async function POST(req: Request) {
 
   // Provider switch: keep existing frontend flow but route to Xendit when configured.
   // NOTE: Payment.provider enum currently only has MIDTRANS; we track actual provider in rawPayload until schema migration.
-  const paymentProvider = String(process.env.PAYMENT_PROVIDER || "MIDTRANS").toUpperCase();
+  const paymentProvider = (parsed.data.provider || process.env.PAYMENT_PROVIDER || "MIDTRANS").toUpperCase();
 
   if (paymentProvider === "DUITKU") {
     const { merchantCode, apiKey, baseUrl } = require("@/lib/duitku").duitkuConfig();

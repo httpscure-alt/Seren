@@ -10,19 +10,20 @@ export function PaywallCheckoutClient() {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
-  const paymentProvider = (process.env.NEXT_PUBLIC_PAYMENT_PROVIDER || "").toUpperCase();
-  const providerLabel =
-    paymentProvider === "XENDIT"
-      ? "Xendit"
-      : paymentProvider === "DUITKU"
-      ? "Duitku"
-      : "Midtrans";
-
   const plan = (sp.get("plan") ?? "journey") as "single" | "journey";
   const next = sp.get("next") ?? "/results";
   const coupon = sp.get("coupon") ?? "";
+  const providerOverride = sp.get("provider")?.toUpperCase();
 
-  const payload = useMemo(() => ({ plan, next, coupon }), [plan, next, coupon]);
+  const activeProvider = providerOverride || (process.env.NEXT_PUBLIC_PAYMENT_PROVIDER || "").toUpperCase();
+  const providerLabel =
+    activeProvider === "XENDIT"
+      ? "Xendit"
+      : activeProvider === "DUITKU"
+      ? "Duitku"
+      : "Midtrans";
+
+  const payload = useMemo(() => ({ plan, next, coupon, provider: providerOverride }), [plan, next, coupon, providerOverride]);
 
   useEffect(() => {
     (async () => {
