@@ -122,6 +122,7 @@ export async function POST(req: Request) {
       productDetails: `Seren plan (${plan})`,
       email: session.user.email,
       phoneNumber: process.env.NEXT_PUBLIC_CONTACT_PHONE || "",
+      paymentMethod: "", // Empty string often triggers the selection page in some Duitku versions, or we might need a specific code.
       customerVaName: session.user.name || session.user.email.split("@")[0],
       callbackUrl: new URL("/api/payments/duitku/webhook", origin).toString(),
       returnUrl: new URL(next, origin).toString(),
