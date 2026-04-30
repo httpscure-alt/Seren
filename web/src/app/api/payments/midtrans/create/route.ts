@@ -139,7 +139,8 @@ export async function POST(req: Request) {
         where: { orderId },
         data: { status: "FAILED", rawPayload: { provider: "DUITKU", error: json } as any },
       });
-      return NextResponse.json({ ok: false, error: "Duitku request failed." }, { status: 502 });
+      const errMsg = json?.statusMessage || "Duitku request failed.";
+      return NextResponse.json({ ok: false, error: errMsg }, { status: 502 });
     }
 
     await prisma.payment.update({
