@@ -5,7 +5,7 @@ export async function SiteFooter() {
   const { dict } = await getDictionary();
   const businessAddress =
     "Jl Puter 5 blok ed 5 no 14, Pondok Aren, Pondok Aren, Tangerang Selatan, Banten, 15224, ID";
-  const contactPhone = process.env.NEXT_PUBLIC_CONTACT_PHONE?.trim() || "";
+  const contactPhone = process.env.NEXT_PUBLIC_CONTACT_PHONE?.trim() || "081112345678";
   const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || "support@seren.id";
   const footerLinks = [
     { href: "/privacy", label: dict.footer.privacy },

@@ -104,6 +104,51 @@ export async function POST(req: Request) {
   // Provider switch: keep existing frontend flow but route to Xendit when configured.
   // NOTE: Payment.provider enum currently only has MIDTRANS; we track actual provider in rawPayload until schema migration.
   const paymentProvider = String(process.env.PAYMENT_PROVIDER || "MIDTRANS").toUpperCase();
+
+  if (paymentProvider === "DUITKU") {
+    const { merchantCode, apiKey, baseUrl } = require("@/lib/duitku").duitkuConfig();
+    const { generateDuitkuSignature } = require("@/lib/duitku");
+    if (!merchantCode || !apiKey) {
+      return NextResponse.json({ ok: false, error: "Duitku is not configured." }, { status: 500 });
+    }
+
+    const origin = new URL(req.url).origin;
+    const signature = generateDuitkuSignature(orderId, amountIdr, apiKey, merchantCode);
+    const body = {
+      merchantCode,
+      paymentAmount: amountIdr,
+      merchantOrderId: orderId,
+      productDetails: `Seren plan (${plan})`,
+      email: session.user.email,
+      customerVaName: session.user.name || session.user.email.split("@")[0],
+      callbackUrl: new URL("/api/payments/duitku/webhook", origin).toString(),
+      returnUrl: new URL(next, origin).toString(),
+      signature,
+    };
+
+    const res = await fetch(baseUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok || json.statusCode !== "00") {
+      await prisma.payment.update({
+        where: { orderId },
+        data: { status: "FAILED", rawPayload: { provider: "DUITKU", error: json } as any },
+      });
+      return NextResponse.json({ ok: false, error: "Duitku request failed." }, { status: 502 });
+    }
+
+    await prisma.payment.update({
+      where: { orderId },
+      data: { rawPayload: { provider: "DUITKU", invoice: json, plan, next } as any },
+    });
+
+    return NextResponse.json({ ok: true, redirectUrl: json.paymentUrl, orderId });
+  }
+
   if (paymentProvider === "XENDIT") {
     const { secretKey } = xenditConfig();
     if (!secretKey) {

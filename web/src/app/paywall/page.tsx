@@ -21,7 +21,8 @@ export default async function PaywallPage({ searchParams }: Props) {
   const sp = (await searchParams) ?? {};
   const returnTo = safeReturnTo(sp.returnTo);
   const couponInput = sp.coupon ?? "";
-  const providerLabel = (process.env.PAYMENT_PROVIDER || "MIDTRANS").toUpperCase() === "XENDIT" ? "Xendit" : "Midtrans";
+  const paymentProvider = (process.env.PAYMENT_PROVIDER || "").toUpperCase();
+  const providerLabel = paymentProvider === "XENDIT" ? "Xendit" : paymentProvider === "DUITKU" ? "Duitku" : "Midtrans";
 
   const c = await cookies();
   const lang = normalizeLang(c.get(LANG_COOKIE)?.value);
@@ -54,8 +55,8 @@ export default async function PaywallPage({ searchParams }: Props) {
       title: isId ? "Laporan sekali" : "Single report",
       price: "Rp 49.000,-",
       desc: isId
-        ? "Analisis dan rutinitas yang direview dokter kulit."
-        : "Dermatologist-reviewed analysis and routine.",
+        ? "Analisis kondisi kulit secara mendalam, rekomendasi produk yang disesuaikan, dan rutinitas perawatan yang direview langsung oleh dokter kulit bersertifikat."
+        : "In-depth skin condition analysis, personalized product recommendations, and a care routine reviewed directly by a board-certified dermatologist.",
       cta: isId ? "Buka laporan" : "Unlock report",
       plan: "single",
     },
@@ -63,8 +64,8 @@ export default async function PaywallPage({ searchParams }: Props) {
       title: isId ? "Perjalanan kulit 30 hari" : "30-day skin journey",
       price: "Rp 99.000,-",
       desc: isId
-        ? "Pendampingan berkelanjutan, evaluasi, dan penyesuaian rutinitas."
-        : "Ongoing guidance, evaluation, and routine adjustments.",
+        ? "Program pendampingan berkelanjutan selama 30 hari yang mencakup evaluasi berkala, tanya jawab dengan tim medis, dan penyesuaian rutinitas perawatan sesuai perkembangan kulit."
+        : "A 30-day continuous guidance program including periodic evaluations, Q&A with the medical team, and routine adjustments based on your skin's progress.",
       cta: isId ? "Mulai perjalanan" : "Start journey",
       plan: "journey",
     },

@@ -10,9 +10,12 @@ export function PaywallCheckoutClient() {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
+  const paymentProvider = (process.env.NEXT_PUBLIC_PAYMENT_PROVIDER || "").toUpperCase();
   const providerLabel =
-    (process.env.NEXT_PUBLIC_PAYMENT_PROVIDER || "").toUpperCase() === "XENDIT"
+    paymentProvider === "XENDIT"
       ? "Xendit"
+      : paymentProvider === "DUITKU"
+      ? "Duitku"
       : "Midtrans";
 
   const plan = (sp.get("plan") ?? "journey") as "single" | "journey";

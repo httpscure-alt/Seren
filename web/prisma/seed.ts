@@ -76,6 +76,9 @@ async function main() {
   await upsertStaff(prisma, PROD_PHYSICIAN_EMAIL, PHYSICIAN_PASS, Role.PHYSICIAN, "Dr. Riris Asti Respati, SpDVE");
   await upsertStaff(prisma, PROD_ADMIN_EMAIL,     ADMIN_PASS,     Role.ADMIN,     "Seren Super Admin");
 
+  // Payment Gateway Test Accounts
+  await upsertStaff(prisma, "duitku_test@seren.id", "password123", Role.USER, "Duitku Reviewer");
+
   // Friends & family invite coupon (Option B) — used at signup to auto-grant access.
   await prisma.coupon.upsert({
     where: { code: "SERENFRIENDS" },
