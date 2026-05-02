@@ -102,6 +102,7 @@ export function LegalFrameworkLayout({
   ctaLinkText,
   ctaHref,
   disclaimer,
+  navHrefForSectionId,
 }: {
   frameworkLabel: string;
   pageTitle: string;
@@ -113,6 +114,8 @@ export function LegalFrameworkLayout({
   ctaLinkText: string;
   ctaHref: string;
   disclaimer: string;
+  /** PSP-friendly paths (e.g. `/terms/payments`). Default: in-page `#id` anchors. */
+  navHrefForSectionId?: (sectionId: string) => string;
 }) {
   return (
     <main className="pt-24 sm:pt-28 pb-20 sm:pb-28 overflow-x-hidden bg-surface">
@@ -138,7 +141,7 @@ export function LegalFrameworkLayout({
               {sections.map((s) => (
                 <a
                   key={s.id}
-                  href={`#${s.id}`}
+                  href={navHrefForSectionId ? navHrefForSectionId(s.id) : `#${s.id}`}
                   className="block py-2 text-sm text-on-surface/55 hover:text-primary transition-colors tracking-tight border-b border-transparent hover:border-primary/20"
                 >
                   {s.navLabel}

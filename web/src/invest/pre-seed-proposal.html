@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SEREN | Pre-Seed Funding Proposal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#f0f9ff",
+                        "on-secondary-fixed-variant": "#575c5f",
+                        "on-primary-container": "#305767",
+                        "secondary-dim": "#4f5457",
+                        "tertiary-fixed-dim": "#c0d3ec",
+                        "surface-dim": "#d6dbd5",
+                        "error-container": "#fe8983",
+                        "on-error-container": "#752121",
+                        "error-dim": "#4e0309",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#fff7f6",
+                        "inverse-primary": "#c3ebff",
+                        "outline-variant": "#afb3ae",
+                        "surface-container-high": "#e6e9e4",
+                        "on-primary-fixed-variant": "#3a6171",
+                        "secondary-container": "#dfe3e7",
+                        "background": "#faf9f6",
+                        "secondary-fixed-dim": "#d1d5d8",
+                        "on-surface": "#2f3330",
+                        "on-tertiary": "#f7f9ff",
+                        "primary-fixed-dim": "#b2daed",
+                        "on-surface-variant": "#5c605c",
+                        "primary": "#3d6374",
+                        "on-primary-fixed": "#1b4453",
+                        "inverse-surface": "#0d0f0d",
+                        "error": "#9f403d",
+                        "surface-container-highest": "#e0e4de",
+                        "secondary-fixed": "#dfe3e7",
+                        "primary-dim": "#305767",
+                        "surface": "#faf9f6",
+                        "primary-container": "#c0e9fc",
+                        "on-secondary-container": "#4d5256",
+                        "surface-bright": "#faf9f6",
+                        "tertiary": "#4e6176",
+                        "surface-container-low": "#f4f4f0",
+                        "surface-container": "#edeeea",
+                        "secondary": "#5b6063",
+                        "tertiary-fixed": "#cee1fb",
+                        "on-tertiary-container": "#3f5266",
+                        "tertiary-dim": "#425569",
+                        "on-tertiary-fixed-variant": "#495b70",
+                        "on-background": "#2f3330",
+                        "outline": "#787c77",
+                        "tertiary-container": "#cee1fb",
+                        "on-secondary": "#f5f9fd",
+                        "primary-fixed": "#c0e9fc",
+                        "on-tertiary-fixed": "#2c3f53",
+                        "surface-tint": "#3d6374",
+                        "inverse-on-surface": "#9d9d9a",
+                        "on-secondary-fixed": "#3b4043",
+                        "surface-variant": "#e0e4de"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope", "sans-serif"],
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #faf9f6; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .editorial-shadow { box-shadow: 0 12px 40px -10px rgba(47, 51, 48, 0.05); }
+        .glass-header { backdrop-filter: blur(20px); background: rgba(250, 249, 246, 0.7); }
+        .primary-gradient { background: linear-gradient(135deg, #3d6374 0%, #305767 100%); }
+        .lowercase-header { text-transform: lowercase; letter-spacing: -0.02em; }
+    </style>
+</head>
+<body class="font-body text-on-surface antialiased overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="fixed top-0 left-0 right-0 z-50 glass-header">
+<div class="flex justify-center items-center w-full px-8 max-w-screen-xl mx-auto pt-8 pb-6">
+<div class="font-headline font-light tracking-[0.25em] text-[#3A3F42] text-3xl uppercase">
+                seren
+            </div>
+</div>
+</header>
+<main class="pt-32">
+<!-- 1. Hero Cover Section -->
+<section class="min-h-[80vh] flex flex-col items-center justify-center text-center px-6 relative overflow-hidden">
+<div class="max-w-4xl w-full z-10">
+<div class="mb-8 opacity-80">
+<span class="font-headline text-6xl md:text-8xl font-light text-primary tracking-tighter lowercase">seren</span>
+<div class="w-32 h-1 bg-primary/20 mx-auto mt-2 rounded-full"></div>
+</div>
+<h1 class="font-headline text-3xl md:text-5xl font-light mb-4 text-on-surface tracking-tight lowercase">pre-seed funding proposal</h1>
+<p class="font-headline text-lg md:text-xl text-primary font-medium tracking-wide uppercase opacity-70">the clinical atelier: scalable dermatology for the modern era</p>
+<div class="mt-16 flex justify-center gap-4">
+<button class="primary-gradient text-on-primary px-8 py-4 rounded-xl editorial-shadow hover:opacity-90 transition-all font-medium lowercase">investor relations</button>
+<button class="bg-secondary-container text-on-secondary-container px-8 py-4 rounded-xl hover:bg-surface-container-highest transition-all font-medium lowercase">view roadmap</button>
+</div>
+</div>
+<div class="absolute -bottom-24 -right-24 w-96 h-96 bg-primary-container/20 rounded-full blur-[100px]"></div>
+<div class="absolute top-48 -left-24 w-64 h-64 bg-tertiary-container/20 rounded-full blur-[80px]"></div>
+</section>
+<!-- 2. Overview: The Problem & Vision -->
+<section class="py-32 px-6 max-w-screen-xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+<div class="md:col-span-5 relative">
+<div class="rounded-xl overflow-hidden editorial-shadow">
+<img alt="Seren — product UI preview" class="editorial-shadow w-full h-[600px] object-cover object-top" src="/pitch/ui-showcase-hero.svg"/>
+</div>
+</div>
+<div class="md:col-span-7 md:pl-12">
+<span class="text-primary font-medium tracking-[0.2em] uppercase text-xs mb-4 block">the clinical atelier</span>
+<h2 class="font-headline text-4xl md:text-5xl font-light mb-8 text-on-surface lowercase leading-tight">the gap in the skin-care market.</h2>
+<div class="space-y-8 text-lg text-on-surface-variant leading-relaxed">
+<p>Dermatology today remains a luxury of access. With average wait times exceeding 4 months and localized clinical expertise concentrated in urban hubs, millions are left navigating contradictory advice from retail cosmetic counters or unvetted social trends.</p>
+<p class="border-l-4 border-primary/20 pl-8 py-2 italic font-light">"seren bridges the high-fidelity accuracy of clinical diagnosis with the frictionless delivery of a premium lifestyle app."</p>
+<p>Our vision is the <span class="text-primary font-semibold">Scalable Atelier</span>: a multimodal AI-driven platform that empowers dermatologists to handle 10x the case load while providing patients with instantaneous, high-precision skin health mapping and treatment protocols.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Funding Objective -->
+<section class="bg-surface-container-low py-32">
+<div class="max-w-screen-xl mx-auto px-6 text-center">
+<div class="mb-16">
+<h2 class="font-headline text-4xl font-light mb-4 lowercase">funding objective</h2>
+<p class="text-on-surface-variant max-w-2xl mx-auto uppercase tracking-widest text-sm">Target Raise: $50,000 — $100,000</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-surface-container-lowest p-12 rounded-xl editorial-shadow text-left border border-outline-variant/10">
+<span class="material-symbols-outlined text-primary text-4xl mb-6">verified</span>
+<h3 class="font-headline text-xl font-medium mb-4 lowercase">market validation</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Securing our first 1,000 paid cohorts to validate LTV/CAC ratios and referral loops.</p>
+</div>
+<div class="bg-surface-container-lowest p-12 rounded-xl editorial-shadow text-left border border-outline-variant/10">
+<span class="material-symbols-outlined text-primary text-4xl mb-6">database</span>
+<h3 class="font-headline text-xl font-medium mb-4 lowercase">ai optimization</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Refining our multimodal computer vision models for diverse skin tones and lighting conditions.</p>
+</div>
+<div class="bg-surface-container-lowest p-12 rounded-xl editorial-shadow text-left border border-outline-variant/10">
+<span class="material-symbols-outlined text-primary text-4xl mb-6">clinical_notes</span>
+<h3 class="font-headline text-xl font-medium mb-4 lowercase">clinical network</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Onboarding a vetted human-in-the-loop network of certified practitioners for oversight.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Use of Funds (Bento Grid) -->
+<section class="py-32 px-6 max-w-screen-xl mx-auto">
+<h2 class="font-headline text-4xl font-light mb-16 text-center lowercase">strategic allocation of capital.</h2>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- AI & Infra -->
+<div class="md:col-span-2 bg-primary text-on-primary p-12 rounded-xl flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-8">
+<span class="text-xs uppercase tracking-widest opacity-70">30-40%</span>
+<span class="material-symbols-outlined">memory</span>
+</div>
+<h3 class="font-headline text-2xl font-light mb-4 lowercase">ai &amp; infrastructure</h3>
+<ul class="space-y-2 opacity-80 text-sm">
+<li>• Multimodal image analysis pipeline</li>
+<li>• High-concurrency secure backend</li>
+<li>• Proprietary dataset labeling</li>
+</ul>
+</div>
+<div class="mt-12 h-1 bg-white/20 rounded-full w-full overflow-hidden">
+<div class="h-full bg-white w-2/5"></div>
+</div>
+</div>
+<!-- Derm Ops -->
+<div class="md:col-span-2 bg-surface-container-highest p-12 rounded-xl flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-8 text-on-surface">
+<span class="text-xs uppercase tracking-widest opacity-70">20-30%</span>
+<span class="material-symbols-outlined">groups</span>
+</div>
+<h3 class="font-headline text-2xl font-light mb-4 lowercase text-on-surface">dermatologist operations</h3>
+<ul class="space-y-2 text-on-surface-variant text-sm">
+<li>• Clinical advisory board sustainment</li>
+<li>• Human-in-the-loop review workflow</li>
+<li>• Professional liability coverage</li>
+</ul>
+</div>
+<div class="mt-12 h-1 bg-outline-variant/30 rounded-full w-full overflow-hidden">
+<div class="h-full bg-primary w-1/4"></div>
+</div>
+</div>
+<!-- Acquisition -->
+<div class="bg-surface-container p-8 rounded-xl">
+<span class="text-xs uppercase tracking-widest opacity-50 block mb-4">20-30%</span>
+<h3 class="font-headline text-lg font-medium mb-2 lowercase">user acquisition</h3>
+<p class="text-xs text-on-surface-variant">TikTok/IG micro-influencer strategy and paid experimentation.</p>
+</div>
+<!-- Product Dev -->
+<div class="bg-surface-container p-8 rounded-xl">
+<span class="text-xs uppercase tracking-widest opacity-50 block mb-4">10-20%</span>
+<h3 class="font-headline text-lg font-medium mb-2 lowercase">product development</h3>
+<p class="text-xs text-on-surface-variant">Bahasa localization and clinical-grade retention loops.</p>
+</div>
+<!-- Legal -->
+<div class="md:col-span-2 bg-tertiary-container text-on-tertiary-container p-8 rounded-xl">
+<div class="flex justify-between items-center">
+<div>
+<span class="text-xs uppercase tracking-widest opacity-50 block mb-2">5-10%</span>
+<h3 class="font-headline text-lg font-medium mb-1 lowercase">legal &amp; compliance</h3>
+<p class="text-xs">Global HIPAA/GDPR standards &amp; payment security.</p>
+</div>
+<span class="material-symbols-outlined text-3xl">gavel</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Execution Plan (Timeline) -->
+<section class="py-32 bg-white">
+<div class="max-w-screen-xl mx-auto px-6">
+<div class="flex flex-col md:flex-row gap-12 items-start">
+<div class="md:w-1/3 sticky top-32">
+<h2 class="font-headline text-4xl font-light mb-6 lowercase">execution roadmap.</h2>
+<p class="text-on-surface-variant leading-relaxed">Our 4-month sprint to primary validation and seed-round readiness.</p>
+<div class="mt-8 space-y-4">
+<div class="flex items-center gap-4 text-sm font-medium text-primary uppercase tracking-tighter">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                                month 01: alpha launch
+                            </div>
+<div class="flex items-center gap-4 text-sm font-medium text-on-surface-variant uppercase tracking-tighter opacity-40">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+                                month 02: scale &amp; refine
+                            </div>
+</div>
+</div>
+<div class="md:w-2/3 space-y-24">
+<!-- M1 -->
+<div class="relative pl-12 border-l border-primary/20">
+<div class="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-primary"></div>
+<span class="text-primary font-bold text-xs uppercase tracking-widest block mb-4">month 01</span>
+<h3 class="font-headline text-2xl font-light mb-6 lowercase">initial cohort &amp; system hardening</h3>
+<div class="grid grid-cols-2 gap-8">
+<div class="text-sm">
+<h4 class="font-semibold text-on-surface mb-2">product</h4>
+<p class="text-on-surface-variant">Release of v1.0 multimodal skin tracker for the first 500 waitlist users.</p>
+</div>
+<div class="text-sm">
+<h4 class="font-semibold text-on-surface mb-2">operations</h4>
+<p class="text-on-surface-variant">Live clinical review desk staffed by 2 board-certified dermatologists.</p>
+</div>
+</div>
+</div>
+<!-- M2-M3 -->
+<div class="relative pl-12 border-l border-primary/10">
+<div class="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-outline-variant"></div>
+<span class="text-on-surface-variant/50 font-bold text-xs uppercase tracking-widest block mb-4">month 02 - 03</span>
+<h3 class="font-headline text-2xl font-light mb-6 lowercase">growth &amp; localization</h3>
+<div class="grid grid-cols-2 gap-8">
+<div class="text-sm">
+<h4 class="font-semibold text-on-surface mb-2">acquisition</h4>
+<p class="text-on-surface-variant">Activation of Bahasa-speaking influencer network for SE Asia pilot.</p>
+</div>
+<div class="text-sm">
+<h4 class="font-semibold text-on-surface mb-2">engineering</h4>
+<p class="text-on-surface-variant">Integration of prescription payment rails and local delivery loops.</p>
+</div>
+</div>
+</div>
+<!-- M4 -->
+<div class="relative pl-12 border-l border-primary/5">
+<div class="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-outline-variant/50"></div>
+<span class="text-on-surface-variant/30 font-bold text-xs uppercase tracking-widest block mb-4">month 04</span>
+<h3 class="font-headline text-2xl font-light mb-6 lowercase">partnership &amp; seed prep</h3>
+<div class="grid grid-cols-2 gap-8">
+<div class="text-sm">
+<h4 class="font-semibold text-on-surface mb-2">strategic</h4>
+<p class="text-on-surface-variant">Initial B2B partnership with top-tier aesthetic clinics for O2O referrals.</p>
+</div>
+<div class="text-sm">
+<h4 class="font-semibold text-on-surface mb-2">capital</h4>
+<p class="text-on-surface-variant">Preparation of Seed data room focusing on retention and cohort margins.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. Expected Outcomes -->
+<section class="py-32 bg-primary-container/10">
+<div class="max-w-screen-xl mx-auto px-6">
+<div class="text-center mb-20">
+<h2 class="font-headline text-4xl font-light mb-4 lowercase">signals of success.</h2>
+<p class="text-on-surface-variant uppercase tracking-[0.15em] text-sm">KPI targets — year-one model (projected)</p>
+<p class="text-on-surface-variant/80 font-body text-sm max-w-2xl mx-auto mt-4 leading-relaxed">Not actual results. Inputs: paid + organic acquisition mix, Bahasa-led creatives, blended CAC methodology, blinded panel concordance study, post-review NPS.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="bg-white p-10 rounded-xl text-center editorial-shadow">
+<div class="text-3xl font-headline font-bold text-primary mb-2">31%</div>
+<div class="text-xs uppercase tracking-widest text-on-surface-variant">M1 cohort retention</div>
+</div>
+<div class="bg-white p-10 rounded-xl text-center editorial-shadow">
+<div class="text-3xl font-headline font-bold text-primary mb-2">~$21</div>
+<div class="text-xs uppercase tracking-widest text-on-surface-variant">Blended CAC USD (Y1)</div>
+</div>
+<div class="bg-white p-10 rounded-xl text-center editorial-shadow">
+<div class="text-3xl font-headline font-bold text-primary mb-2">91%</div>
+<div class="text-xs uppercase tracking-widest text-on-surface-variant">Primary concern derm agreement</div>
+</div>
+<div class="bg-white p-10 rounded-xl text-center editorial-shadow">
+<div class="text-3xl font-headline font-bold text-primary mb-2">+34</div>
+<div class="text-xs uppercase tracking-widest text-on-surface-variant">Net promoter score</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 7. Long-Term Vision -->
+<section class="relative py-48 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="vision" class="w-full h-full object-cover opacity-20" data-alt="A macro shot of premium skincare texture with subtle air bubbles and soft light reflections, presented in a high-end editorial style. The colors are dominated by warm whites, soft blues, and muted teals. The background feels expansive and serene, representing the depth and future potential of the clinical-atelier vision of seren." src="https://lh3.googleusercontent.com/aida/ADBb0ugMkZv3Cnu8ua4WTZc7RMkqbFgkuF-ormHWrgk7ztVe12IM_vh_VnYIRg9G5vSGVE2IAgixgmGbZq2yV6Z7mR_Q_LgewiFKxEHR9Up6Mg3rg-jxqPAyTEiIrR_PSBSvsoCCrwaplhNqtnlVIshyu61sGZ5j8v1uSrs7CDBLlADf9J_7La7B32aDlvkoJBMC6v92ndD6FaKbm5QyOZJHYhVMgq9lS3u2S0JyWXyoy9nFGT4uJL9rNx8K3xtrDvA_0KSS3wV72m3i"/>
+</div>
+<div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+<h2 class="font-headline text-5xl md:text-7xl font-light mb-12 lowercase leading-none">an ecosystem for the skin.</h2>
+<p class="text-xl md:text-2xl text-on-surface-variant font-light mb-12 leading-relaxed">
+                    beyond diagnostic validation, seren is building the <span class="text-primary italic">operating system for dermatology</span>. from direct-to-door pharmaceutical fulfillment to hyper-localized clinical referrals and personalized brand discovery.
+                </p>
+<div class="inline-flex items-center gap-6 group cursor-pointer">
+<span class="h-px w-24 bg-primary transition-all group-hover:w-32"></span>
+<span class="text-primary font-bold uppercase tracking-widest text-sm">join the revolution</span>
+<span class="material-symbols-outlined text-primary group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#faf9f6] w-full border-t border-[#3A3F42]/10 py-24">
+<div class="flex flex-col items-center text-center gap-8 w-full px-12 max-w-screen-md mx-auto">
+<div class="text-[10px] font-manrope font-medium tracking-[0.15em] uppercase leading-loose text-[#3A3F42]/40">
+                © 2024 SEREN. Designed for restoration.
+            </div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="text-[10px] font-manrope font-medium tracking-[0.15em] uppercase text-[#3A3F42]/40 hover:text-[#3d6475] transition-colors" href="#">Privacy Policy</a>
+<a class="text-[10px] font-manrope font-medium tracking-[0.15em] uppercase text-[#3A3F42]/40 hover:text-[#3d6475] transition-colors" href="#">Terms of Service</a>
+<a class="text-[10px] font-manrope font-medium tracking-[0.15em] uppercase text-[#3A3F42]/40 hover:text-[#3d6475] transition-colors" href="#">Unsubscribe</a>
+<a class="text-[10px] font-manrope font-medium tracking-[0.15em] uppercase text-[#3A3F42]/40 hover:text-[#3d6475] transition-colors" href="#">Support</a>
+</div>
+</div>
+</footer>
+</body></html>

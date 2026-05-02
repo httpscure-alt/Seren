@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 620" fill="none" role="img" aria-labelledby="tit">
+  <title id="tit">Seren product UI  illustrative</title>
+  <defs>
+    <linearGradient id="g-frame" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3d6374" stop-opacity=".9"/>
+      <stop offset="55%" stop-color="#c0e9fc"/>
+      <stop offset="100%" stop-color="#f6daa6"/>
+    </linearGradient>
+    <linearGradient id="g-surface" x1="48%" y1="12%" x2="60%" y2="88%">
+      <stop offset="0%" stop-color="#faf9f6"/>
+      <stop offset="100%" stop-color="#edeeea"/>
+    </linearGradient>
+    <radialGradient id="g-skin" cx="42%" cy="38%" r="55%">
+      <stop offset="0%" stop-color="#dfb48c"/>
+      <stop offset="45%" stop-color="#c9a089" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="#faf9f6" stop-opacity=".2"/>
+    </radialGradient>
+    <linearGradient id="g-bar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3d6374" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="#3d6374" stop-opacity=".2"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="620" rx="42" fill="url(#g-frame)" opacity=".92"/>
+  <rect x="5" y="5" width="390" height="610" rx="38" fill="url(#g-surface)"/>
+  <!-- masthead -->
+  <rect x="36" y="36" width="52" height="52" rx="16" fill="#dbe8ec" stroke="#3d6374" stroke-opacity=".2"/>
+  <circle cx="62" cy="62" r="18" fill="#305767"/>
+  <path d="M52 74c6 5 13 8 21 10" stroke="#c0e9fc" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+  <rect x="100" y="44" width="160" height="12" rx="4" fill="#305767" opacity=".35"/>
+  <rect x="100" y="64" width="120" height="8" rx="3" fill="#5c605c" opacity=".45"/>
+  <rect x="300" y="48" width="60" height="22" rx="11" fill="#c0e9fc" stroke="#3d6374" stroke-opacity=".35"/>
+  <!-- chips -->
+  <rect x="36" y="108" width="72" height="26" rx="13" stroke="#3d6374" stroke-opacity=".4" fill="#dfe3e7" opacity=".6"/>
+  <rect x="120" y="108" width="70" height="26" rx="13" stroke="#3d6374" stroke-opacity=".35" fill="#dfe3e7" opacity=".45"/>
+  <rect x="202" y="108" width="56" height="26" rx="13" stroke="#3d6374" stroke-opacity=".35" fill="#dfe3e7" opacity=".45"/>
+  <rect x="270" y="108" width="92" height="26" rx="13" stroke="#3d6374" stroke-opacity=".35" fill="#dfe3e7" opacity=".45"/>
+  <!-- analysis card -->
+  <rect x="28" y="156" width="344" height="260" rx="28" fill="#ffffff" opacity=".94" stroke="#afb3ae" stroke-opacity=".35"/>
+  <rect x="52" y="184" width="120" height="10" rx="3" fill="#3d6374" opacity=".4"/>
+  <rect x="52" y="206" width="220" height="18" rx="4" fill="#2f3330" opacity=".22"/>
+  <rect x="52" y="234" width="280" height="8" rx="3" fill="#5c605c" opacity=".35"/>
+  <rect x="52" y="254" width="260" height="8" rx="3" fill="#5c605c" opacity=".3"/>
+  <rect x="52" y="288" width="296" height="96" rx="22" fill="url(#g-skin)"/>
+  <rect x="68" y="302" width="264" height="4" rx="2" fill="#ffffff" opacity=".45"/>
+  <rect x="68" y="318" width="200" height="3" rx="1.5" fill="#3d6374" opacity=".15"/>
+  <!-- bars -->
+  <rect x="68" y="404" width="8" height="28" rx="3" fill="url(#g-bar)"/>
+  <rect x="86" y="388" width="8" height="44" rx="3" fill="url(#g-bar)" opacity=".85"/>
+  <rect x="104" y="396" width="8" height="36" rx="3" fill="url(#g-bar)" opacity=".75"/>
+  <rect x="122" y="380" width="8" height="52" rx="3" fill="url(#g-bar)" opacity=".95"/>
+  <rect x="140" y="392" width="8" height="40" rx="3" fill="url(#g-bar)" opacity=".8"/>
+  <rect x="158" y="372" width="8" height="60" rx="3" fill="url(#g-bar)"/>
+  <rect x="176" y="400" width="8" height="32" rx="3" fill="url(#g-bar)" opacity=".7"/>
+  <!-- review chip -->
+  <rect x="28" y="434" width="344" height="110" rx="24" fill="#faf9f6" stroke="#afb3ae" stroke-opacity=".3"/>
+  <circle cx="64" cy="481" r="22" fill="#dfe3e7"/>
+  <path d="M54 478l10 14 22-26" stroke="#3d6374" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="100" y="454" width="140" height="10" rx="3" fill="#3d6374" opacity=".4"/>
+  <rect x="100" y="474" width="240" height="8" rx="3" fill="#5c605c" opacity=".4"/>
+  <rect x="40" y="516" width="320" height="8" rx="4" fill="#afb3ae" opacity=".4"/>
+  <rect x="40" y="516" width="230" height="8" rx="4" fill="#3d6374"/>
+</svg>

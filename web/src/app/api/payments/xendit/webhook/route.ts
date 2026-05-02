@@ -10,6 +10,10 @@ function planDurationDays(plan: "SINGLE" | "JOURNEY_30D") {
   return plan === "SINGLE" ? 7 : 30;
 }
 
+export async function GET() {
+  return NextResponse.json({ ok: true });
+}
+
 export async function POST(req: Request) {
   const { webhookToken } = xenditConfig();
   const token =

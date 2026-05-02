@@ -6,6 +6,7 @@ import { prisma } from "@/lib/db";
 import { midtransAuthHeader, midtransConfig } from "@/lib/midtrans";
 import { hasActiveSubscription } from "@/lib/entitlement";
 import { xenditAuthHeader, xenditConfig, xenditIdempotencyKey } from "@/lib/xendit";
+import { dokuConfig, dokuRequestTimestamp, dokuSignedHeaders } from "@/lib/doku";
 import { formatDiscountLineIdr, isCouponEligibleForPlan, validateCouponCode } from "@/lib/promotions";
 
 const schema = z.object({
@@ -17,7 +18,14 @@ const schema = z.object({
 
 function safeNext(maybePath: string) {
   if (!maybePath.startsWith("/")) return "/results";
+  // Never send customers to API routes — Midtrans/DOKU "finish" is a browser GET.
+  if (maybePath.startsWith("/api")) return "/results";
   return maybePath;
+}
+
+/** Browsers bookmark or prefetch payment init; only POST creates a transaction. */
+export async function GET(req: Request) {
+  return NextResponse.redirect(new URL("/paywall", req.url));
 }
 
 function planToDb(plan: "single" | "journey") {
@@ -26,6 +34,14 @@ function planToDb(plan: "single" | "journey") {
 
 function planPriceIdr(plan: "single" | "journey") {
   return plan === "single" ? 49000 : 99000;
+}
+
+function amountOverrideIdr() {
+  const raw = (process.env.PAYMENT_FORCE_AMOUNT_IDR || "").trim();
+  if (!raw) return null;
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return Math.round(n);
 }
 
 function planDurationDays(plan: "single" | "journey") {
@@ -49,7 +65,8 @@ export async function POST(req: Request) {
   const plan = parsed.data.plan;
   const couponInput = (parsed.data.coupon ?? "").trim();
 
-  const baseAmountIdr = planPriceIdr(plan);
+  const forcedAmountIdr = amountOverrideIdr();
+  const baseAmountIdr = forcedAmountIdr ?? planPriceIdr(plan);
   let amountIdr = baseAmountIdr;
   let couponMeta: any = null;
   if (couponInput) {
@@ -199,6 +216,102 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, redirectUrl: json.invoice_url, orderId });
   }
 
+  if (paymentProvider === "DOKU") {
+    const { clientId, secretKey, baseUrl } = dokuConfig();
+    if (!clientId || !secretKey) {
+      return NextResponse.json({ ok: false, error: "DOKU is not configured." }, { status: 500 });
+    }
+
+    const requestTarget = "/checkout/v1/payment";
+    const requestId =
+      (globalThis.crypto as any)?.randomUUID?.() || `srn-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    const requestTimestamp = dokuRequestTimestamp();
+
+    // Keep request as close as possible to DOKU docs "Basic Request".
+    const body = {
+      order: { amount: amountIdr, invoice_number: orderId },
+      payment: { payment_due_date: 60 },
+    };
+
+    const bodyText = JSON.stringify(body);
+    const url = `${baseUrl}${requestTarget}`;
+
+    async function attempt(includeDigest: boolean) {
+      return await fetch(url, {
+        method: "POST",
+        headers: dokuSignedHeaders({
+          clientId,
+          secretKey,
+          requestId,
+          requestTimestamp,
+          requestTarget,
+          bodyText,
+          includeDigest,
+        }),
+        body: bodyText,
+      });
+    }
+
+    // Checkout docs show headers without Digest; try without Digest first, then fallback.
+    let res = await attempt(false);
+    if (!res.ok) {
+      const res2 = await attempt(true);
+      if (res2.ok) res = res2;
+    }
+
+    const text = await res.text();
+    const json = (() => {
+      try {
+        return JSON.parse(text || "{}");
+      } catch {
+        return { raw: text };
+      }
+    })();
+    if (!res.ok) {
+      console.error("[payments][doku] create failed", {
+        status: res.status,
+        requestId,
+        orderId,
+        body,
+        response: json,
+      });
+      await prisma.payment.update({
+        where: { orderId },
+        data: { status: "FAILED", rawPayload: { provider: "DOKU", error: json } as any },
+      });
+      const detail = typeof json === "object" ? JSON.stringify(json).slice(0, 900) : String(json).slice(0, 900);
+      const clientIdTag = clientId ? String(clientId).split("-")[0] : "missing";
+      const envTag = (process.env.DOKU_ENV || "").toLowerCase() === "production" ? "production" : "sandbox";
+      return NextResponse.json(
+        { ok: false, error: `DOKU request failed (${res.status}). env=${envTag} clientIdTag=${clientIdTag}. ${detail}` },
+        { status: 502 },
+      );
+    }
+
+    await prisma.payment.update({
+      where: { orderId },
+      data: { rawPayload: { provider: "DOKU", checkout: json, plan, next } as any },
+    });
+
+    const redirectUrl =
+      (json as any)?.payment?.url ||
+      (json as any)?.response?.payment?.url ||
+      (json as any)?.data?.payment?.url ||
+      (json as any)?.payment_url ||
+      (json as any)?.url;
+    if (!redirectUrl) {
+      console.error("[payments][doku] missing payment url", {
+        requestId,
+        orderId,
+        response: json,
+      });
+      const detail = typeof json === "object" ? JSON.stringify(json).slice(0, 900) : String(json).slice(0, 900);
+      return NextResponse.json({ ok: false, error: `DOKU response missing payment URL. ${detail}` }, { status: 502 });
+    }
+
+    return NextResponse.json({ ok: true, redirectUrl, orderId });
+  }
+
   const { serverKey, baseUrl } = midtransConfig();
   if (!serverKey) {
     // Dev fallback: activate subscription immediately (still time-bound) when Midtrans keys are not configured.
@@ -243,11 +356,32 @@ export async function POST(req: Request) {
 
   const json = await res.json().catch(() => ({}));
   if (!res.ok) {
+    const j = json as Record<string, unknown> & { error_messages?: unknown };
+    console.error("[payments][midtrans] create failed", {
+      httpStatus: res.status,
+      orderId,
+      body: json,
+    });
     await prisma.payment.update({
       where: { orderId },
       data: { status: "FAILED", rawPayload: json as any },
     });
-    return NextResponse.json({ ok: false, error: "Midtrans request failed." }, { status: 502 });
+    const msgs = Array.isArray(j?.error_messages) ? (j.error_messages as unknown[]).filter(Boolean).join("; ") : "";
+    const statusMsg = typeof j?.status_message === "string" ? j.status_message : "";
+    const detail =
+      msgs ||
+      statusMsg ||
+      (typeof json === "object" && json !== null ? JSON.stringify(json).slice(0, 900) : String(json ?? "").slice(0, 900));
+    return NextResponse.json(
+      {
+        ok: false,
+        error:
+          detail && String(detail).trim()
+            ? `Midtrans error (${res.status}): ${String(detail).trim()}`
+            : `Midtrans request failed (${res.status}).`,
+      },
+      { status: 502 },
+    );
   }
 
   await prisma.payment.update({

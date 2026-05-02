@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { duitkuConfig, verifyDuitkuWebhookSignature } from "@/lib/duitku";
 
+export async function GET() {
+  return NextResponse.json({ ok: true });
+}
+
 export async function POST(req: Request) {
   try {
     const text = await req.text();

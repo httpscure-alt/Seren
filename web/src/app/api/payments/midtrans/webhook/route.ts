@@ -22,6 +22,10 @@ function planDurationDays(plan: "SINGLE" | "JOURNEY_30D") {
   return plan === "SINGLE" ? 7 : 30;
 }
 
+export async function GET() {
+  return NextResponse.json({ ok: true });
+}
+
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
   if (!body) return NextResponse.json({ ok: false }, { status: 400 });

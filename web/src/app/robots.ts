@@ -26,7 +26,14 @@ export default function robots(): MetadataRoute.Robots {
   }
 
   return {
-    rules: [{ userAgent: "*", allow: "/" }],
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        // Confidential pitch / invest routes are also noindex in page metadata — extra belt for crawlers.
+        disallow: ["/pitch/", "/invest/"],
+      },
+    ],
     sitemap: `${base}/sitemap.xml`,
   };
 }

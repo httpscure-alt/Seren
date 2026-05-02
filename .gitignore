@@ -24,3 +24,7 @@ web/blob-report/
 web/playwright/.cache/
 .vercel
 .env*.local
+.env.vercel.prod
+
+# Accident: absolute path pasted into repo root
+/Users/

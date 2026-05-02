@@ -1,0 +1,54 @@
+/* Mirrors the visual deck HTML (pre-seed iframe) — scoped via .pitch-deck-root */
+.pitch-deck-root {
+  scroll-behavior: smooth;
+}
+
+.pitch-glass-header {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(250, 249, 246, 0.72);
+}
+
+.pitch-editorial-shadow {
+  box-shadow: 0 12px 40px -10px rgba(47, 51, 48, 0.06);
+}
+
+.pitch-primary-gradient {
+  background: linear-gradient(135deg, #3d6374 0%, #305767 100%);
+}
+
+@keyframes pitch-scan-slide {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  88% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(520%);
+    opacity: 0;
+  }
+}
+
+.pitch-scan-sweep {
+  animation: pitch-scan-slide 10s ease-in-out infinite;
+}
+
+.pitch-material-symbols {
+  font-family: "Material Symbols Outlined";
+  font-weight: 300;
+  font-style: normal;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+}

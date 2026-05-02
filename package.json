@@ -4,6 +4,8 @@
   "description": "Next.js app is in web/. Run these scripts from repo root without cd.",
   "scripts": {
     "dev": "npm run dev --prefix web",
+    "dev:fresh-network": "npm run dev:fresh-network --prefix web",
+    "dev:network": "npm run dev:network --prefix web",
     "build": "npm run build --prefix web",
     "start": "npm run start --prefix web",
     "db:seed": "npm run db:seed --prefix web"

@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { getDictionary } from "@/i18n/getDictionary";
+import { merchantPublicContact } from "@/lib/merchantPublicInfo";
 
-export async function SiteFooter() {
+export async function SiteFooter({ showContact = false }: { showContact?: boolean }) {
   const { dict } = await getDictionary();
-  const companyName = "PT Sene Kamayu Venture";
-  const businessAddress =
-    "Masjid Barkah, Manggarai Selatan, Tebet, Jakarta Selatan, DKI Jakarta";
-  const contactPhone = process.env.NEXT_PUBLIC_CONTACT_PHONE?.trim() || "+6285129786294";
-  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || "httpscure@gmail.com";
+  const c = merchantPublicContact();
+  const companyName = c.companyName;
+  const businessAddress = c.address;
+  const contactPhone = c.phoneDisplay;
+  const contactEmail = c.email;
   const footerLinks = [
     { href: "/privacy", label: dict.footer.privacy },
     { href: "/terms", label: dict.footer.terms },
@@ -20,34 +21,36 @@ export async function SiteFooter() {
             <span className="block">
               © {new Date().getFullYear()} {companyName}. {dict.footer.rights}
             </span>
-            <div className="rounded-2xl bg-surface-container-lowest border border-outline-variant/10 p-5 text-on-surface/55">
-              <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">Contact us</p>
-              <p className="mt-2 leading-relaxed">
-                <span className="text-on-surface/60">Phone:</span>{" "}
-                {contactPhone ? (
+            {showContact ? (
+              <div className="rounded-2xl bg-surface-container-lowest border border-outline-variant/10 p-5 text-on-surface/55">
+                <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">Contact us</p>
+                <p className="mt-2 leading-relaxed">
+                  <span className="text-on-surface/60">Phone:</span>{" "}
+                  {contactPhone ? (
+                    <a
+                      className="text-on-surface/70 hover:text-primary transition-colors"
+                      href={c.phoneHref}
+                    >
+                      {contactPhone}
+                    </a>
+                  ) : (
+                    "Set NEXT_PUBLIC_CONTACT_PHONE"
+                  )}
+                </p>
+                <p className="mt-2 leading-relaxed">
+                  <span className="text-on-surface/60">Email:</span>{" "}
                   <a
                     className="text-on-surface/70 hover:text-primary transition-colors"
-                    href={`tel:${contactPhone.replace(/\s+/g, "")}`}
+                    href={`mailto:${contactEmail}`}
                   >
-                    {contactPhone}
+                    {contactEmail}
                   </a>
-                ) : (
-                  "Set NEXT_PUBLIC_CONTACT_PHONE"
-                )}
-              </p>
-              <p className="mt-2 leading-relaxed">
-                <span className="text-on-surface/60">Email:</span>{" "}
-                <a
-                  className="text-on-surface/70 hover:text-primary transition-colors"
-                  href={`mailto:${contactEmail}`}
-                >
-                  {contactEmail}
-                </a>
-              </p>
-              <p className="mt-2 leading-relaxed">
-                <span className="text-on-surface/60">Address:</span> {businessAddress}
-              </p>
-            </div>
+                </p>
+                <p className="mt-2 leading-relaxed">
+                  <span className="text-on-surface/60">Address:</span> {businessAddress}
+                </p>
+              </div>
+            ) : null}
           </div>
 
           <div className="flex gap-8 uppercase tracking-[0.18em] text-[10px] sm:justify-end">

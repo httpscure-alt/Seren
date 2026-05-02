@@ -44,7 +44,16 @@ function add(name, value, target = "production") {
   const args = fs.existsSync(vercelBin)
     ? ["env", "add", name, target, "--value", String(value), "--yes", "--force"]
     : ["--yes", "vercel", "env", "add", name, target, "--value", String(value), "--yes", "--force"];
-  const r = spawnSync(cmd, args, { cwd: webRoot, stdio: "inherit", env: process.env });
+  const r = spawnSync(cmd, args, {
+    cwd: webRoot,
+    stdio: "inherit",
+    env: process.env,
+    // Guard against occasional CLI hangs (network/auth edge cases).
+    timeout: 90_000,
+  });
+  if (r.error?.name === "Error" && String(r.error?.message || "").includes("timed out")) {
+    throw new Error(`vercel env add ${name} timed out`);
+  }
   if (r.status !== 0) throw new Error(`vercel env add ${name} failed`);
   return true;
 }
@@ -85,8 +94,17 @@ if (!isLocalDb && db.length > 12) {
 }
 
 const optionalKeys = [
+  // Payments (provider switch + additional gateways)
+  "PAYMENT_PROVIDER",
+  "NEXT_PUBLIC_PAYMENT_PROVIDER",
   "MIDTRANS_ENV",
   "MIDTRANS_SERVER_KEY",
+  "MIDTRANS_QA_EMAIL",
+  "MIDTRANS_QA_PASSWORD",
+  "MIDTRANS_QA_NAME",
+  "DOKU_ENV",
+  "DOKU_CLIENT_ID",
+  "DOKU_SECRET_KEY",
   "GOOGLE_CLIENT_ID",
   "GOOGLE_CLIENT_SECRET",
   "APPLE_CLIENT_ID",
@@ -101,6 +119,8 @@ const optionalKeys = [
   "MOONSHOT_BASE_URL",
   "RESEND_API_KEY",
   "RESEND_FROM",
+  "PRE_SEED_PAGE_TOKEN",
+  "INVESTOR_DECK_PATH_SECRET",
 ];
 
 for (const k of optionalKeys) {

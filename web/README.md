@@ -2,6 +2,25 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+## Payments (ID)
+
+This app supports multiple payment providers behind a single checkout flow. To switch providers:
+
+- Set **`PAYMENT_PROVIDER`** to one of: `MIDTRANS`, `XENDIT`, `DUITKU`, `DOKU`
+- Optionally set **`NEXT_PUBLIC_PAYMENT_PROVIDER`** to show the provider label in the paywall UI (defaults to server value)
+
+### DOKU Checkout
+
+Environment variables:
+
+- **`DOKU_CLIENT_ID`**: Client ID from DOKU Back Office
+- **`DOKU_SECRET_KEY`**: Secret Key from DOKU Back Office
+- **`DOKU_ENV`**: `production` or `sandbox` (defaults to sandbox)
+
+Webhook endpoint (configure in DOKU, or ensure override-notification is allowed):
+
+- **`POST /api/payments/doku/webhook`**
+
 First, run the development server:
 
 ```bash
