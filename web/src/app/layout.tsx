@@ -25,7 +25,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Seren — dermatologist‑reviewed routines",
+    default: "Seren — Skin, Understood",
     template: "%s — Seren",
   },
   icons: {
@@ -41,13 +41,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Seren",
-    title: "Seren — dermatologist‑reviewed routines",
+    title: "Seren — Skin, Understood",
     description:
       "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Seren — dermatologist‑reviewed routines",
+    title: "Seren — Skin, Understood",
     description:
       "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
   },
