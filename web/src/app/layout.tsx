@@ -29,11 +29,16 @@ export const metadata: Metadata = {
     template: "%s — Seren",
   },
   icons: {
+    // Some browsers prioritize `/favicon.ico` (and cache it aggressively).
+    // We also provide explicit icon links to maximize consistency.
     icon: [
-      { url: "/brand/seren-app-icon-240.png", type: "image/png" },
+      { url: "/brand/seren-app-icon-240.png", type: "image/png", sizes: "240x240" },
+    ],
+    shortcut: [
+      { url: "/brand/seren-app-icon-240.png", type: "image/png", sizes: "240x240" },
     ],
     apple: [
-      { url: "/brand/seren-app-icon-240.png", type: "image/png" },
+      { url: "/brand/seren-app-icon-240.png", type: "image/png", sizes: "240x240" },
     ],
   },
   description:
