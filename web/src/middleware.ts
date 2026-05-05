@@ -10,15 +10,6 @@ import type { NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Force browsers requesting `/favicon.ico` to use Seren icon.
-  // Many browsers hard-code this path and cache it aggressively, even if metadata icons exist.
-  if (pathname === "/favicon.ico") {
-    const url = req.nextUrl.clone();
-    url.pathname = "/brand/seren-app-icon-240.png";
-    url.search = ""; // stable asset URL for caching
-    return NextResponse.redirect(url);
-  }
-
   // Only gate page routes — API routes handle their own auth via requireRole()
   const isProtected =
     (pathname.startsWith("/physician") || pathname.startsWith("/admin")) &&
@@ -44,5 +35,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/favicon.ico", "/physician/:path*", "/admin/:path*"],
+  matcher: ["/physician/:path*", "/admin/:path*"],
 };
