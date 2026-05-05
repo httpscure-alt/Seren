@@ -8,7 +8,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authOptions";
 
 export const metadata: Metadata = {
-  title: "Seren — clinical skin analysis",
+  title: "Seren — Skin, Understood",
   description:
     "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
   alternates: { canonical: "/" },
