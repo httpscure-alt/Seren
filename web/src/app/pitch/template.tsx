@@ -1,28 +1,10 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
+import type { ReactNode } from "react";
 
 /**
- * Pitch segment remounts on each route change → soft entry without fighting RSC hydration.
+ * Pitch routes remount on each navigation (Next.js template behavior).
+ * No wrapper `div` here: a parent with `opacity`/`transform` animations breaks
+ * `position: fixed` (glass header) — fixed then positions against that ancestor and can disappear.
  */
-export default function PitchTemplate({ children }: { children: React.ReactNode }) {
-  const reduceMotion = useReducedMotion();
-
-  if (reduceMotion) {
-    return <div className="pitch-motion-page-root">{children}</div>;
-  }
-
-  return (
-    <motion.div
-      className="pitch-motion-page-root"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{
-        duration: 0.32,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-    >
-      {children}
-    </motion.div>
-  );
+export default function PitchTemplate({ children }: { children: ReactNode }) {
+  return children;
 }

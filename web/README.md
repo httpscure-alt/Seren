@@ -4,10 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Payments (ID)
 
-This app supports multiple payment providers behind a single checkout flow. To switch providers:
-
-- Set **`PAYMENT_PROVIDER`** to one of: `MIDTRANS`, `XENDIT`, `DUITKU`, `DOKU`
-- Optionally set **`NEXT_PUBLIC_PAYMENT_PROVIDER`** to show the provider label in the paywall UI (defaults to server value)
+This app uses **DOKU** as the payment gateway.
 
 ### DOKU Checkout
 

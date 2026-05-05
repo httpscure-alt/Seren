@@ -3,6 +3,15 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { notFound } from "next/navigation";
 
+/** Next.js `searchValues` may be string or repeated-key array; trim pasted tokens. */
+function normalizeTokenParam(v: string | string[] | undefined): string | undefined {
+  if (v === undefined) return undefined;
+  const raw = Array.isArray(v) ? v[0] : v;
+  if (typeof raw !== "string") return undefined;
+  const t = raw.trim();
+  return t.length ? t : undefined;
+}
+
 function tokenMatches(provided: string | undefined, expected: string): boolean {
   if (!provided) return false;
   try {
@@ -41,9 +50,10 @@ export async function requireInvestorDeckPathSecret(slug: string | undefined): P
 
 /** Runs gate and returns `t` for building same-origin links that keep access. */
 export async function resolvePitchAccess(
-  searchParams: Promise<{ t?: string }>,
+  searchParams: Promise<{ t?: string | string[] } | undefined>,
 ): Promise<{ t?: string; query: string }> {
-  const { t } = await searchParams;
+  const sp = (await searchParams) ?? {};
+  const t = normalizeTokenParam(sp.t);
   await requireInvestorPitchToken(t);
   const query = t ? `?t=${encodeURIComponent(t)}` : "";
   return { t, query };

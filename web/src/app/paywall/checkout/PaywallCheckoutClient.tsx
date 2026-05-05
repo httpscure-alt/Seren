@@ -27,8 +27,6 @@ export type PaywallCheckoutPreset = {
   plan: "single" | "journey";
   next?: string;
   coupon?: string;
-  /** Uppercase PSP id, e.g. DOKU */
-  provider?: string;
   backHref?: string;
 };
 
@@ -42,22 +40,13 @@ export function PaywallCheckoutClient(props: { preset?: PaywallCheckoutPreset })
   const plan = ((planRaw ?? "journey") === "single" ? "single" : "journey") as keyof typeof PLAN_DETAIL;
   const nextRaw = preset?.next ?? sp.get("next") ?? "/results";
   const coupon = preset?.coupon ?? sp.get("coupon") ?? "";
-  const providerOverride = (preset?.provider ?? sp.get("provider"))?.toUpperCase();
   const payFailed = sp.get("failed") === "1";
 
-  const activeProvider = providerOverride || (process.env.NEXT_PUBLIC_PAYMENT_PROVIDER || "").toUpperCase();
-  const providerLabel =
-    activeProvider === "XENDIT"
-      ? "Xendit"
-      : activeProvider === "DUITKU"
-        ? "Duitku"
-        : activeProvider === "DOKU"
-          ? "DOKU"
-          : "Midtrans";
+  const providerLabel = "DOKU";
 
   const payload = useMemo(
-    () => ({ plan, next: nextRaw, coupon, provider: providerOverride }),
-    [plan, nextRaw, coupon, providerOverride],
+    () => ({ plan, next: nextRaw, coupon }),
+    [plan, nextRaw, coupon],
   );
 
   const planDetail = PLAN_DETAIL[plan];
@@ -67,16 +56,15 @@ export function PaywallCheckoutClient(props: { preset?: PaywallCheckoutPreset })
     const qs = new URLSearchParams();
     qs.set("returnTo", nextRaw.startsWith("/") ? nextRaw : "/results");
     if (coupon) qs.set("coupon", coupon);
-    if (providerOverride) qs.set("provider", providerOverride);
     return `/paywall?${qs.toString()}`;
-  }, [coupon, nextRaw, preset?.backHref, providerOverride]);
+  }, [coupon, nextRaw, preset?.backHref]);
 
   const continueLabel = useMemo(() => `Continue to ${providerLabel}`, [providerLabel]);
 
   const startPayment = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/payments/midtrans/create", {
+      const res = await fetch("/api/payments/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -141,9 +129,8 @@ export function PaywallCheckoutClient(props: { preset?: PaywallCheckoutPreset })
             <div className="mt-5 rounded-2xl bg-surface-container-lowest/80 px-4 py-3 border border-outline-variant/8">
               <p className="text-[10px] uppercase tracking-[0.2em] text-on-surface/45 mb-2">After payment</p>
               <p className="text-xs text-on-surface-variant leading-relaxed">
-                We’ll send you back to this route on Seren after {providerLabel} finishes:
+                After {providerLabel} finishes, you’ll return to Seren automatically.
               </p>
-              <p className="mt-2 font-mono text-[11px] sm:text-xs text-on-surface break-all leading-snug">{nextRaw}</p>
             </div>
           </div>
 

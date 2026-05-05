@@ -48,7 +48,7 @@ test("Paywall loads and checkout route exists", async ({ page }) => {
   await expect(page.getByRole("heading", { name: /unlock/i })).toBeVisible();
 
   await page.goto("/paywall/checkout?plan=journey&next=%2Fresults");
-  await expect(page.getByText(/connecting to midtrans/i)).toBeVisible();
+  await expect(page.getByText(/continue to doku/i)).toBeVisible();
 
   expect(consoleErrors, `Console errors: ${consoleErrors.join("\n")}`).toEqual([]);
 });

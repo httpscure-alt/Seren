@@ -94,14 +94,7 @@ if (!isLocalDb && db.length > 12) {
 }
 
 const optionalKeys = [
-  // Payments (provider switch + additional gateways)
-  "PAYMENT_PROVIDER",
-  "NEXT_PUBLIC_PAYMENT_PROVIDER",
-  "MIDTRANS_ENV",
-  "MIDTRANS_SERVER_KEY",
-  "MIDTRANS_QA_EMAIL",
-  "MIDTRANS_QA_PASSWORD",
-  "MIDTRANS_QA_NAME",
+  // Payments (DOKU)
   "DOKU_ENV",
   "DOKU_CLIENT_ID",
   "DOKU_SECRET_KEY",

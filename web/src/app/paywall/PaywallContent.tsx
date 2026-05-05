@@ -12,9 +12,9 @@ import {
 export type PaywallSearchInput = { returnTo?: string; coupon?: string; provider?: string };
 
 function safeReturnTo(maybePath: string | undefined) {
-  if (!maybePath) return "/report/srn-8821";
-  if (!maybePath.startsWith("/")) return "/report/srn-8821";
-  if (maybePath.startsWith("/api")) return "/report/srn-8821";
+  if (!maybePath) return "/results";
+  if (!maybePath.startsWith("/")) return "/results";
+  if (maybePath.startsWith("/api")) return "/results";
   return maybePath;
 }
 
@@ -29,18 +29,8 @@ export async function PaywallContent(props: {
 
   const returnTo = dokuCanonical ? safeReturnTo(sp.returnTo ?? "/results") : safeReturnTo(sp.returnTo);
   const couponInput = dokuCanonical ? "" : (sp.coupon ?? "");
-  const providerOverride = dokuCanonical ? "DOKU" : sp.provider?.toUpperCase();
-
-  const activeProvider = providerOverride || (process.env.PAYMENT_PROVIDER || "").toUpperCase();
-  const providerLabel =
-    activeProvider === "XENDIT"
-      ? "Xendit"
-      : activeProvider === "DUITKU"
-      ? "Duitku"
-      : activeProvider === "DOKU"
-      ? "DOKU"
-      : "Midtrans";
-  const showContact = activeProvider === "DUITKU" || activeProvider === "XENDIT";
+  const providerLabel = "DOKU";
+  const showContact = false;
 
   const c = await cookies();
   const lang = normalizeLang(c.get(LANG_COOKIE)?.value);
@@ -67,7 +57,7 @@ export async function PaywallContent(props: {
       ? `Pembayaran diproses lewat ${providerLabel}. Setelah berhasil, akses aktif otomatis.`
       : `Payments are processed via ${providerLabel}. After success, access activates automatically.`,
     back: isId ? "Kembali" : "Back",
-    continue: isId ? `Bayar dengan ${providerLabel}` : `Pay with ${providerLabel}`,
+    continue: isId ? "Lanjutkan" : "Continue",
     recommended: isId ? "Direkomendasikan" : "Recommended",
     single: {
       title: isId ? "Laporan sekali" : "Single report",
@@ -97,7 +87,6 @@ export async function PaywallContent(props: {
     params.set("plan", plan);
     params.set("next", returnTo);
     if (couponResult?.ok) params.set("coupon", couponResult.normalizedCode);
-    if (providerOverride) params.set("provider", providerOverride);
     return `/paywall/checkout?${params.toString()}`;
   };
 
@@ -157,7 +146,7 @@ export async function PaywallContent(props: {
                   href={payHref(copy.single.plan)}
                   className="mt-10 inline-flex rounded-full border border-outline-variant/25 bg-surface px-8 py-3.5 text-sm font-medium tracking-wide text-on-surface hover:bg-surface-container-low transition-colors justify-center"
                 >
-                  {copy.continue}
+                  {copy.single.cta}
                 </Link>
               </div>
 
@@ -189,7 +178,7 @@ export async function PaywallContent(props: {
                   href={payHref(copy.journey.plan)}
                   className="mt-10 inline-flex btn-gradient text-on-primary px-8 py-3.5 rounded-full text-sm font-medium tracking-wide hover:brightness-[1.03] transition justify-center"
                 >
-                  {copy.continue}
+                  {copy.journey.cta}
                 </Link>
               </div>
             </div>
@@ -216,46 +205,11 @@ export async function PaywallContent(props: {
               </div>
 
               <div className="mt-8 rounded-3xl bg-surface-container-low p-6">
-                {dokuCanonical ? (
-                  <p className="text-xs text-on-surface-variant leading-relaxed">
-                    Promo codes — use <Link href="/paywall">/paywall</Link>; this lane uses simple paths for PSP
-                    registration.
-                  </p>
-                ) : (
-                  <form action="/paywall" method="get" className="space-y-3">
-                    <input type="hidden" name="returnTo" value={returnTo} />
-                    <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
-                      {copy.promoLabel}
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <input
-                        name="coupon"
-                        defaultValue={couponInput}
-                        className="w-full rounded-2xl bg-surface-container-lowest border border-outline-variant/15 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/20"
-                        placeholder={copy.promoHint}
-                        autoComplete="off"
-                        inputMode="text"
-                      />
-                      <button
-                        type="submit"
-                        className="shrink-0 rounded-full border border-outline-variant/25 px-5 py-3 text-sm font-medium hover:bg-surface-container transition-colors"
-                      >
-                        {copy.applyPromo}
-                      </button>
-                    </div>
-                    {couponResult ? (
-                      <p
-                        className={[
-                          "text-xs",
-                          couponResult.ok ? "text-primary" : "text-error",
-                        ].join(" ")}
-                      >
-                        {couponResult.ok ? copy.promoApplied : copy.promoInvalid}{" "}
-                        <span className="text-on-surface/45">{couponResult.message}</span>
-                      </p>
-                    ) : null}
-                  </form>
-                )}
+                <p className="text-xs text-on-surface-variant leading-relaxed">
+                  {isId
+                    ? "Kode promo dimasukkan saat pendaftaran / di halaman sebelumnya. Jika kamu perlu mengubahnya, kembali ke halaman sebelumnya."
+                    : "Promo codes are entered during registration / earlier in the flow. If you need to change it, go back to the previous step."}
+                </p>
               </div>
 
               <div className="mt-8 flex items-center gap-3">
@@ -264,12 +218,6 @@ export async function PaywallContent(props: {
                   className="rounded-full border border-outline-variant/25 px-6 py-3 text-sm text-on-surface-variant hover:bg-surface-container transition-colors"
                 >
                   {copy.back}
-                </Link>
-                <Link
-                  href={payHref(copy.journey.plan)}
-                  className="btn-gradient text-on-primary px-6 py-3 rounded-full text-sm font-medium tracking-wide shadow-sm"
-                >
-                  {copy.continue}
                 </Link>
               </div>
             </div>

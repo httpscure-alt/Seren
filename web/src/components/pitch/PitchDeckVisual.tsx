@@ -59,18 +59,31 @@ export function PitchDeckSplit({
 
 export function PitchDeckFeatureStrip({
   items,
+  lowerCaseTitles = true,
+  flatCards = false,
 }: {
   items: { icon: string; title: string; body: string }[];
+  /** When false, preserves capitalization in card titles (e.g. VC funding strip). */
+  lowerCaseTitles?: boolean;
+  /** Memo/PDF: no soft shadow — avoids grey compositing blocks in Chrome print. */
+  flatCards?: boolean;
 }) {
+  const cardClass = flatCards
+    ? "pitch-vc-funding-feature-card rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-10 text-left shadow-none sm:p-12"
+    : "pitch-editorial-shadow rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-10 text-left sm:p-12";
+
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-8">
       {items.map((it) => (
-        <div
-          key={it.title}
-          className="pitch-editorial-shadow rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-10 text-left sm:p-12"
-        >
+        <div key={it.title} className={cardClass}>
           <Ms name={it.icon} className="mb-6 text-4xl text-primary" />
-          <h3 className="mb-4 font-headline text-xl font-medium lowercase tracking-tight text-on-surface">{it.title}</h3>
+          <h3
+            className={`mb-4 font-headline text-xl font-medium tracking-tight text-on-surface ${
+              lowerCaseTitles ? "lowercase" : "normal-case"
+            }`}
+          >
+            {it.title}
+          </h3>
           <p className="font-body text-sm leading-relaxed text-on-surface-variant">{it.body}</p>
         </div>
       ))}
@@ -82,13 +95,20 @@ export function PitchDeckFeatureStrip({
 export function PitchDeckCenterTitle({
   title,
   subtitle,
+  lowerCaseTitle = true,
 }: {
   title: string;
   subtitle?: string;
+  /** When false, preserves capitalization in the main title (e.g. “Funding objective”). */
+  lowerCaseTitle?: boolean;
 }) {
   return (
     <div className="mb-12 text-center md:mb-16">
-      <h2 className="mb-4 font-headline text-3xl font-light lowercase tracking-tight text-on-surface md:text-4xl">
+      <h2
+        className={`mb-4 font-headline text-3xl font-light tracking-tight text-on-surface md:text-4xl ${
+          lowerCaseTitle ? "lowercase" : "normal-case"
+        }`}
+      >
         {title}
       </h2>
       {subtitle ? (

@@ -1,102 +1,115 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 
+/**
+ * Pitch hero typography — static markup only (no Framer).
+ * Motion variants with `initial="hidden"` were leaving the entire hero at opacity 0 in production.
+ */
 export function PitchHeroStagger({
   eyebrow,
   title,
   tagline,
+  sentenceCaseTitle,
+  sentenceCaseEyebrow,
+  sentenceCaseTagline,
+  richBackdrop,
   children,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   tagline?: string;
+  sentenceCaseTitle?: boolean;
+  sentenceCaseEyebrow?: boolean;
+  sentenceCaseTagline?: boolean;
+  richBackdrop?: boolean;
   children?: ReactNode;
 }) {
-  const reduceMotion = useReducedMotion();
-
-  if (reduceMotion) {
-    return (
-      <div className="relative z-10 mx-auto w-full max-w-4xl">
-        <HeroStatic eyebrow={eyebrow} title={title} tagline={tagline} childrenSlot={children} />
-      </div>
-    );
-  }
-
-  const item = {
-    hidden: { opacity: 0, y: 16 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] as const },
-    },
-  };
+  const showEyebrow = Boolean(eyebrow?.trim());
+  const richGradientTitle = Boolean(richBackdrop && sentenceCaseTitle);
 
   return (
-    <motion.div
-      className="relative z-10 mx-auto w-full max-w-4xl"
-      variants={{
-        hidden: {},
-        show: {
-          transition: { staggerChildren: 0.09, delayChildren: 0.05 },
-        },
-      }}
-      initial="hidden"
-      animate="show"
-    >
-      <motion.div variants={item} className="mb-8 opacity-[0.88]">
-        <span className="font-headline text-5xl font-light tracking-tighter text-primary lowercase sm:text-7xl md:text-8xl">
-          seren
-        </span>
-        <div className="mx-auto mt-3 h-1 w-32 rounded-full bg-primary/22" />
-      </motion.div>
-      <motion.span variants={item} className="mb-4 block font-headline text-xs font-medium tracking-[0.2em] text-primary uppercase">
-        {eyebrow}
-      </motion.span>
-      <motion.h1 variants={item} className="mb-4 font-headline text-3xl font-light tracking-tight text-on-surface lowercase md:text-5xl">
-        {title}
-      </motion.h1>
-      {tagline ? (
-        <motion.p
-          variants={item}
-          className="mx-auto max-w-2xl font-headline text-base font-medium leading-snug tracking-wide text-primary uppercase opacity-[0.72] md:text-lg"
-        >
-          {tagline}
-        </motion.p>
-      ) : null}
-      {children ? (
-        <motion.div variants={item} className="mt-12 flex flex-wrap justify-center gap-4 md:mt-16">
-          {children}
-        </motion.div>
-      ) : null}
-    </motion.div>
+    <div className="relative z-10 mx-auto w-full max-w-4xl">
+      <HeroStatic
+        eyebrow={eyebrow}
+        showEyebrow={showEyebrow}
+        title={title}
+        tagline={tagline}
+        sentenceCaseTitle={sentenceCaseTitle}
+        sentenceCaseEyebrow={sentenceCaseEyebrow}
+        sentenceCaseTagline={sentenceCaseTagline}
+        richBackdrop={richBackdrop}
+        richGradientTitle={richGradientTitle}
+        childrenSlot={children}
+      />
+    </div>
   );
 }
 
 function HeroStatic({
   eyebrow,
+  showEyebrow,
   title,
   tagline,
+  sentenceCaseTitle,
+  sentenceCaseEyebrow,
+  sentenceCaseTagline,
+  richBackdrop,
+  richGradientTitle,
   childrenSlot,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
+  showEyebrow: boolean;
   title: string;
   tagline?: string;
+  sentenceCaseTitle?: boolean;
+  sentenceCaseEyebrow?: boolean;
+  sentenceCaseTagline?: boolean;
+  richBackdrop?: boolean;
+  richGradientTitle: boolean;
   childrenSlot?: ReactNode;
 }) {
+  const titleClass = richGradientTitle
+    ? "mb-4 bg-gradient-to-br from-[#1f3a45] via-[#2d4f5d] to-[#3d6374] bg-clip-text font-headline text-4xl font-normal tracking-tight text-transparent md:mb-5 md:text-5xl lg:text-6xl"
+    : `mb-4 font-headline text-3xl font-light tracking-tight text-on-surface md:text-5xl ${
+        sentenceCaseTitle ? "normal-case" : "lowercase"
+      }`;
+
+  const ruleClass = richBackdrop ? "bg-primary/45" : "bg-primary/22";
+
   return (
     <>
-      <div className="mb-8 opacity-[0.88]">
-        <span className="font-headline text-5xl font-light tracking-tighter text-primary lowercase sm:text-7xl md:text-8xl">
-          seren
-        </span>
-        <div className="mx-auto mt-3 h-1 w-32 rounded-full bg-primary/22" />
+      {/* Wordmark → rule → eyebrow; narrow column so eyebrow lines up with “seren” (not full-bleed). */}
+      <div className="mb-8 flex justify-center opacity-[0.88]">
+        <div className="flex w-max max-w-full flex-col items-center text-center">
+          <span
+            className={`font-headline text-5xl font-light tracking-tighter lowercase sm:text-7xl md:text-8xl ${
+              richBackdrop ? "text-[#2d4f5d]" : "text-primary"
+            }`}
+          >
+            seren
+          </span>
+          <div className={`mx-auto mt-4 h-1 w-36 shrink-0 rounded-full sm:w-40 ${ruleClass}`} aria-hidden />
+          {showEyebrow ? (
+            <span
+              className={
+                sentenceCaseEyebrow
+                  ? "mt-4 max-w-prose px-1 text-pretty font-headline text-xs font-semibold tracking-[0.16em] text-primary normal-case md:text-sm"
+                  : "mt-4 max-w-prose px-1 text-pretty font-headline text-xs font-medium tracking-[0.2em] text-primary uppercase"
+              }
+            >
+              {eyebrow}
+            </span>
+          ) : null}
+        </div>
       </div>
-      <span className="mb-4 block font-headline text-xs font-medium tracking-[0.2em] text-primary uppercase">{eyebrow}</span>
-      <h1 className="mb-4 font-headline text-3xl font-light tracking-tight text-on-surface lowercase md:text-5xl">{title}</h1>
+      <h1 className={titleClass}>{title}</h1>
       {tagline ? (
-        <p className="mx-auto max-w-2xl font-headline text-base font-medium leading-snug tracking-wide text-primary uppercase opacity-[0.72] md:text-lg">
+        <p
+          className={
+            sentenceCaseTagline
+              ? "mx-auto max-w-2xl text-pretty px-2 font-headline text-sm font-normal leading-relaxed tracking-normal text-on-surface md:text-base"
+              : "mx-auto max-w-2xl text-pretty px-2 font-headline text-base font-medium leading-snug tracking-wide text-primary uppercase opacity-[0.72] md:text-lg"
+          }
+        >
           {tagline}
         </p>
       ) : null}

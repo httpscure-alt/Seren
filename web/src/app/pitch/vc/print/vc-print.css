@@ -1,0 +1,150 @@
+/*
+ * VC memo PDF / print export — scoped under .pitch-vc-pdf-root
+ *
+ * Recommended “Save as PDF” (matches on-screen layout):
+ * - Paper: A4
+ * - Margins: Default (or Minimum if you need one extra line per page)
+ * - Scale: 100%
+ * - Background graphics: ON (required for section tints and gradients)
+ * - Numbered memo bands (`.pitch-vc-memo-page`) each start a new printed page after the hero.
+ * - Headers and footers: OFF
+ * - Chrome: More settings → uncheck “Headers and footers”
+ * - Safari: Show details → uncheck headers/footers if shown
+ */
+
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  /* PitchReveal may still be mid-tween — force full opacity in PDF */
+  .pitch-vc-pdf-root .pitch-deck-section-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    overflow: visible !important;
+  }
+
+  .pitch-vc-pdf-root {
+    background: #faf9f6 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .pitch-vc-pdf-root .pitch-deck-root {
+    overflow: visible !important;
+    overflow-x: visible !important;
+  }
+
+  /* Reinforce section tints inside PDF root (same as pitch-deck.css print block) */
+  .pitch-vc-pdf-root .pitch-deck-root section[data-pitch-tone] {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .pitch-vc-pdf-root .pitch-deck-root section[data-pitch-tone="jewel"] {
+    background: linear-gradient(to bottom right, #e8ecf4, #dff2fa, #fdebd2) !important;
+  }
+
+  .pitch-vc-pdf-root .pitch-deck-root section[data-pitch-tone="muted"] {
+    background: #f4f4f0 !important;
+  }
+
+  .pitch-vc-pdf-root .pitch-deck-root section[data-pitch-tone="bright"] {
+    background: #ffffff !important;
+  }
+
+  .pitch-vc-pdf-root .pitch-deck-root section[data-pitch-tone="mist"] {
+    background: rgba(192, 233, 252, 0.22) !important;
+  }
+
+  /* Memo bands: tighter vertical rhythm + avoid splitting a band across pages when it fits */
+  .pitch-vc-pdf-root .pitch-deck-body > section {
+    padding-top: 1.75rem !important;
+    padding-bottom: 1.75rem !important;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  .pitch-vc-pdf-root .pitch-deck-body > section.pitch-vc-memo-page {
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+
+  .pitch-vc-pdf-root .pitch-deck-body > section.pitch-vc-founders-band {
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+  }
+
+  /* Let global h2 “break-after: avoid” yield on Founders title */
+  .pitch-vc-pdf-root .pitch-vc-founders-band header h2 {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  .pitch-vc-pdf-root .pitch-vc-founder-card h3 {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  /* Hero: shorter on paper (overrides padding-top from rule above) */
+  .pitch-vc-pdf-root .pitch-deck-body > section:first-of-type {
+    min-height: 0 !important;
+    padding-top: 1.5rem !important;
+  }
+
+  .pitch-vc-pdf-root * {
+    box-shadow: none !important;
+  }
+
+  .pitch-vc-pdf-root .pitch-editorial-shadow {
+    box-shadow: 0 1px 0 rgba(47, 51, 48, 0.08) !important;
+  }
+
+  /* Avoid awkward splits inside dense cards — do NOT target `.rounded-xl` globally (Chrome draws grey paint rects behind each). */
+  .pitch-vc-pdf-root table,
+  .pitch-vc-pdf-root .pitch-vc-ask-block {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .pitch-vc-pdf-root h2,
+  .pitch-vc-pdf-root h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Funding objective: vertically center title + 3 cards within the printable page (matches @page margins) */
+  .pitch-vc-pdf-root .pitch-deck-body > section[data-pitch-tone="bright"]:has(.pitch-vc-funding-print) {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: calc(297mm - 24mm);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .pitch-vc-pdf-root
+    .pitch-deck-body
+    > section[data-pitch-tone="bright"]:has(.pitch-vc-funding-print)
+    > .pitch-deck-section-reveal,
+  .pitch-vc-pdf-root
+    .pitch-deck-body
+    > section[data-pitch-tone="bright"]:has(.pitch-vc-funding-print)
+    > div:first-child {
+    width: 100%;
+  }
+
+  /* Funding strip cards: flat white surfaces (no shadow stack / compositor glitches in Save as PDF) */
+  .pitch-vc-pdf-root .pitch-vc-funding-print .pitch-vc-funding-feature-card {
+    background: #ffffff !important;
+    box-shadow: none !important;
+  }
+
+  /* Founders: solid white cards on mist so nothing reads as a grey panel */
+  .pitch-vc-pdf-root .pitch-vc-founder-card,
+  .pitch-vc-pdf-root .pitch-vc-founder-team-foot {
+    background: #ffffff !important;
+    box-shadow: none !important;
+  }
+}
