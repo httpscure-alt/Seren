@@ -190,27 +190,22 @@ export async function PaywallContent(props: {
 
           <aside className="col-span-12 lg:col-span-5">
             <div className="rounded-[2.5rem] bg-surface-container-lowest p-8 sm:p-9 border border-outline-variant/10 shadow-[0_18px_60px_-40px_rgba(47,51,48,0.14)]">
-              <p className="font-headline tracking-tight text-base">
-                {copy.methodsTitle}
+              <p className="text-[10px] uppercase tracking-[0.22em] text-on-surface/45">
+                {isId ? "Pembayaran aman" : "Secure payment"}
               </p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {copy.methods.map((m) => (
-                  <span
-                    key={m}
-                    className="text-[10px] uppercase tracking-[0.22em] text-on-surface/55 bg-surface-container-low px-3 py-1.5 rounded-full"
-                  >
-                    {m}
-                  </span>
-                ))}
-              </div>
-
-              <div className="mt-8 rounded-3xl bg-surface-container-low p-6">
-                <p className="text-xs text-on-surface-variant leading-relaxed">
-                  {isId
-                    ? "Kode promo dimasukkan saat pendaftaran / di halaman sebelumnya. Jika kamu perlu mengubahnya, kembali ke halaman sebelumnya."
-                    : "Promo codes are entered during registration / earlier in the flow. If you need to change it, go back to the previous step."}
-                </p>
-              </div>
+              <p className="mt-3 font-headline tracking-tight text-lg">
+                {isId ? "Diproses oleh DOKU" : "Processed by DOKU"}
+              </p>
+              <p className="mt-3 text-sm text-on-surface-variant leading-relaxed">
+                {isId
+                  ? "Mendukung QRIS, e-wallet (GoPay/OVO/DANA), dan virtual account bank (BCA/BNI/BRI/Mandiri)."
+                  : "Supports QRIS, e-wallets (GoPay/OVO/DANA), and bank virtual accounts (BCA/BNI/BRI/Mandiri)."}
+              </p>
+              <p className="mt-4 text-xs text-on-surface/45 leading-relaxed">
+                {isId
+                  ? "Kamu akan kembali ke Seren otomatis setelah pembayaran selesai."
+                  : "You’ll return to Seren automatically after payment completes."}
+              </p>
 
               <div className="mt-8 flex items-center gap-3">
                 <Link

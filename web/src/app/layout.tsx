@@ -25,21 +25,29 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Seren — clinical skin analysis",
+    default: "Seren — dermatologist‑reviewed routines",
     template: "%s — Seren",
+  },
+  icons: {
+    icon: [
+      { url: "/brand/seren-app-icon-240.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/brand/seren-app-icon-240.png", type: "image/png" },
+    ],
   },
   description:
     "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
   openGraph: {
     type: "website",
     siteName: "Seren",
-    title: "Seren — clinical skin analysis",
+    title: "Seren — dermatologist‑reviewed routines",
     description:
       "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Seren — clinical skin analysis",
+    title: "Seren — dermatologist‑reviewed routines",
     description:
       "AI-assisted skin analysis, reviewed by certified dermatologists. Get a clear routine and treatment plan you can follow.",
   },
