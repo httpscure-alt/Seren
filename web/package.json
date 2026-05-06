@@ -23,6 +23,7 @@
     "reminders:once": "tsx scripts/subscription-reminders.ts",
     "create:staff": "tsx scripts/create-staff-user.ts",
     "brand:png": "node scripts/render-brand-png.mjs",
+    "brand:ico": "node scripts/generate-brand-ico.mjs",
     "test:e2e": "playwright test",
     "vercel:sync-env": "node scripts/sync-vercel-prod-env.mjs"
   },
@@ -56,6 +57,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.3",
     "png-to-ico": "^3.0.1",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5",

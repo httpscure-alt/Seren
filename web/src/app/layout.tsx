@@ -29,13 +29,15 @@ export const metadata: Metadata = {
     template: "%s — Seren",
   },
   icons: {
-    // Some browsers prioritize `/favicon.ico` (and cache it aggressively).
-    // We also provide explicit icon links to maximize consistency.
+    // Browsers often prioritize `/favicon.ico` and cache it aggressively.
+    // We also expose a versioned path at `/brand/*` that is safe to change when we need a cache break.
     icon: [
+      { url: "/brand/seren-tab.ico", type: "image/x-icon" },
       { url: "/favicon.ico", type: "image/x-icon" },
       { url: "/brand/seren-app-icon-240.png", type: "image/png", sizes: "240x240" },
     ],
     shortcut: [
+      { url: "/brand/seren-tab.ico", type: "image/x-icon" },
       { url: "/favicon.ico", type: "image/x-icon" },
       { url: "/brand/seren-app-icon-240.png", type: "image/png", sizes: "240x240" },
     ],
