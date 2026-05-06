@@ -27,15 +27,18 @@ async function main() {
   /** @type {Buffer} */
   const icoBuf = await pngToIco(pngBuffers);
 
-  const outPath = path.join(ROOT, "public", "brand", "seren-tab.ico");
-  fs.writeFileSync(outPath, icoBuf);
+  const brandPath = path.join(ROOT, "public", "brand", "seren-tab.ico");
+  const appPath = path.join(ROOT, "src", "app", "favicon.ico");
+  fs.writeFileSync(brandPath, icoBuf);
+  fs.writeFileSync(appPath, icoBuf);
 
   console.log(
-    `Wrote ${outPath} (${icoBuf.byteLength} bytes) from ${path.relative(
+    `Wrote ${brandPath} (${icoBuf.byteLength} bytes) from ${path.relative(
       ROOT,
       srcPng,
     )}`,
   );
+  console.log(`Wrote ${appPath} (${icoBuf.byteLength} bytes)`);
 }
 
 await main();
