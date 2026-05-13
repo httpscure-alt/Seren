@@ -1,13 +1,61 @@
 import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNavbar } from "@/components/SiteNavbar";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/authOptions";
+import { hasActiveSubscription } from "@/lib/entitlement";
+import { redirect } from "next/navigation";
 
-export default function AnalyzingPage() {
+export default async function AnalyzingPage() {
+  const session = await getServerSession(authOptions);
+  const userId = (session as any)?.userId as string | undefined;
+  const role = (session as any)?.role as string | undefined;
+
+  if (!session?.user?.email || !userId) {
+    redirect(`/auth?returnTo=${encodeURIComponent("/consult/analyzing")}`);
+  }
+
+  const entitled =
+    role === "PHYSICIAN" || role === "ADMIN" ? true : await hasActiveSubscription(userId);
+  const paywallHref = `/paywall?returnTo=${encodeURIComponent("/consult/analyzing")}`;
+
   return (
     <div className="flex flex-col min-h-screen bg-surface text-on-surface overflow-x-hidden">
       <SiteNavbar />
 
       <main className="seren-container pt-28 sm:pt-32 pb-24">
+        {!entitled ? (
+          <section className="mb-10 rounded-[2.25rem] border border-primary/16 bg-primary/[0.04] px-7 py-7 sm:px-9 sm:py-9">
+            <h1 className="font-headline text-[1.9rem] leading-[1.05] tracking-[-0.03em] text-on-surface sm:text-[2.25rem]">
+              Ready to begin your skin analysis
+            </h1>
+            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-on-surface-variant sm:text-base">
+              Your photos and intake have been securely prepared. Complete payment to begin AI-assisted analysis and
+              dermatologist review.
+            </p>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <Link
+                href={paywallHref}
+                className="btn-gradient inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-medium tracking-wide text-on-primary shadow-sm"
+              >
+                Continue to checkout
+              </Link>
+              <Link
+                href="/paywall"
+                className="inline-flex items-center justify-center rounded-full border border-outline-variant/18 bg-white/70 px-7 py-3 text-sm font-medium text-on-surface/85 transition hover:bg-white"
+              >
+                View plans
+              </Link>
+              <Link
+                href="/results/pending-payment"
+                className="inline-flex items-center justify-center text-sm font-medium text-primary underline-offset-4 hover:underline sm:px-2"
+              >
+                Review submission &amp; timeline
+              </Link>
+            </div>
+          </section>
+        ) : null}
+
         {/* Hero — match reference structure */}
         <section className="grid grid-cols-12 gap-10 lg:gap-12 items-start">
           <div className="col-span-12 lg:col-span-7 relative">
@@ -15,38 +63,45 @@ export default function AnalyzingPage() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(246,217,166,0.18),transparent_55%),radial-gradient(circle_at_80%_60%,rgba(61,99,116,0.14),transparent_55%),linear-gradient(180deg,rgba(0,0,0,0.06),rgba(0,0,0,0.02))]" />
               <div className="relative aspect-[16/10] sm:aspect-[16/9] flex items-center justify-center p-6 sm:p-10">
                 <div className="glass-effect bg-surface/70 p-7 sm:p-8 rounded-3xl shadow-sm border border-outline-variant/12 max-w-md w-full text-center">
-                  <div className="mb-4 flex justify-center">
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="h-6 w-6 text-primary animate-spin"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M12 4a8 8 0 1 1-7.5 5"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.7"
-                        strokeLinecap="round"
-                      />
-                      <path
-                        d="M4.5 9.2V5.8H7.9"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.7"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
+                  {entitled ? (
+                    <div className="mb-4 flex justify-center">
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="h-6 w-6 text-primary animate-spin"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M12 4a8 8 0 1 1-7.5 5"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M4.5 9.2V5.8H7.9"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="mb-4 flex justify-center" aria-hidden="true">
+                      <div className="h-2.5 w-2.5 rounded-full bg-primary/45" />
+                    </div>
+                  )}
                   <h2 className="font-headline text-xl sm:text-2xl mb-2 tracking-tight">
-                    Analyzing skin patterns…
+                    {entitled ? "Analyzing skin patterns…" : "Your case is ready to proceed"}
                   </h2>
                   <p className="text-on-surface-variant font-body text-sm leading-relaxed">
-                    Preparing your assessment while your case is reviewed by a
-                    dermatologist.
+                    {entitled
+                      ? "Preparing your assessment while your case is reviewed by a dermatologist."
+                      : "Your case is ready. Complete payment to begin AI-assisted analysis and dermatologist review."}
                   </p>
                   <p className="mt-3 text-[11px] text-on-surface/45 uppercase tracking-[0.18em]">
-                    Mapping 1,402 unique dermal markers
+                    {entitled ? "Mapping 1,402 unique dermal markers" : "Analysis will begin after payment"}
                   </p>
                 </div>
               </div>
@@ -145,12 +200,21 @@ export default function AnalyzingPage() {
                 secure within Seren.
               </p>
               <div className="mt-6">
-                <Link
-                  href="/results"
-                  className="btn-gradient inline-flex text-on-primary px-7 py-3 rounded-full text-sm font-medium tracking-wide shadow-sm"
-                >
-                  View status
-                </Link>
+                {entitled ? (
+                  <Link
+                    href="/results"
+                    className="btn-gradient inline-flex text-on-primary px-7 py-3 rounded-full text-sm font-medium tracking-wide shadow-sm"
+                  >
+                    View status
+                  </Link>
+                ) : (
+                  <Link
+                    href={paywallHref}
+                    className="btn-gradient inline-flex text-on-primary px-7 py-3 rounded-full text-sm font-medium tracking-wide shadow-sm"
+                  >
+                    Continue to checkout
+                  </Link>
+                )}
               </div>
             </div>
           </div>
